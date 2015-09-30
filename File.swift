@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#10 $
+//  $Id: //depot/RubyNative/File.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -59,7 +59,7 @@ public class File : IO {
         }
     }
 
-    public init?( _ filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
+    public init?( filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
         self.filepath = filepath.to_s
         super.init( what: "fopen '\(filepath.to_s)'", filePointer: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
     }
@@ -67,7 +67,7 @@ public class File : IO {
     // MARK: Class Methods
 
     public class func new( file_name: to_s_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> File? {
-        let newFile = File( file_name, mode: mode, file: file, line: line )
+        let newFile = File( filepath: file_name, mode: mode, file: file, line: line )
         if perm != nil {
             newFile?.chmod( perm!, file: file, line: line )
         }
@@ -273,7 +273,7 @@ public class File : IO {
     }
 
     public class func truncate( file_name: to_s_protocol, _ integer: Int, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.truncate '\(file_name.to_s)'", Darwin.truncate( file_name.to_s, off_t(integer) ), file: file, line: line )
+        return unixOK( "File.truncate '\(file_name.to_s)' \(integer)", Darwin.truncate( file_name.to_s, off_t(integer) ), file: file, line: line )
     }
 
     public class func utime( file_name: to_s_protocol, _ actime: to_i_protocol, _ modtime: to_i_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
@@ -310,7 +310,7 @@ public class File : IO {
     }
 
     public func chown( owner_int: Int?, _ group_int: Int?, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.chown '\(filepath)'", Darwin.chown( filepath,
+        return unixOK( "File.chown '\(filepath)' \(owner_int) \(group_int)", Darwin.chown( filepath,
             uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
     }
 
@@ -319,7 +319,7 @@ public class File : IO {
     }
 
     public func flock( locking_constant: Int, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.flock \(locking_constant) '\(filepath)'", Darwin.flock( Int32(fileno), Int32(locking_constant) ), file: file, line: line )
+        return unixOK( "File.flock '\(filepath)' \(locking_constant)", Darwin.flock( Int32(fileno), Int32(locking_constant) ), file: file, line: line )
     }
 
     public var lstat: Stat? {
@@ -339,7 +339,7 @@ public class File : IO {
     }
 
     public func truncate( integer: Int, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.truncate \(integer) '\(filepath)'", Darwin.truncate( filepath, off_t(integer) ), file: file, line: line )
+        return unixOK( "File.truncate '\(filepath)' \(integer)", Darwin.truncate( filepath, off_t(integer) ), file: file, line: line )
     }
 
 }

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Kernel.swift#6 $
+//  $Id: //depot/RubyNative/Kernel.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -16,7 +16,7 @@ import Foundation
 
 public class Kernel: Object {
 
-    public class func open( path: to_s_protocol, _ mode: to_s_protocol = "r", perm: Int = 0o644, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func open( path: to_s_protocol, _ mode: to_s_protocol = "r", _ perm: Int = 0o644, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
         let path = path.to_s
         let index1 = path.startIndex.advancedBy(1)
 

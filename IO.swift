@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/IO.swift#12 $
+//  $Id: //depot/RubyNative/IO.swift#17 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -60,7 +60,7 @@ public class IO: Object {
         super.init()
         if filePointer == nil {
             if warningDisposition != .Ignore {
-                Swift.print( "RubyNative: \(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)")
+                STDERR.print( "RubyNative: \(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -94,7 +94,7 @@ public class IO: Object {
         return copied
     }
 
-    public class func for_fd( fd: Int, mode: to_s_protocol, opt: Array<String>? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
         return IO( what: "fdopen \(fd)", filePointer: fdopen( Int32(fd), mode.to_s ), file: file, line: line )
     }
 
@@ -110,11 +110,11 @@ public class IO: Object {
     }
 
     public class func new( fd: Int, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return for_fd( fd, mode: mode, file: file, line: line )
+        return for_fd( fd, mode, file: file, line: line )
     }
 
     public class func open( fd: Int, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return for_fd( fd, mode: mode, file: file, line: line )
+        return for_fd( fd, mode, file: file, line: line )
     }
 
     public class func pipe( file: String = __FILE__, line: Int = __LINE__ ) -> (reader: IO?, writer: IO?) {
@@ -155,6 +155,7 @@ public class IO: Object {
 
     public class func select( read_array: [IO], _ write_array: [IO]? = nil, _ error_array: [IO]? = nil, timeout: Int? = nil ) {
         /// later, much later...
+        notImplemented( "IO.select" )
     }
 
     public class func sysopen( path: to_s_protocol, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
@@ -258,7 +259,7 @@ public class IO: Object {
     }
 
     public func fdatasync() {
-        /////
+        notImplemented( "IO.fdatasync" )
     }
 
     public var fileno: Int {
@@ -309,7 +310,6 @@ public class IO: Object {
     }
 
     public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
-        /////
         notImplemented( "IO.ioctl" )
         return 1
     }
@@ -324,6 +324,7 @@ public class IO: Object {
 
     public var pid: Int {
         /// no possible without re-implementing popen()
+        notImplemented( "IO.pid" )
         return -1
     }
 
@@ -332,7 +333,7 @@ public class IO: Object {
     }
 
     public func print( string: to_s_protocol ) -> Int {
-        return Int(fputs( string.to_s.to_c, filePointer ))
+        return Int(fputs( string.to_s, filePointer ))
     }
 
     public func print( strings: [String] ) {
@@ -393,7 +394,7 @@ public class IO: Object {
 //        return readlines( dollarSlash, limit )
 //    }
 
-    public func readpartial( maxlen: Int, outbuf: Data? = nil ) -> Data? {
+    public func readpartial( maxlen: Int, _ outbuf: Data? = nil ) -> Data? {
         notImplemented( "IO.readpartial" )
         return nil
     }
@@ -403,7 +404,7 @@ public class IO: Object {
         return self
     }
 
-    public func reopen( path: to_s_protocol, mode_str: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public func reopen( path: to_s_protocol, _ mode_str: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
         return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.filePointer ) == nil ? 1 : 0,
                         file: file, line: line ) ? self : nil
     }
@@ -426,13 +427,13 @@ public class IO: Object {
         return Stat( fd: fileno, file: __FILE__, line: __LINE__ )
     }
 
-    public func sysread( maxlen: Int? = nil, outbuf: Data? = nil ) -> Data? {
+    public func sysread( maxlen: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
         let data = outbuf ?? Data( capacity: maxlen ?? stat?.size ?? 1_000_000 )
         data.length = Darwin.read( Int32(fileno), data.bytes, data.capacity )
         return data.length > 0 ? data : nil
     }
 
-    public func sysseek( offset: Int, whence: Int = Int(SEEK_SET) ) -> Int {
+    public func sysseek( offset: Int, _ whence: Int = Int(SEEK_SET) ) -> Int {
         return Int(lseek( Int32(fileno), off_t(offset), Int32(whence) ))
     }
 
@@ -457,7 +458,7 @@ public class IO: Object {
     }
 
     public func ungetbyte( string: to_s_protocol ) {
-        ungetc( Int32(Array(arrayLiteral: string.to_s)[0])!, filePointer )
+        ungetc( Int32(Array(arrayLiteral: string.to_s)[0])!, filePointer ) ////
     }
 
     public func ungetbyte( byte: Int ) {
@@ -465,8 +466,6 @@ public class IO: Object {
     }
 
     public func write( string: to_d_protocol ) -> fixnum {
-        Swift.print( "444 \(filePointer)" )
-
         return fwrite( string.to_d.bytes, 1, string.to_d.length, filePointer );
     }
 

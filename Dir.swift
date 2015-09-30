@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Dir.swift#15 $
+//  $Id: //depot/RubyNative/Dir.swift#18 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -28,7 +28,7 @@ public class Dir: Object {
         super.init()
         if dirPointer == nil {
             if warningDisposition != .Ignore {
-                Swift.print( "RubyNative: opendir '\(dirpath)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)")
+                STDERR.print( "RubyNative: opendir '\(dirpath)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -114,7 +114,7 @@ public class Dir: Object {
         return String( UTF8String: info.pw_dir )
     }
 
-    public class func mkdir( string: to_s_protocol, mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mkdir( string: to_s_protocol, _ mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return unixOK( "Dir.mkdir '\(string.to_s)", Darwin.mkdir( string.to_s, mode_t(mode) ), file: file, line: line )
     }
 
@@ -130,11 +130,11 @@ public class Dir: Object {
         return getwd
     }
 
-    public class func rmdir( string: to_s_protocol, mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rmdir( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
-    public class func unlink( string: to_s_protocol, mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func unlink( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
@@ -153,7 +153,7 @@ public class Dir: Object {
     }
 
     public var fileno: Int {
-        return Int(dirPointer.memory.__dd_fd)
+        return Int(dirfd(dirPointer))
     }
 
     public var inspect: String {
@@ -168,7 +168,7 @@ public class Dir: Object {
         return Int(telldir( dirPointer ))
     }
 
-    public func read( file: String = __FILE__, line: Int = __LINE__ ) -> String? {
+    public func read() -> String? {
         let ent = readdir( dirPointer )
         if ent != nil {
             return withUnsafeMutablePointer (&ent.memory.d_name) {
