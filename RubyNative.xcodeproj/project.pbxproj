@@ -1,0 +1,651 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BB1E3DFF1BBAF6F900C8F408 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D9F1BB7599C00C0E190 /* Utilities.m */; };
+		BB1E3E001BBAF6F900C8F408 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8EE2E51BB22FFD00348257 /* main.swift */; };
+		BB1E3E011BBAF6F900C8F408 /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D891BB7437B00C0E190 /* Object.swift */; };
+		BB1E3E021BBAF6F900C8F408 /* Kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB319ECE1BB882F3002FB64B /* Kernel.swift */; };
+		BB1E3E041BBAF6F900C8F408 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D951BB743C900C0E190 /* Array.swift */; };
+		BB1E3E051BBAF6F900C8F408 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D931BB743C100C0E190 /* String.swift */; };
+		BB1E3E071BBAF6F900C8F408 /* Rational.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0DA11BB7940400C0E190 /* Rational.swift */; };
+		BB1E3E081BBAF6F900C8F408 /* Integer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D971BB7446A00C0E190 /* Integer.swift */; };
+		BB1E3E091BBAF6F900C8F408 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D991BB7447C00C0E190 /* Float.swift */; };
+		BB1E3E0A1BBAF6F900C8F408 /* IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D8B1BB7438B00C0E190 /* IO.swift */; };
+		BB1E3E0B1BBAF6F900C8F408 /* Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46501BB94EC400701DE9 /* Dir.swift */; };
+		BB1E3E0C1BBAF6F900C8F408 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D8D1BB7439B00C0E190 /* File.swift */; };
+		BB1E3E0D1BBAF6F900C8F408 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD464E1BB94B6100701DE9 /* Data.swift */; };
+		BB1E3E0E1BBAF6F900C8F408 /* StringIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD463B1BB8CF1700701DE9 /* StringIO.swift */; };
+		BB1E3E0F1BBAF6F900C8F408 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D911BB743AF00C0E190 /* Time.swift */; };
+		BB1E3E101BBAF6F900C8F408 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D8F1BB743A600C0E190 /* Stat.swift */; };
+		BB1E3E111BBAF6F900C8F408 /* Addrinfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46481BB8D26700701DE9 /* Addrinfo.swift */; };
+		BB1E3E121BBAF6F900C8F408 /* BasicSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD463E1BB8D0F400701DE9 /* BasicSocket.swift */; };
+		BB1E3E131BBAF6F900C8F408 /* IPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46461BB8D1C800701DE9 /* IPSocket.swift */; };
+		BB1E3E141BBAF6F900C8F408 /* UDPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46441BB8D19100701DE9 /* UDPSocket.swift */; };
+		BB1E3E151BBAF6F900C8F408 /* TCPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46401BB8D10A00701DE9 /* TCPSocket.swift */; };
+		BB1E3E161BBAF6F900C8F408 /* TCPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46421BB8D17E00701DE9 /* TCPServer.swift */; };
+		BB1E3E171BBAF6F900C8F408 /* UNIXSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46521BB94F5000701DE9 /* UNIXSocket.swift */; };
+		BB1E3E181BBAF6F900C8F408 /* UNIXServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAD46541BB94F6100701DE9 /* UNIXServer.swift */; };
+		BB8EE2E71BB2307700348257 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8EE2E51BB22FFD00348257 /* main.swift */; };
+		BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE491BBB6FD9009E718C /* FileUtils.swift */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE4E1BBB709B009E718C /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4D1BBB709B009E718C /* Process.swift */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE911BBBFDA5009E718C /* RubyNativeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */; };
+		BBB3FE931BBBFDA5009E718C /* RubyNative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* RubyNative.framework */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE9A1BBC02C9009E718C /* MISSING.md in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE991BBC02C9009E718C /* MISSING.md */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BBB3FE9B1BBC02DC009E718C /* LICENSE */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BBB3FE941BBBFDA5009E718C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB3F78881BACAB9B00435430 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB3F78901BACAB9B00435430;
+			remoteInfo = Framework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BB45AF581BB0CC8A00428322 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BB319ECE1BB882F3002FB64B /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
+		BB3F78911BACAB9B00435430 /* RubyNative.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyNative.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB3F78A21BACAC3600435430 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB45AF5A1BB0CC8A00428322 /* RubyNative */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubyNative; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB5C0D891BB7437B00C0E190 /* Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
+		BB5C0D8B1BB7438B00C0E190 /* IO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IO.swift; sourceTree = "<group>"; };
+		BB5C0D8D1BB7439B00C0E190 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		BB5C0D8F1BB743A600C0E190 /* Stat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
+		BB5C0D911BB743AF00C0E190 /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		BB5C0D931BB743C100C0E190 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		BB5C0D951BB743C900C0E190 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		BB5C0D971BB7446A00C0E190 /* Integer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Integer.swift; sourceTree = "<group>"; };
+		BB5C0D991BB7447C00C0E190 /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
+		BB5C0D9F1BB7599C00C0E190 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		BB5C0DA11BB7940400C0E190 /* Rational.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rational.swift; sourceTree = "<group>"; };
+		BB8EE2E51BB22FFD00348257 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		BBAD463B1BB8CF1700701DE9 /* StringIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringIO.swift; sourceTree = "<group>"; };
+		BBAD463E1BB8D0F400701DE9 /* BasicSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicSocket.swift; sourceTree = "<group>"; };
+		BBAD46401BB8D10A00701DE9 /* TCPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPSocket.swift; sourceTree = "<group>"; };
+		BBAD46421BB8D17E00701DE9 /* TCPServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPServer.swift; sourceTree = "<group>"; };
+		BBAD46441BB8D19100701DE9 /* UDPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UDPSocket.swift; sourceTree = "<group>"; };
+		BBAD46461BB8D1C800701DE9 /* IPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPSocket.swift; sourceTree = "<group>"; };
+		BBAD46481BB8D26700701DE9 /* Addrinfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Addrinfo.swift; sourceTree = "<group>"; };
+		BBAD464E1BB94B6100701DE9 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		BBAD46501BB94EC400701DE9 /* Dir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dir.swift; sourceTree = "<group>"; };
+		BBAD46521BB94F5000701DE9 /* UNIXSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UNIXSocket.swift; sourceTree = "<group>"; };
+		BBAD46541BB94F6100701DE9 /* UNIXServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UNIXServer.swift; sourceTree = "<group>"; };
+		BBB3FE451BBB30F9009E718C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		BBB3FE491BBB6FD9009E718C /* FileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
+		BBB3FE4D1BBB709B009E718C /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
+		BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regexp.swift; sourceTree = "<group>"; };
+		BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubyNativeTests.swift; sourceTree = "<group>"; };
+		BBB3FE921BBBFDA5009E718C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BBB3FE991BBC02C9009E718C /* MISSING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MISSING.md; sourceTree = "<group>"; };
+		BBB3FE9B1BBC02DC009E718C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BB3F788D1BACAB9B00435430 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB45AF571BB0CC8A00428322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BBB3FE8B1BBBFDA5009E718C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBB3FE931BBBFDA5009E718C /* RubyNative.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BB319EEA1BB8CC80002FB64B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F78A21BACAC3600435430 /* Info.plist */,
+				BB5C0D9F1BB7599C00C0E190 /* Utilities.m */,
+				BB8EE2E51BB22FFD00348257 /* main.swift */,
+				BB5C0D891BB7437B00C0E190 /* Object.swift */,
+				BB319ECE1BB882F3002FB64B /* Kernel.swift */,
+				BBB3FE4D1BBB709B009E718C /* Process.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		BB319EEB1BB8CC90002FB64B /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD464E1BB94B6100701DE9 /* Data.swift */,
+				BB5C0D951BB743C900C0E190 /* Array.swift */,
+				BB5C0D931BB743C100C0E190 /* String.swift */,
+				BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */,
+				BB5C0DA11BB7940400C0E190 /* Rational.swift */,
+				BB5C0D971BB7446A00C0E190 /* Integer.swift */,
+				BB5C0D991BB7447C00C0E190 /* Float.swift */,
+			);
+			name = Types;
+			sourceTree = "<group>";
+		};
+		BB319EEC1BB8CCA1002FB64B /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				BB5C0D8B1BB7438B00C0E190 /* IO.swift */,
+				BBAD46501BB94EC400701DE9 /* Dir.swift */,
+				BB5C0D8D1BB7439B00C0E190 /* File.swift */,
+				BBB3FE491BBB6FD9009E718C /* FileUtils.swift */,
+				BBAD463B1BB8CF1700701DE9 /* StringIO.swift */,
+				BB5C0D911BB743AF00C0E190 /* Time.swift */,
+				BB5C0D8F1BB743A600C0E190 /* Stat.swift */,
+			);
+			name = IO;
+			sourceTree = "<group>";
+		};
+		BB3F78871BACAB9B00435430 = {
+			isa = PBXGroup;
+			children = (
+				BBB3FE451BBB30F9009E718C /* README.md */,
+				BBB3FE991BBC02C9009E718C /* MISSING.md */,
+				BBB3FE9B1BBC02DC009E718C /* LICENSE */,
+				BB319EEA1BB8CC80002FB64B /* Core */,
+				BB319EEB1BB8CC90002FB64B /* Types */,
+				BB319EEC1BB8CCA1002FB64B /* IO */,
+				BBAD463D1BB8D0DC00701DE9 /* Networking */,
+				BBB3FE8F1BBBFDA5009E718C /* RubyNativeTests */,
+				BB3F78921BACAB9B00435430 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BB3F78921BACAB9B00435430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F78911BACAB9B00435430 /* RubyNative.framework */,
+				BB45AF5A1BB0CC8A00428322 /* RubyNative */,
+				BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BBAD463D1BB8D0DC00701DE9 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				BBAD46481BB8D26700701DE9 /* Addrinfo.swift */,
+				BBAD463E1BB8D0F400701DE9 /* BasicSocket.swift */,
+				BBAD46461BB8D1C800701DE9 /* IPSocket.swift */,
+				BBAD46441BB8D19100701DE9 /* UDPSocket.swift */,
+				BBAD46401BB8D10A00701DE9 /* TCPSocket.swift */,
+				BBAD46421BB8D17E00701DE9 /* TCPServer.swift */,
+				BBAD46521BB94F5000701DE9 /* UNIXSocket.swift */,
+				BBAD46541BB94F6100701DE9 /* UNIXServer.swift */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
+		BBB3FE8F1BBBFDA5009E718C /* RubyNativeTests */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */,
+				BBB3FE921BBBFDA5009E718C /* Info.plist */,
+			);
+			path = RubyNativeTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BB3F788E1BACAB9B00435430 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BB3F78901BACAB9B00435430 /* Framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "Framework" */;
+			buildPhases = (
+				BB3F788C1BACAB9B00435430 /* Sources */,
+				BB3F788D1BACAB9B00435430 /* Frameworks */,
+				BB3F788E1BACAB9B00435430 /* Headers */,
+				BB3F788F1BACAB9B00435430 /* Resources */,
+				BBAD46601BBAB8C800701DE9 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Framework;
+			productName = RubyNative;
+			productReference = BB3F78911BACAB9B00435430 /* RubyNative.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		BB45AF591BB0CC8A00428322 /* Binary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB45AF5E1BB0CC8A00428322 /* Build configuration list for PBXNativeTarget "Binary" */;
+			buildPhases = (
+				BB45AF561BB0CC8A00428322 /* Sources */,
+				BB45AF571BB0CC8A00428322 /* Frameworks */,
+				BB45AF581BB0CC8A00428322 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Binary;
+			productName = RubyNative;
+			productReference = BB45AF5A1BB0CC8A00428322 /* RubyNative */;
+			productType = "com.apple.product-type.tool";
+		};
+		BBB3FE8D1BBBFDA5009E718C /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				BBB3FE8A1BBBFDA5009E718C /* Sources */,
+				BBB3FE8B1BBBFDA5009E718C /* Frameworks */,
+				BBB3FE8C1BBBFDA5009E718C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */,
+			);
+			name = Tests;
+			productName = RubyNativeTests;
+			productReference = BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BB3F78881BACAB9B00435430 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "John Holdsworth";
+				TargetAttributes = {
+					BB3F78901BACAB9B00435430 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					BB45AF591BB0CC8A00428322 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					BBB3FE8D1BBBFDA5009E718C = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyNative" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BB3F78871BACAB9B00435430;
+			productRefGroup = BB3F78921BACAB9B00435430 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BB3F78901BACAB9B00435430 /* Framework */,
+				BB45AF591BB0CC8A00428322 /* Binary */,
+				BBB3FE8D1BBBFDA5009E718C /* Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BB3F788F1BACAB9B00435430 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BBB3FE8C1BBBFDA5009E718C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BBAD46601BBAB8C800701DE9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/Diamond/Frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BB3F788C1BACAB9B00435430 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB1E3DFF1BBAF6F900C8F408 /* Utilities.m in Sources */,
+				BB1E3E001BBAF6F900C8F408 /* main.swift in Sources */,
+				BB1E3E011BBAF6F900C8F408 /* Object.swift in Sources */,
+				BB1E3E021BBAF6F900C8F408 /* Kernel.swift in Sources */,
+				BB1E3E041BBAF6F900C8F408 /* Array.swift in Sources */,
+				BB1E3E051BBAF6F900C8F408 /* String.swift in Sources */,
+				BB1E3E071BBAF6F900C8F408 /* Rational.swift in Sources */,
+				BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */,
+				BB1E3E081BBAF6F900C8F408 /* Integer.swift in Sources */,
+				BB1E3E091BBAF6F900C8F408 /* Float.swift in Sources */,
+				BB1E3E0A1BBAF6F900C8F408 /* IO.swift in Sources */,
+				BB1E3E0B1BBAF6F900C8F408 /* Dir.swift in Sources */,
+				BB1E3E0C1BBAF6F900C8F408 /* File.swift in Sources */,
+				BB1E3E0D1BBAF6F900C8F408 /* Data.swift in Sources */,
+				BB1E3E0E1BBAF6F900C8F408 /* StringIO.swift in Sources */,
+				BB1E3E0F1BBAF6F900C8F408 /* Time.swift in Sources */,
+				BB1E3E101BBAF6F900C8F408 /* Stat.swift in Sources */,
+				BB1E3E111BBAF6F900C8F408 /* Addrinfo.swift in Sources */,
+				BB1E3E121BBAF6F900C8F408 /* BasicSocket.swift in Sources */,
+				BBB3FE9A1BBC02C9009E718C /* MISSING.md in Sources */,
+				BB1E3E131BBAF6F900C8F408 /* IPSocket.swift in Sources */,
+				BB1E3E141BBAF6F900C8F408 /* UDPSocket.swift in Sources */,
+				BB1E3E151BBAF6F900C8F408 /* TCPSocket.swift in Sources */,
+				BBB3FE4E1BBB709B009E718C /* Process.swift in Sources */,
+				BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */,
+				BB1E3E161BBAF6F900C8F408 /* TCPServer.swift in Sources */,
+				BB1E3E171BBAF6F900C8F408 /* UNIXSocket.swift in Sources */,
+				BB1E3E181BBAF6F900C8F408 /* UNIXServer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB45AF561BB0CC8A00428322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB8EE2E71BB2307700348257 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BBB3FE8A1BBBFDA5009E718C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBB3FE911BBBFDA5009E718C /* RubyNativeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB3F78901BACAB9B00435430 /* Framework */;
+			targetProxy = BBB3FE941BBBFDA5009E718C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		BB3F78971BACAB9B00435430 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DSTROOT = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(HOME)/Library/Diamond/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/Diamond/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SYMROOT = /tmp/build;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BB3F78981BACAB9B00435430 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DSTROOT = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(HOME)/Library/Diamond/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/Diamond/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SYMROOT = /tmp/build;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		BB3F789A1BACAB9B00435430 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
+				PRODUCT_NAME = RubyNative;
+				SKIP_INSTALL = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BB3F789B1BACAB9B00435430 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DSTROOT = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
+				PRODUCT_NAME = RubyNative;
+				SKIP_INSTALL = NO;
+			};
+			name = Release;
+		};
+		BB45AF5F1BB0CC8A00428322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = RubyNative;
+				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
+			};
+			name = Debug;
+		};
+		BB45AF601BB0CC8A00428322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = RubyNative;
+				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
+			};
+			name = Release;
+		};
+		BBB3FE961BBBFDA5009E718C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RubyNativeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyNativeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BBB3FE971BBBFDA5009E718C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RubyNativeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyNativeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyNative" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB3F78971BACAB9B00435430 /* Debug */,
+				BB3F78981BACAB9B00435430 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB3F789A1BACAB9B00435430 /* Debug */,
+				BB3F789B1BACAB9B00435430 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB45AF5E1BB0CC8A00428322 /* Build configuration list for PBXNativeTarget "Binary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB45AF5F1BB0CC8A00428322 /* Debug */,
+				BB45AF601BB0CC8A00428322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBB3FE961BBBFDA5009E718C /* Debug */,
+				BBB3FE971BBBFDA5009E718C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BB3F78881BACAB9B00435430 /* Project object */;
+}
