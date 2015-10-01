@@ -357,6 +357,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/Diamond/Frameworks";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 

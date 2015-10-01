@@ -291,5 +291,15 @@ public class FileUtils {
     public class func touch_f( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "touch -f \(expand( list ))", file: file, line: line )
     }
-    
+
+    public class func uptodate( new: to_s_protocol, old_list: [String] ) -> Bool {
+        let new_time = File.stat( new )?.mtime.to_f ?? 0
+        for old in old_list {
+            if File.stat( old )?.mtime.to_f > new_time {
+                return false
+            }
+        }
+        return true
+    }
+
 }
