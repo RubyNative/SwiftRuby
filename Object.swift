@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Object.swift#12 $
+//  $Id: //depot/RubyNative/Object.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -21,7 +21,7 @@ public let STDOUT = IO( what: "stdout", filePointer: stdout )!
 public let STDERR = IO( what: "stderr", filePointer: stderr )!
 
 public func RNLog( msg: String ) {
-    STDERR.print( "RuxbyNative: "+msg )
+    STDERR.print( "RubyNative: "+msg )
 }
 
 public let ENV = ENVProxy()
