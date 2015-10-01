@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Dir.swift#19 $
+//  $Id: //depot/RubyNative/Dir.swift#20 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -28,7 +28,7 @@ public class Dir: Object {
         super.init()
         if dirPointer == nil {
             if warningDisposition != .Ignore {
-                STDERR.print( "RubyNative: opendir '\(dirpath)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
+                RNLog( "opendir '\(dirpath)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
             }
             if warningDisposition == .Fatal {
                 fatalError()

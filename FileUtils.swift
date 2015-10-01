@@ -21,7 +21,7 @@ public func systemOK( command: to_s_protocol, file: String?, line: Int = 0 ) -> 
     if STATUS != 0 {
         if file != nil {
             if warningDisposition != .Ignore {
-                print( "RubyNative: system call '\(command.to_s)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
+                RNLog( "system call '\(command.to_s)' failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
             }
             if warningDisposition == .Fatal {
                 fatalError()

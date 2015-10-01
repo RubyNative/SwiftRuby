@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Time.swift#5 $
+//  $Id: //depot/RubyNative/Time.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -27,15 +27,20 @@ public class Time : Object, to_s_protocol {
     }
 
     public class func now() -> Time {
-        let now = Time()
-        gettimeofday( &now.value, &now.tzone )
-        return now
+        return Time()
     }
 
-    public init( seconds: Int = 0, usec: Int = 0 ) { ///
+    public convenience override init() {
+        self.init( seconds: nil )
+        gettimeofday( &value, &tzone )
+    }
+
+    public init( seconds: Int?, usec: Int = 0 ) { ///
         super.init()
-        value.tv_sec = seconds.to_i
-        value.tv_usec = suseconds_t(usec.to_i)
+        if seconds != nil {
+            value.tv_sec = seconds!.to_i
+            value.tv_usec = suseconds_t(usec.to_i)
+        }
     }
 
     public convenience init( spec: timespec ) {

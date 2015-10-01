@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Data.swift#11 $
+//  $Id: //depot/RubyNative/Data.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -27,7 +27,7 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
     public var length = 0 {
         didSet {
             if length > capacity {
-                print( "Data length > capacity" )
+                RNLog( "Data length \(length) > capacity \(capacity)" )
                 fatalError()
             }
             bytes[length] = 0

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/String.swift#8 $
+//  $Id: //depot/RubyNative/String.swift#10 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -42,7 +42,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
             return val
         }
         let dummy = -99999999
-        STDERR.print( "Unable to convert \(self) to Int. Returning \(dummy)" )
+        RNLog( "Unable to convert \(self) to Int. Returning \(dummy)" )
         return dummy
     }
 
@@ -51,7 +51,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
             return val
         }
         let dummy = -99999999.0
-        STDERR.print( "Unable to convert \(self) to Int. Returning \(dummy)" )
+        RNLog( "Unable to convert \(self) to Doubleb. Returning \(dummy)" )
         return dummy
     }
 

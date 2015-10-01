@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Object.swift#9 $
+//  $Id: //depot/RubyNative/Object.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -19,6 +19,10 @@ public let ARGV = Process.arguments
 public let STDIN = IO( what: "stdin", filePointer: stdin )!
 public let STDOUT = IO( what: "stdout", filePointer: stdout )!
 public let STDERR = IO( what: "stderr", filePointer: stderr )!
+
+public func RNLog( msg: String ) {
+    STDERR.print( "RuxbyNative: "+msg )
+}
 
 public let ENV = ENVProxy()
 
@@ -42,9 +46,9 @@ public class ENVProxy {
 }
 
 @asmname("instanceVariablesForClass")
-func instanceVariablesForClass( obj: AnyClass, _: NSMutableArray ) -> NSArray
+func instanceVariablesForClass( cls: AnyClass, _: NSMutableArray ) -> NSArray
 @asmname("methodSymbolsForClass")
-func methodSymbolsForClass( obj: AnyClass ) -> NSArray
+func methodSymbolsForClass( cls: AnyClass ) -> NSArray
 
 public class Object: NSObject {
 

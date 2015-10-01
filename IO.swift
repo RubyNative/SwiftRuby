@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/IO.swift#20 $
+//  $Id: //depot/RubyNative/IO.swift#24 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -84,7 +84,7 @@ public class IO: Object {
         super.init()
         if filePointer == nil {
             if warningDisposition != .Ignore {
-                STDERR.print( "RubyNative: \(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
+                RNLog( "\(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -218,11 +218,17 @@ public class IO: Object {
         }
         else if selected > 0 {
             var readable = [IO](), writable = [IO](), errored = [IO]()
-            var data = [([IO]?, UnsafeMutablePointer<Int32>, UnsafeMutablePointer<[IO]>)]()
-            data.append( (read_array, read_flags, io_array_ptr( &readable )) )
-            data.append( (write_array, write_flags, io_array_ptr( &writable )) )
-            data.append( (error_array, error_flags, io_array_ptr( &errored )) )
-            for (array, flags, out) in data {
+
+            func io_array_ptr( inout val: [IO] ) -> UnsafeMutablePointer<[IO]> {
+                return withUnsafeMutablePointer (&val) {
+                    UnsafeMutablePointer($0)
+                }
+            }
+
+            for (array, flags, out) in [
+                (read_array, read_flags, io_array_ptr( &readable )),
+                (write_array, write_flags, io_array_ptr( &writable )),
+                (error_array, error_flags, io_array_ptr( &errored ))] {
                 if array != nil {
                     for io in array! {
                        if FD_ISSET( io.fileno, flags ) {
@@ -239,12 +245,6 @@ public class IO: Object {
         free( write_flags )
         free( error_flags )
         return out
-    }
-
-    private class func io_array_ptr( inout val: [IO] ) -> UnsafeMutablePointer<[IO]> {
-        return withUnsafeMutablePointer (&val) {
-            UnsafeMutablePointer($0)
-        }
     }
 
     public class func sysopen( path: to_s_protocol, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
@@ -380,13 +380,15 @@ public class IO: Object {
     }
 
     func gets( sep: to_s_protocol = dollarSlash ) -> String? {
-        let data = Data( capacity: 1_000_000 ) // TODO: should loop
+        let data = Data( capacity: 1_000_000 ) //// TODO: should loop
         if fgets( data.bytes, Int32(data.capacity), filePointer ) == nil {
             return nil
         }
         lineno++
         data.length = Int(strlen( data.bytes ))
-        data.bytes[data.length-1] = 0 ////
+        if data.length > 0 && data.bytes[data.length-1] == Int8("\n".utf8.first!) {
+            data.bytes[data.length-1] = 0 //// chomp
+        }
         return data.to_s
     }
 
@@ -448,7 +450,7 @@ public class IO: Object {
     }
     
     public func read( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
-        let data = outbuf ?? Data( capacity: length ?? stat?.size ?? 1_000_000 )
+        let data = outbuf ?? Data( capacity: length ?? stat?.size ?? 1_000_000 ) ////
         data.length = fread( data.bytes, 1, data.capacity, filePointer )
         return data.length != 0 ? data : nil
     }
@@ -517,7 +519,7 @@ public class IO: Object {
     }
 
     public func sysread( maxlen: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
-        let data = outbuf ?? Data( capacity: maxlen ?? stat?.size ?? 1_000_000 )
+        let data = outbuf ?? Data( capacity: maxlen ?? stat?.size ?? 1_000_000 ) ////
         data.length = Darwin.read( Int32(fileno), data.bytes, data.capacity )
         return data.length > 0 ? data : nil
     }

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#16 $
+//  $Id: //depot/RubyNative/File.swift#17 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -29,7 +29,7 @@ public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, li
     if returnValue != 0 {
         if file != nil {
             if warningDisposition != .Ignore {
-                print( "RubyNative: \(what.to_s) failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
+                RNLog( "\(what.to_s) failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -41,7 +41,7 @@ public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, li
 }
 
 func notImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    print( "RubyNative: \(what) not implemented at \(file)#\(line)" )
+    RNLog( "\(what) not implemented at \(file)#\(line)" )
 }
 
 public class File : IO {
