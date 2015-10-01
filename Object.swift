@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Object.swift#8 $
+//  $Id: //depot/RubyNative/Object.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -20,9 +20,9 @@ public let STDIN = IO( what: "stdin", filePointer: stdin )!
 public let STDOUT = IO( what: "stdout", filePointer: stdout )!
 public let STDERR = IO( what: "stderr", filePointer: stderr )!
 
-public let ENV = ENVImpl()
+public let ENV = ENVProxy()
 
-public class ENVImpl {
+public class ENVProxy {
 
     public subscript( key: to_s_protocol ) -> String? {
         get {

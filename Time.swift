@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Time.swift#4 $
+//  $Id: //depot/RubyNative/Time.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -42,7 +42,7 @@ public class Time : Object, to_s_protocol {
         self.init( seconds: spec.tv_sec, usec: spec.tv_nsec/1000 )
     }
 
-    public convenience init(_ time_f: Double ) {
+    public convenience init( time_f: Double ) {
         let time_i = Int(time_f.to_f)
         self.init( seconds: time_i, usec: Int((time_f.to_f-Double(time_i))*Double(CLOCKS_PER_SEC)) )
     }
@@ -54,7 +54,7 @@ public class Time : Object, to_s_protocol {
     }
 
     public class func at( time_f: to_f_protocol ) -> Time {
-        return Time( time_f.to_f )
+        return Time( time_f: time_f.to_f )
     }
 
     public class func at( time: Int, usec: Double = 0 ) -> Time {
@@ -208,7 +208,7 @@ public class Time : Object, to_s_protocol {
 
     public func round( ndigits: Int ) -> Time {
         let divisor = pow( 10.0, Double(ndigits.to_i) )
-        return Time( Darwin.round(self.to_f * divisor) / divisor )
+        return Time( time_f: Darwin.round(self.to_f * divisor) / divisor )
     }
 
     public var saturday: Bool {

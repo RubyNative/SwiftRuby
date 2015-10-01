@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#13 $
+//  $Id: //depot/RubyNative/File.swift#14 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -25,7 +25,7 @@ public enum WarningDisposition {
 
 public var warningDisposition: WarningDisposition = .Warn
 
-func unixOK( what: String, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
+public func unixOK( what: String, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
     if returnValue != 0 {
         if file != nil {
             if warningDisposition != .Ignore {

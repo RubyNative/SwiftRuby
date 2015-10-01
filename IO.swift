@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/IO.swift#17 $
+//  $Id: //depot/RubyNative/IO.swift#19 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -17,6 +17,30 @@ import Foundation
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
 public let dollarSlash = "\n"
+
+private let selectBitsPerFlag: Int32 = 32
+private let selectShift = 5
+private let selectBitMask = (1<<selectShift)-1
+
+public func FD_ZERO( flags: UnsafeMutablePointer<Int32> ) {
+    memset( flags, 0, sizeof(fd_set) )
+}
+
+public func FD_CLR( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
+    let set = flags + Int( fd>>selectShift )
+    set.memory &= ~Int32(1<<(fd&selectBitMask))
+}
+
+public func FD_SET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
+    let set = flags + Int( fd>>selectShift )
+    set.memory |= Int32(1<<(fd&selectBitMask))
+}
+
+public func FD_ISSET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
+    let set = flags + Int( fd>>selectShift )
+    return (set.memory & Int32(1<<(fd&selectBitMask))) != 0
+}
+
 
 @asmname("fcntl")
 func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
@@ -153,9 +177,74 @@ public class IO: Object {
         return readlines( name, dollarSlash, limit, file: file, line: line )
     }
 
-    public class func select( read_array: [IO], _ write_array: [IO]? = nil, _ error_array: [IO]? = nil, timeout: Int? = nil ) {
-        /// later, much later...
-        notImplemented( "IO.select" )
+    public class func select( read_array: [IO]?, _ write_array: [IO]? = nil, _ error_array: [IO]? = nil,
+                        timeout: Double? = nil, file: String = __FILE__, line: Int = __LINE__ )
+                            -> (readable: [IO], writable: [IO], errored: [IO])? {
+
+        let read_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
+        let write_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
+        let error_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
+        var max_fd = -1
+
+        for (array, flags) in [(read_array, read_flags), (write_array, write_flags), (error_array, error_flags)] {
+            FD_ZERO( flags )
+            if array != nil {
+                for io in array! {
+                    FD_SET( io.fileno, flags )
+                    if max_fd < io.fileno {
+                        max_fd = io.fileno
+                    }
+                }
+            }
+        }
+
+        var time: Time?
+        if timeout != nil {
+            time = Time( time_f: timeout! )
+        }
+
+        let selected = Darwin.select( Int32(max_fd),
+                        UnsafeMutablePointer<fd_set>( read_flags ),
+                        UnsafeMutablePointer<fd_set>( write_flags ),
+                        UnsafeMutablePointer<fd_set>( error_flags ),
+            time != nil ? withUnsafeMutablePointer( &time!.value ) {
+                            UnsafeMutablePointer($0)
+                        } : nil )
+
+        var out: (readable: [IO], writable: [IO], errored: [IO])?
+
+        if selected < 0 {
+            unixOK( "IO.select", selected, file: file, line: line )
+        }
+        else if selected > 0 {
+            var readable = [IO](), writable = [IO](), errored = [IO]()
+            var data = [([IO]?, UnsafeMutablePointer<Int32>, UnsafeMutablePointer<[IO]>)]()
+            data.append( (read_array, read_flags, io_array_ptr( &readable )) )
+            data.append( (write_array, write_flags, io_array_ptr( &writable )) )
+            data.append( (error_array, error_flags, io_array_ptr( &errored )) )
+            for (array, flags, out) in data {
+                if array != nil {
+                    for io in array! {
+                       if FD_ISSET( io.fileno, flags ) {
+                            out.memory.append( io )
+                        }
+                    }
+                }
+            }
+
+            out = (readable, writable, errored)
+        }
+
+        free( read_flags )
+        free( write_flags )
+        free( error_flags )
+        return out
+    }
+
+    private class func io_array_ptr( inout val: [IO] ) -> UnsafeMutablePointer<[IO]> {
+        return withUnsafeMutablePointer (&val) {
+            UnsafeMutablePointer($0)
+        }
     }
 
     public class func sysopen( path: to_s_protocol, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
