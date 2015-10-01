@@ -9,7 +9,7 @@
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
-//  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/fileutils/rdoc/public class func html
+//  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/fileutils/rdoc/FileUtils.html
 //
 
 import Foundation
@@ -39,8 +39,8 @@ public class FileUtils {
 
     }
     
-    private class func expand( list: [String] ) -> String {
-        return list.map { "\""+$0.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")+"\"" }
+    private class func expand( list: to_a_protocol ) -> String {
+        return list.to_a.map { "\""+$0.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")+"\"" }
             .joinWithSeparator( " " )
     }
 
@@ -50,20 +50,20 @@ public class FileUtils {
 
 //    public class func cd( dir: to_s_protocol, options: [String]?, file: String = __FILE__, line: Int = __LINE__ ) -> Bool { {|dir| .... }
 
-    public class func chmod( mode: to_s_protocol, _ list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chmod( mode: to_s_protocol, _ list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "chmod \(mode.to_s) \(expand( list ))", file: file, line: line )
     }
 
-    public class func chmod_R( mode: to_s_protocol, _ list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chmod_R( mode: to_s_protocol, _ list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "chmod -R \(mode.to_s) \(expand( list ))", file: file, line: line )
     }
 
-    public class func chown( user: to_s_protocol, _ group: to_s_protocol?, _ list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chown( user: to_s_protocol, _ group: to_s_protocol?, _ list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         let whoto = user.to_s + (group != nil ? ":"+group!.to_s : "")
         return systemOK( "chown \(whoto) \(expand( list ))", file: file, line: line )
     }
 
-    public class func chown_R( user: to_s_protocol, _ group: to_s_protocol?, _ list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chown_R( user: to_s_protocol, _ group: to_s_protocol?, _ list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         let whoto = user.to_s + (group != nil ? ":"+group!.to_s : "")
         return systemOK( "chown -R \(whoto) \(expand( list ))", file: file, line: line )
     }
@@ -103,27 +103,15 @@ public class FileUtils {
         return false
     }
 
-    public class func cp( src: to_s_protocol, _ dest: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return cp( [src.to_s], dest, options, file: file, line: line )
-    }
-
-    public class func cp( list: [String], _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func cp( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "cp \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
 
-    public class func cp_r( src: to_s_protocol, _ dest: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return cp_r( [src.to_s], dest, options, file: file, line: line )
-    }
-
-    public class func cp_r( list: [String], _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func cp_r( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "cp -r \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
     
-    public class func cp_rf( src: to_s_protocol, _ dest: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return cp_rf( [src.to_s], dest, options, file: file, line: line )
-    }
-
-    public class func cp_rf( list: [String], _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func cp_rf( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "cp -rf \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
     
@@ -140,19 +128,11 @@ public class FileUtils {
         return ln( old, new, options, file: file, line: line )
     }
 
-    public class func ln( old: to_s_protocol, _ new: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return ln( [old.to_s], new, options, file: file, line: line )
-    }
-
-    public class func ln( list: [String], _ destdir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func ln( list: to_a_protocol, _ destdir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "ln \(expand( list )) \"\(destdir.to_s)\"", file: file, line: line )
     }
 
-    public class func ln_s( old: to_s_protocol, _ new: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return ln_s( [old.to_s], new, options, file: file, line: line )
-    }
-
-    public class func ln_s( list: [String], _ destdir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func ln_s( list: to_a_protocol, _ destdir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "ln -s \(expand( list )) \"\(destdir.to_s)\"", file: file, line: line )
     }
 
@@ -160,43 +140,27 @@ public class FileUtils {
         return systemOK( "ln -sf \"\(src.to_s)\" \"\(dest.to_s)\"", file: file, line: line )
     }
 
-    public class func makedirs( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func makedirs( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return mkdir_p( list, options, file: file, line: line )
     }
     
-    public class func mkdir( dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return mkdir( [dir.to_s], options, file: file, line: line )
-    }
-
-    public class func mkdir( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mkdir( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "mkdir \(expand( list ))", file: file, line: line )
     }
 
-    public class func mkdir_p( dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return mkdir_p( [dir.to_s], options, file: file, line: line )
-    }
-
-    public class func mkdir_p( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mkdir_p( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
             return systemOK( "mkdir -p \(expand( list ))", file: file, line: line )
     }
 
-    public class func mkpath( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mkpath( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return mkdir_p( list, options, file: file, line: line )
     }
 
-    public class func mv( src: to_s_protocol, _ dest: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return mv( [src.to_s], dest, options, file: file, line: line )
-    }
-
-    public class func mv( list: [String], _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mv( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "mv \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
     
-    public class func mv_f( src: to_s_protocol, _ dest: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return mv_f( [src.to_s], dest, options, file: file, line: line )
-    }
-
-    public class func mv_f( list: [String], _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mv_f( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "mv -f \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
     
@@ -216,51 +180,31 @@ public class FileUtils {
         return rm( [path.to_s], options, file: file, line: line )
     }
 
-    public class func rm( path: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rm( [path.to_s], options, file: file, line: line )
-    }
-
-    public class func rm( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rm( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "rm \(expand( list ))", file: file, line: line )
     }
     
-    public class func rmdir( dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rmdir( [dir.to_s], options, file: file, line: line )
-    }
-
-    public class func rmdir( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return systemOK( "rmdir \(expand( list ))", file: file, line: line )
-    }
-    
-    public class func rm_f( path: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rm_f( [path.to_s], options, file: file, line: line )
-    }
-
-    public class func rm_f( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rm_f( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "rm -f \(expand( list ))", file: file, line: line )
     }
     
-    public class func rm_r( dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rm_r( [dir.to_s], options, file: file, line: line )
-    }
-
-    public class func rm_r( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rm_r( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "rm -r \(expand( list ))", file: file, line: line )
     }
 
-    public class func rm_rf( dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rm_rf( [dir.to_s], options, file: file, line: line )
+    public class func rm_rf( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        return systemOK( "rm -rf \(expand( list.to_a ))", file: file, line: line )
     }
 
-    public class func rm_rf( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return systemOK( "rm -rf \(expand( list ))", file: file, line: line )
+    public class func rmdir( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        return systemOK( "rmdir \(expand( list ))", file: file, line: line )
     }
 
-    public class func rmtree( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rmtree( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return rm_rf( list, options, file: file, line: line )
     }
 
-    public class func safe_unlink( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func safe_unlink( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return rm_f( list, options, file: file, line: line )
     }
 
@@ -268,34 +212,22 @@ public class FileUtils {
         return ln_s( src, dest, options, file: file, line: line )
     }
 
-    public class func rsync( src: to_s_protocol, _ dest: to_s_protocol, _ args: to_s_protocol = "-rlp", _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return rsync( [src.to_s], dest, file: file, line: line )
-    }
-
-    public class func rsync( list: [String], _ dir: to_s_protocol, _ args: to_s_protocol = "-rlp", _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rsync( list: to_a_protocol, _ dir: to_s_protocol, _ args: to_s_protocol = "-rlp", _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "rsync \(args) \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
     }
 
-    public class func touch( path: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return touch( [path.to_s], options, file: file, line: line )
-    }
-
-    public class func touch( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func touch( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "touch \(expand( list ))", file: file, line: line )
     }
     
-    public class func touch_f( path: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return touch_f( [path.to_s], options, file: file, line: line )
-    }
-
-    public class func touch_f( list: [String], _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func touch_f( list: to_a_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return systemOK( "touch -f \(expand( list ))", file: file, line: line )
     }
 
-    public class func uptodate( new: to_s_protocol, old_list: [String] ) -> Bool {
-        let new_time = File.stat( new )?.mtime.to_f ?? 0
-        for old in old_list {
-            if File.stat( old )?.mtime.to_f > new_time {
+    public class func uptodate( new: to_s_protocol, old_list: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        let new_time = Stat( new, file: nil )?.mtime.to_f ?? 0
+        for old in old_list.to_a {
+            if Stat( old, file: file, line: line )?.mtime.to_f > new_time {
                 return false
             }
         }

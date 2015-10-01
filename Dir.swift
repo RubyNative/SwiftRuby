@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Dir.swift#18 $
+//  $Id: //depot/RubyNative/Dir.swift#19 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -91,7 +91,7 @@ public class Dir: Object {
             .stringByReplacingOccurrencesOfString( "?", withString: "[^/]" )
             .stringByReplacingOccurrencesOfString( "___", withString: ".*" )
         //print( regex )
-        return IO.popen( "find \"\(root)\" -print | egrep -e \"^(./)?\(regex)$\"" )?.readlines()
+        return IO.popen( "find \"\(root)\" -print | egrep -e \"^(./)?\(regex)$\"", file: file, line: line )?.readlines()
     }
 
     public class func home( user: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {

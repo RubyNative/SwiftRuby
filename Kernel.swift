@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Kernel.swift#7 $
+//  $Id: //depot/RubyNative/Kernel.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -21,10 +21,10 @@ public class Kernel: Object {
         let index1 = path.startIndex.advancedBy(1)
 
         if path.substringToIndex( index1 ) == "|" {
-            return IO.popen( path.substringFromIndex( index1 ), mode.to_s, file: file, line: line )
+            return IO.popen( path.substringFromIndex( index1 ), mode, file: file, line: line )
         }
         else {
-            return File.open( path, mode.to_s, perm, file: file, line: line )
+            return File.open( path, mode, perm, file: file, line: line )
         }
     }
 

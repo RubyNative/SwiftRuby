@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Array.swift#4 $
+//  $Id: //depot/RubyNative/Array.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -20,12 +20,18 @@ public protocol to_a_protocol {
 
 }
 
-extension Array {
+extension Array: to_a_protocol {
 
-    public func each( block: (String) -> () ) {
-        for string in self {
-            block( String( string ) ) ///// cast! doesn't work in binary targets 
-        }
+    public var to_a: [String] {
+        return map { String( $0 ) }
     }
 
+}
+
+extension CollectionType {
+
+    public func each( block: (Generator.Element) -> () ) {
+        forEach( block )
+    }
+    
 }

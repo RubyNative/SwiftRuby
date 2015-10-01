@@ -4,6 +4,7 @@ Pod::Spec.new do |s|
     s.summary     = "Port of Ruby api to Swift for scripting"
     s.homepage    = "https://github.com/RubyNative/RubyNative"
     s.social_media_url = "https://twitter.com/Injection4Xcode"
+    s.documentation_url = "https://github.com/RubyNative/RubyNative"
     s.license     = { :type => "MIT" }
     s.authors     = { "johnno1962" => "native@johnholdsworth.com" }
 

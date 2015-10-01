@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#14 $
+//  $Id: //depot/RubyNative/File.swift#16 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -25,11 +25,11 @@ public enum WarningDisposition {
 
 public var warningDisposition: WarningDisposition = .Warn
 
-public func unixOK( what: String, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
+public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
     if returnValue != 0 {
         if file != nil {
             if warningDisposition != .Ignore {
-                print( "RubyNative: \(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
+                print( "RubyNative: \(what.to_s) failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -105,12 +105,22 @@ public class File : IO {
         return Stat( file_name, file: file, line: line )?.chardev
     }
 
-    public class func chmod( mode_int: Int, _ file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.chmod '\(file_name.to_s)'", Darwin.chmod( file_name.to_s, mode_t(mode_int) ), file: file, line: line )
+    public class func chmod( mode_int: Int, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        var ok = true
+        file_names.to_a.each {
+            (file_name) in
+            ok = ok && unixOK( "File.chmod '\(file_name)'", Darwin.chmod( file_name, mode_t(mode_int) ), file: file, line: line )
+        }
+        return ok
     }
 
-    public class func chown( owner_int: Int?, _ group_int: Int?, _ file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.chown '\(file_name.to_s)'", Darwin.chown( file_name.to_s, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
+    public class func chown( owner_int: Int?, _ group_int: Int?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        var ok = true
+        file_names.to_a.each {
+            (file_name) in
+            ok = ok && unixOK( "File.chown '\(file_name)'", Darwin.chown( file_name, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
+        }
+        return ok
     }
 
     public class func ctime( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Time? {
@@ -178,12 +188,22 @@ public class File : IO {
         return strings.joinWithSeparator( SEPARATOR )
     }
 
-    public class func lchmod( mode_int: Int, _ file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.lchmod '\(file_name.to_s)'", Darwin.lchmod( file_name.to_s, mode_t(mode_int) ), file: file, line: line )
+    public class func lchmod( mode_int: Int, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        var ok = true
+        file_names.to_a.each {
+            (file_name) in
+            ok = ok &&  unixOK( "File.lchmod '\(file_name)'", Darwin.lchmod( file_name, mode_t(mode_int) ), file: file, line: line )
+        }
+        return ok
     }
 
-    public class func lchown( owner_int: Int?, _ group_int: Int?, _ file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.lchown '\(file_name.to_s)'", Darwin.lchown( file_name.to_s, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
+    public class func lchown( owner_int: Int?, _ group_int: Int?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        var ok = true
+        file_names.to_a.each {
+            (file_name) in
+            ok = ok &&  unixOK( "File.lchown '\(file_name.to_s)'", Darwin.lchown( file_name.to_s, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
+        }
+        return ok
     }
     
     public class func link( old_name: to_s_protocol, _ new_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Data.swift#10 $
+//  $Id: //depot/RubyNative/Data.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -64,6 +64,10 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
 
     public var to_s: String {
         return String( UTF8String: bytes )!
+    }
+
+    public var to_a: [String] {
+        return [to_s]
     }
 
     public var data: NSData {

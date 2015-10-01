@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Stat.swift#4 $
+//  $Id: //depot/RubyNative/Stat.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -97,12 +97,12 @@ public class Stat : Object {
     convenience public init?( _ filepath: to_s_protocol, statLink: Bool = false, file: String?, line: Int = 0 ) {
         self.init()
         if statLink {
-            if !unixOK( "lstat \(filepath)", lstat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK( "lstat \(filepath.to_s)", lstat( filepath.to_s, &info ), file: file, line: line ) {
                 return nil
             }
         }
         else {
-            if !unixOK( "stat \(filepath)", stat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK( "stat \(filepath.to_s)", stat( filepath.to_s, &info ), file: file, line: line ) {
                 return nil
             }
         }
