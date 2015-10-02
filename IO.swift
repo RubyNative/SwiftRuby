@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/IO.swift#24 $
+//  $Id: //depot/RubyNative/IO.swift#27 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -16,7 +16,6 @@ import Foundation
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
-public let dollarSlash = "\n"
 
 private let selectBitsPerFlag: Int32 = 32
 private let selectShift = 5
@@ -47,19 +46,31 @@ func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
 public class IO: Object {
 
-    var filePointer = UnsafeMutablePointer<FILE>()
-    var autoclose = true
-    let binmode = true
-    var lineno = 0
-
-    var sync = true {
-        didSet {
-            flush()
-            setvbuf( filePointer, nil, sync ? _IONBF : _IOFBF, 0 )
+    private var _unixFILE = UnsafeMutablePointer<FILE>()
+    public var unixFILE: UnsafeMutablePointer<FILE> {
+        set {
+            _unixFILE = newValue
+        }
+        get {
+            if _unixFILE == nil {
+                RKLog( "Get of nil IO.unixFILE" )
+            }
+            return _unixFILE
         }
     }
 
-    var nonblock = false {
+    public var autoclose = true
+    public let binmode = true
+    public var lineno = 0
+
+    public var sync = true {
+        didSet {
+            flush()
+            setvbuf( unixFILE, nil, sync ? _IONBF : _IOFBF, 0 )
+        }
+    }
+
+    public var nonblock = false {
         didSet {
             var flags = fcntl( Int(F_GETFL), 0 )
             if nonblock {
@@ -72,7 +83,7 @@ public class IO: Object {
         }
     }
 
-    var close_on_exec = false {
+    public var close_on_exec = false {
         didSet {
             if close_on_exec {
                 fcntl( Int(F_SETFD), Int(FD_CLOEXEC) )
@@ -80,18 +91,27 @@ public class IO: Object {
         }
     }
 
-    public init?( what: String, filePointer: UnsafeMutablePointer<FILE>, file: String = __FILE__, line: Int = __LINE__ ) {
+    public var pos: Int {
+        get {
+            return Int(ftell( unixFILE ))
+        }
+        set {
+            seek( newValue )
+        }
+    }
+
+    public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: String = __FILE__, line: Int = __LINE__ ) {
         super.init()
-        if filePointer == nil {
+        if unixFILE == nil && what != nil {
             if warningDisposition != .Ignore {
-                RNLog( "\(what) failed: \(String( UTF8String: strerror( errno ) )!) at \(file)#\(line)" )
+                RKLogerr( "\(what!) failed", file: file, line: line )
             }
             if warningDisposition == .Fatal {
                 fatalError()
             }
-            return nil
+            ////return nil
         }
-        self.filePointer = filePointer
+        self.unixFILE = unixFILE
     }
 
     // MARK: Class methods
@@ -119,10 +139,10 @@ public class IO: Object {
     }
 
     public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return IO( what: "fdopen \(fd)", filePointer: fdopen( Int32(fd), mode.to_s ), file: file, line: line )
+        return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line )
     }
 
-    public class func foreach( name: to_s_protocol, _ sep: to_s_protocol = dollarSlash,
+    public class func foreach( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR,
                                 _ limit: Int? = nil, _ block: (line: String) -> () ) {
         if let ioFile = File.open( name, "r" ) {
             ioFile.each_line( sep, limit, block )
@@ -130,7 +150,7 @@ public class IO: Object {
     }
 
     public class func foreach( name: to_s_protocol, _ limit: Int? = nil, _ block: (line: String) -> () ) {
-        foreach( name, dollarSlash, limit, block )
+        foreach( name, LINE_SEPARATOR, limit, block )
     }
 
     public class func new( fd: Int, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
@@ -148,7 +168,7 @@ public class IO: Object {
     }
 
     public class func popen( command: to_s_protocol, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return IO( what: "IO.popen '\(command)'", filePointer: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line )
+        return IO( what: "IO.popen '\(command)'", unixFILE: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line )
     }
 
     public class func read( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Data? {
@@ -161,7 +181,7 @@ public class IO: Object {
         return nil
     }
 
-    public class func readlines( name: to_s_protocol, _ sep: to_s_protocol = dollarSlash, _ limit: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
+    public class func readlines( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
         if let ioFile = File.open( name, "r", file: file, line: line ) {
             var out = [String]()
             ioFile.each_line( sep, limit, {
@@ -174,7 +194,7 @@ public class IO: Object {
     }
 
     public class func readlines( name: to_s_protocol, _ limit: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
-        return readlines( name, dollarSlash, limit, file: file, line: line )
+        return readlines( name, LINE_SEPARATOR, limit, file: file, line: line )
     }
 
     public class func select( read_array: [IO]?, _ write_array: [IO]? = nil, _ error_array: [IO]? = nil,
@@ -277,10 +297,10 @@ public class IO: Object {
     }
 
     public func close( file: String = __FILE__, line: Int = __LINE__ ) {
-        if filePointer != nil {
-            pclose( filePointer ) == 0 ||
-            unixOK( "IO.fclose \(filePointer)", fclose( filePointer ), file: file, line: line )
-            filePointer = nil
+        if unixFILE != nil {
+            pclose( unixFILE ) == 0 ||
+            unixOK( "IO.fclose \(unixFILE)", fclose( unixFILE ), file: file, line: line )
+            unixFILE = nil
         }
     }
 
@@ -293,13 +313,13 @@ public class IO: Object {
     }
 
     public var closed: Bool {
-        return filePointer == nil
+        return unixFILE == nil
     }
 
     public func each_byte( block: (CChar) -> () ) -> IO {
         while true {
-            let byte = CChar(fgetc( filePointer ))
-            if feof( filePointer ) != 0 {
+            let byte = CChar(fgetc( unixFILE ))
+            if eof {
                 break
             }
             block( byte )
@@ -308,19 +328,15 @@ public class IO: Object {
     }
 
     public func each_char( block: (CChar16) -> () ) -> IO {
-        if let string = read()?.to_s {
-            for ch in string.utf16 {
-                block( ch )
-            }
-        }
+        read()?.to_s.utf16.each( block )
         return self
     }
 
     public func each( limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
-        return each_line( dollarSlash, limit, block )
+        return each_line( LINE_SEPARATOR, limit, block )
     }
 
-    public func each( sep: to_s_protocol = dollarSlash, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    public func each( sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
         return each_line( sep, limit, block )
     }
 
@@ -328,7 +344,7 @@ public class IO: Object {
 //        return each_line( dollarSlash, limit, block )
 //    }
 //
-    public func each_line( sep: to_s_protocol = dollarSlash, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    public func each_line( sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
         var count = 0
         while let line = readline( sep ) {
             block( line: line )
@@ -340,7 +356,7 @@ public class IO: Object {
     }
 
     public var eof: Bool {
-        return feof( filePointer ) != 0
+        return feof( unixFILE ) != 0
     }
 
     public func fcntl( arg: Int, _ arg2: Int = 0 ) -> Int {
@@ -352,11 +368,11 @@ public class IO: Object {
     }
 
     public var fileno: Int {
-        return Int(Darwin.fileno( filePointer ))
+        return Int(Darwin.fileno( unixFILE ))
     }
 
     public func flush( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "IO.fflush", fflush( filePointer ), file: file, line: line )
+        return unixOK( "IO.fflush", fflush( unixFILE ), file: file, line: line )
     }
 
     public func fsync( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
@@ -364,30 +380,36 @@ public class IO: Object {
     }
 
     public var getbyte: fixnum? {
-        let byte = CChar(fgetc( filePointer ))
-        if feof( filePointer ) != 0 {
+        let byte = CChar(fgetc( unixFILE ))
+        if feof( unixFILE ) != 0 {
             return nil
         }
         return Int(byte)
     }
 
     public var getc: String? {
-        let byte = CChar(fgetc( filePointer ))
-        if feof( filePointer ) != 0 {
+        let byte = CChar(fgetc( unixFILE ))
+        if feof( unixFILE ) != 0 {
             return nil
         }
         return String(byte)
     }
 
-    func gets( sep: to_s_protocol = dollarSlash ) -> String? {
+    static public let newline = Int8("\n".characterAtIndex( 0 ))
+    static public let retchar = Int8("\r".characterAtIndex( 0 ))
+
+    func gets( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
         let data = Data( capacity: 1_000_000 ) //// TODO: should loop
-        if fgets( data.bytes, Int32(data.capacity), filePointer ) == nil {
+        if fgets( data.bytes, Int32(data.capacity), unixFILE ) == nil {
             return nil
         }
         lineno++
         data.length = Int(strlen( data.bytes ))
-        if data.length > 0 && data.bytes[data.length-1] == Int8("\n".utf8.first!) {
-            data.bytes[data.length-1] = 0 //// chomp
+        if data.length > 0 && data.bytes[data.length-1] == IO.newline {
+            data.bytes[--data.length] = 0
+        }
+        if data.length > 0 && data.bytes[data.length-1] == IO.retchar {
+            data.bytes[--data.length] = 0
         }
         return data.to_s
     }
@@ -410,7 +432,7 @@ public class IO: Object {
     }
 
     public func lines( block: (line: String) -> () ) -> IO {
-        return each_line( dollarSlash, nil, block )
+        return each_line( LINE_SEPARATOR, nil, block )
     }
 
     public var pid: Int {
@@ -419,16 +441,12 @@ public class IO: Object {
         return -1
     }
 
-    public var pos: Int {
-        return Int(ftell( filePointer ))
-    }
-
     public func print( string: to_s_protocol ) -> Int {
-        return Int(fputs( string.to_s, filePointer ))
+        return Int(fputs( string.to_s, unixFILE ))
     }
 
-    public func print( strings: [String] ) {
-        for string in strings {
+    public func print( strings: to_a_protocol ) {
+        for string in strings.to_a {
             print( string )
         }
     }
@@ -438,20 +456,20 @@ public class IO: Object {
     }
 
     func putc( obj: Int ) -> Int {
-        return Int(fputc( Int32(obj), filePointer ))
+        return Int(fputc( Int32(obj), unixFILE ))
     }
 
     public func puts( string: to_s_protocol ) -> Int {
         return print( string )
     }
 
-    public func puts( strings: [String] ) {
+    public func puts( strings: to_a_protocol ) {
         return print( strings )
     }
     
     public func read( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
         let data = outbuf ?? Data( capacity: length ?? stat?.size ?? 1_000_000 ) ////
-        data.length = fread( data.bytes, 1, data.capacity, filePointer )
+        data.length = fread( data.bytes, 1, data.capacity, unixFILE )
         return data.length != 0 ? data : nil
     }
 
@@ -468,13 +486,13 @@ public class IO: Object {
         return getc
     }
 
-    public func readline( sep: to_s_protocol = dollarSlash ) -> String? {
+    public func readline( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
         return gets( sep )
     }
 
     public func readlines( /*sep: to_s_protocol = dollarSlash, _*/ limit: Int? = nil ) -> [String] {
         var out = [String]()
-        each_line( dollarSlash, limit, {
+        each_line( LINE_SEPARATOR, limit, {
             (line) in
             out.append( line )
         } )
@@ -491,22 +509,22 @@ public class IO: Object {
     }
 
     public func reopen( other_IO: IO ) -> IO {
-        self.filePointer = other_IO.filePointer ////
+        self.unixFILE = other_IO.unixFILE ////
         return self
     }
 
     public func reopen( path: to_s_protocol, _ mode_str: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.filePointer ) == nil ? 1 : 0,
+        return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.unixFILE ) == nil ? 1 : 0,
                         file: file, line: line ) ? self : nil
     }
 
     public func rewind( file: String = __FILE__, line: Int = __LINE__ ) -> IO {
-        Darwin.rewind( filePointer )
+        Darwin.rewind( unixFILE )
         return self
     }
 
     public func seek( amount: Int, _ whence: Int = Int(SEEK_SET), file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "IO.seek", fseek( filePointer, amount, Int32(whence) ), file: file, line: line )
+        return unixOK( "IO.seek", fseek( unixFILE, amount, Int32(whence) ), file: file, line: line )
     }
 
     public func set_encoding( ext_enc: Int ) -> IO? {
@@ -541,7 +559,11 @@ public class IO: Object {
     }
 
     public var to_s: String {
-        return "\(self)"
+        if let data = read() {
+            return data.to_s
+        }
+        RKLog( "IO.to_s, no data" )
+        return ""
     }
 
     public var tty: Bool {
@@ -549,15 +571,15 @@ public class IO: Object {
     }
 
     public func ungetbyte( string: to_s_protocol ) {
-        ungetc( Int32(Array(arrayLiteral: string.to_s)[0])!, filePointer ) ////
+        ungetc( Int32(Array(arrayLiteral: string.to_s)[0])!, unixFILE ) ////
     }
 
     public func ungetbyte( byte: Int ) {
-        ungetc( Int32(byte), filePointer )
+        ungetc( Int32(byte), unixFILE )
     }
 
     public func write( string: to_d_protocol ) -> fixnum {
-        return fwrite( string.to_d.bytes, 1, string.to_d.length, filePointer );
+        return fwrite( string.to_d.bytes, 1, string.to_d.length, unixFILE );
     }
 
     public func write_nonblock( string: to_d_protocol, options: Array<String>? = nil ) -> Int {

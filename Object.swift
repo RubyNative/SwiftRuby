@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Object.swift#13 $
+//  $Id: //depot/RubyNative/Object.swift#15 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -16,12 +16,16 @@ import Foundation
 
 public let ARGV = Process.arguments
 
-public let STDIN = IO( what: "stdin", filePointer: stdin )!
-public let STDOUT = IO( what: "stdout", filePointer: stdout )!
-public let STDERR = IO( what: "stderr", filePointer: stderr )!
+public let STDIN = IO( what: "stdin", unixFILE: stdin )
+public let STDOUT = IO( what: "stdout", unixFILE: stdout )
+public let STDERR = IO( what: "stderr", unixFILE: stderr )
 
-public func RNLog( msg: String ) {
-    STDERR.print( "RubyNative: "+msg )
+public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    STDERR.print( "RubyNative: "+msg+" at \(file)#\(line)\n" )
+}
+
+public func RKLogerr( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    RKLog( msg+": \(String( UTF8String: strerror( errno ) )!)", file: file, line: line )
 }
 
 public let ENV = ENVProxy()

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/String.swift#11 $
+//  $Id: //depot/RubyNative/String.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -42,7 +42,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
             return val
         }
         let dummy = -99999999
-        RNLog( "Unable to convert \(self) to Int. Returning \(dummy)" )
+        RKLog( "Unable to convert \(self) to Int. Returning \(dummy)" )
         return dummy
     }
 
@@ -51,7 +51,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
             return val
         }
         let dummy = -99999999.0
-        RNLog( "Unable to convert \(self) to Doubleb. Returning \(dummy)" )
+        RKLog( "Unable to convert \(self) to Doubleb. Returning \(dummy)" )
         return dummy
     }
 
@@ -62,12 +62,12 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
 
     public var to_d: Data {
         var array = self.to_c
-        return Data( bytes: &array, length: Int(strlen(array)) ) //// avoids extra copy but relies on autorelease scope..
-//        let length = Int(strlen( &array ))
-//        let data = Data( capacity: length )
-//        memcpy( data.bytes, array, length+1 )
-//        data.length = length
-//        return data
+        //return Data( bytes: &array, length: Int(strlen(array)) ) //// avoids extra copy but relies on autorelease scope..
+        let length = Int(strlen( &array ))
+        let data = Data( capacity: length )
+        memcpy( data.bytes, array, length+1 )
+        data.length = length
+        return data
     }
 
     public subscript ( i: Int ) -> String {

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Integer.swift#4 $
+//  $Id: //depot/RubyNative/Integer.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -34,6 +34,18 @@ extension Int {
 
     public var to_s: String {
         return String( self )
+    }
+
+    public var to_b: String {
+        return String( self, radix: 2 )
+    }
+
+    public var to_o: String {
+        return String( self, radix: 8  )
+    }
+
+    public var to_h: String {
+        return String( self, radix: 16, uppercase: false )
     }
 
 }

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#20 $
+//  $Id: //depot/RubyNative/File.swift#22 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -29,7 +29,7 @@ public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, li
     if returnValue != 0 {
         if file != nil {
             if warningDisposition != .Ignore {
-                RNLog( "\(what.to_s) failed: \(String( UTF8String: strerror( errno ) )!) at \(file!)#\(line)")
+                RKLogerr( "\(what.to_s) failed", file: file!, line: line )
             }
             if warningDisposition == .Fatal {
                 fatalError()
@@ -41,7 +41,7 @@ public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, li
 }
 
 func notImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    RNLog( "\(what) not implemented at \(file)#\(line)" )
+    RKLog( "\(what) not implemented", file: file, line: line )
 }
 
 public class File : IO {
@@ -61,7 +61,7 @@ public class File : IO {
 
     public init?( filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
         self.filepath = filepath.to_s
-        super.init( what: "fopen '\(filepath.to_s)'", filePointer: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
+        super.init( what: "fopen '\(filepath.to_s)'", unixFILE: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
     }
 
     // MARK: Class Methods
@@ -236,6 +236,10 @@ public class File : IO {
 
     public class func readable_real( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool? {
         return Stat( file_name, file: file, line: line )?.readable_real
+    }
+
+    public class func read( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Data? {
+        return File( filepath: file_name, file: file, line: line )?.read()
     }
 
     public class func readlink( link_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
