@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#22 $
+//  $Id: //depot/RubyNative/File.swift#23 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -62,6 +62,9 @@ public class File : IO {
     public init?( filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
         self.filepath = filepath.to_s
         super.init( what: "fopen '\(filepath.to_s)'", unixFILE: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
+        if unixFILE == nil {
+            return nil
+        }
     }
 
     // MARK: Class Methods
