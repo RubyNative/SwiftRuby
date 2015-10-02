@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#17 $
+//  $Id: //depot/RubyNative/File.swift#20 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -128,7 +128,7 @@ public class File : IO {
     }
 
     public class func delete( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return unixOK( "File.truncate '\(file_name.to_s)'", unlink( file_name.to_s ), file: file, line: line )
+        return unixOK( "File.delete '\(file_name.to_s)'", Darwin.unlink( file_name.to_s ), file: file, line: line )
     }
 
     public class func directory( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool? {
@@ -296,6 +296,10 @@ public class File : IO {
         return unixOK( "File.truncate '\(file_name.to_s)' \(integer)", Darwin.truncate( file_name.to_s, off_t(integer) ), file: file, line: line )
     }
 
+    public class func unlink( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        return delete( file_name.to_s, file: file, line: line )
+    }
+
     public class func utime( file_name: to_s_protocol, _ actime: to_i_protocol, _ modtime: to_i_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         var times = utimbuf()
         times.actime = time_t(actime.to_i)
@@ -309,6 +313,10 @@ public class File : IO {
 
     public class func writable_real( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool? {
         return Stat( file_name, file: file, line: line )?.writable_real
+    }
+
+    public class func write( file_name: to_s_protocol, string: to_d_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> fixnum? {
+        return File( filepath: file_name, file: file, line: line )?.write( string )
     }
 
     public class func zero( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool? {

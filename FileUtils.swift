@@ -29,6 +29,7 @@ public func systemOK( command: to_s_protocol, file: String?, line: Int = 0 ) -> 
         }
         return false
     }
+    STATUS >>= 8
     return true
 }
 
