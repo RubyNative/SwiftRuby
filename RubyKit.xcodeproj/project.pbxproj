@@ -35,8 +35,8 @@
 		BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE491BBB6FD9009E718C /* FileUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE4E1BBB709B009E718C /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4D1BBB709B009E718C /* Process.swift */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */; settings = {ASSET_TAGS = (); }; };
-		BBB3FE911BBBFDA5009E718C /* RubyNativeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */; };
-		BBB3FE931BBBFDA5009E718C /* RubyNative.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* RubyNative.framework */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE911BBBFDA5009E718C /* RubyKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */; };
+		BBB3FE931BBBFDA5009E718C /* RubyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* RubyKit.framework */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BBB3FE9B1BBC02DC009E718C /* LICENSE */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -64,9 +64,9 @@
 
 /* Begin PBXFileReference section */
 		BB319ECE1BB882F3002FB64B /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
-		BB3F78911BACAB9B00435430 /* RubyNative.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyNative.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB3F78911BACAB9B00435430 /* RubyKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3F78A21BACAC3600435430 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BB45AF5A1BB0CC8A00428322 /* RubyNative */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubyNative; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB45AF5A1BB0CC8A00428322 /* RubyKit */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubyKit; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB5C0D891BB7437B00C0E190 /* Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
 		BB5C0D8B1BB7438B00C0E190 /* IO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IO.swift; sourceTree = "<group>"; };
 		BB5C0D8D1BB7439B00C0E190 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -95,11 +95,11 @@
 		BBB3FE4D1BBB709B009E718C /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regexp.swift; sourceTree = "<group>"; };
 		BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubyNativeTests.swift; sourceTree = "<group>"; };
+		BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubyKitTests.swift; sourceTree = "<group>"; };
 		BBB3FE921BBBFDA5009E718C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBB3FE991BBC02C9009E718C /* MISSING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MISSING.md; sourceTree = "<group>"; };
 		BBB3FE9B1BBC02DC009E718C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		BBB3FEA21BBC16E2009E718C /* RubyNative.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RubyNative.podspec; sourceTree = "<group>"; };
+		BBB3FEA21BBC16E2009E718C /* RubyKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RubyKit.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBB3FE931BBBFDA5009E718C /* RubyNative.framework in Frameworks */,
+				BBB3FE931BBBFDA5009E718C /* RubyKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,12 +175,12 @@
 				BBB3FE9B1BBC02DC009E718C /* LICENSE */,
 				BBB3FE451BBB30F9009E718C /* README.md */,
 				BBB3FE991BBC02C9009E718C /* MISSING.md */,
-				BBB3FEA21BBC16E2009E718C /* RubyNative.podspec */,
+				BBB3FEA21BBC16E2009E718C /* RubyKit.podspec */,
 				BB319EEA1BB8CC80002FB64B /* Core */,
 				BB319EEB1BB8CC90002FB64B /* Types */,
 				BB319EEC1BB8CCA1002FB64B /* IO */,
 				BBAD463D1BB8D0DC00701DE9 /* Networking */,
-				BBB3FE8F1BBBFDA5009E718C /* RubyNativeTests */,
+				BBB3FE8F1BBBFDA5009E718C /* RubyKitTests */,
 				BB3F78921BACAB9B00435430 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -188,8 +188,8 @@
 		BB3F78921BACAB9B00435430 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB3F78911BACAB9B00435430 /* RubyNative.framework */,
-				BB45AF5A1BB0CC8A00428322 /* RubyNative */,
+				BB3F78911BACAB9B00435430 /* RubyKit.framework */,
+				BB45AF5A1BB0CC8A00428322 /* RubyKit */,
 				BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */,
 			);
 			name = Products;
@@ -210,13 +210,13 @@
 			name = Networking;
 			sourceTree = "<group>";
 		};
-		BBB3FE8F1BBBFDA5009E718C /* RubyNativeTests */ = {
+		BBB3FE8F1BBBFDA5009E718C /* RubyKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				BBB3FE901BBBFDA5009E718C /* RubyNativeTests.swift */,
+				BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */,
 				BBB3FE921BBBFDA5009E718C /* Info.plist */,
 			);
-			path = RubyNativeTests;
+			path = RubyKitTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,8 +247,8 @@
 			dependencies = (
 			);
 			name = Framework;
-			productName = RubyNative;
-			productReference = BB3F78911BACAB9B00435430 /* RubyNative.framework */;
+			productName = RubyKit;
+			productReference = BB3F78911BACAB9B00435430 /* RubyKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BB45AF591BB0CC8A00428322 /* Binary */ = {
@@ -264,8 +264,8 @@
 			dependencies = (
 			);
 			name = Binary;
-			productName = RubyNative;
-			productReference = BB45AF5A1BB0CC8A00428322 /* RubyNative */;
+			productName = RubyKit;
+			productReference = BB45AF5A1BB0CC8A00428322 /* RubyKit */;
 			productType = "com.apple.product-type.tool";
 		};
 		BBB3FE8D1BBBFDA5009E718C /* Tests */ = {
@@ -282,7 +282,7 @@
 				BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */,
 			);
 			name = Tests;
-			productName = RubyNativeTests;
+			productName = RubyKitTests;
 			productReference = BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -307,7 +307,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyNative" */;
+			buildConfigurationList = BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyKit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -356,7 +356,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/Diamond/Frameworks";
+			shellScript = "mkdir -p ~/Library/CocoaScript/Frameworks &&\nrsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/CocoaScript/Frameworks";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -408,7 +408,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBB3FE911BBBFDA5009E718C /* RubyNativeTests.swift in Sources */,
+				BBB3FE911BBBFDA5009E718C /* RubyKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +464,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/Diamond/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -511,6 +512,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/Diamond/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -538,7 +540,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
-				PRODUCT_NAME = RubyNative;
+				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -562,7 +564,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
-				PRODUCT_NAME = RubyNative;
+				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
 			};
 			name = Release;
@@ -571,7 +573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "$(HOME)/bin";
-				PRODUCT_NAME = RubyNative;
+				PRODUCT_NAME = RubyKit;
 				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
 			};
 			name = Debug;
@@ -580,7 +582,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "$(HOME)/bin";
-				PRODUCT_NAME = RubyNative;
+				PRODUCT_NAME = RubyKit;
 				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
 			};
 			name = Release;
@@ -589,9 +591,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = RubyNativeTests/Info.plist;
+				INFOPLIST_FILE = RubyKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyNativeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -600,9 +602,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = RubyNativeTests/Info.plist;
+				INFOPLIST_FILE = RubyKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyNativeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -610,7 +612,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyNative" */ = {
+		BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB3F78971BACAB9B00435430 /* Debug */,

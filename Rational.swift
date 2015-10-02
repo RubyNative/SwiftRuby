@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Rational.swift#5 $
+//  $Id: //depot/RubyKit/Rational.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //

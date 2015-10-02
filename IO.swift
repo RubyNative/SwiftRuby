@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/IO.swift#27 $
+//  $Id: //depot/RubyKit/IO.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -103,15 +103,13 @@ public class IO: Object {
     public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: String = __FILE__, line: Int = __LINE__ ) {
         super.init()
         if unixFILE == nil && what != nil {
-            if warningDisposition != .Ignore {
-                RKLogerr( "\(what!) failed", file: file, line: line )
-            }
-            if warningDisposition == .Fatal {
-                fatalError()
-            }
-            ////return nil
+            RKError( "\(what!) failed", file: file, line: line )
         }
         self.unixFILE = unixFILE
+    }
+
+    public func ifValid() -> IO? {
+        return _unixFILE != nil ? self : nil
     }
 
     // MARK: Class methods
@@ -139,7 +137,7 @@ public class IO: Object {
     }
 
     public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line )
+        return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line ).ifValid()
     }
 
     public class func foreach( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR,
@@ -168,7 +166,7 @@ public class IO: Object {
     }
 
     public class func popen( command: to_s_protocol, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
-        return IO( what: "IO.popen '\(command)'", unixFILE: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line )
+        return IO( what: "IO.popen '\(command)'", unixFILE: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line ).ifValid()
     }
 
     public class func read( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Data? {
@@ -284,9 +282,9 @@ public class IO: Object {
 
     // MARK: Instance methods
 
-    public func advise( advice: Int, _ offset: Int = 0, _ len: Int = 0 ) {
-        notImplemented( "IO.advise" )
-    }
+//    public func advise( advice: Int, _ offset: Int = 0, _ len: Int = 0 ) {
+//        notImplemented( "IO.advise" )
+//    }
 
     public func bytes( block: (CChar) -> () ) -> IO {
         return each_byte( block )
@@ -304,13 +302,13 @@ public class IO: Object {
         }
     }
 
-    public func close_read() {
-        notImplemented( "IO.close_read" )
-    }
-
-    public func close_write() {
-        notImplemented( "IO.close_write" )
-    }
+//    public func close_read() {
+//        notImplemented( "IO.close_read" )
+//    }
+//
+//    public func close_write() {
+//        notImplemented( "IO.close_write" )
+//    }
 
     public var closed: Bool {
         return unixFILE == nil
@@ -363,9 +361,9 @@ public class IO: Object {
         return Int(_fcntl( Int32(fileno), Int32(arg), Int32(arg2) ))
     }
 
-    public func fdatasync() {
-        notImplemented( "IO.fdatasync" )
-    }
+//    public func fdatasync() {
+//        notImplemented( "IO.fdatasync" )
+//    }
 
     public var fileno: Int {
         return Int(Darwin.fileno( unixFILE ))
@@ -395,8 +393,8 @@ public class IO: Object {
         return String(byte)
     }
 
-    static public let newline = Int8("\n".characterAtIndex( 0 ))
-    static public let retchar = Int8("\r".characterAtIndex( 0 ))
+    static public let newline = Int8("\n".ord)
+    static public let retchar = Int8("\r".ord)
 
     func gets( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
         let data = Data( capacity: 1_000_000 ) //// TODO: should loop
@@ -422,10 +420,10 @@ public class IO: Object {
         return Int(NSUTF8StringEncoding)
     }
 
-    public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
-        notImplemented( "IO.ioctl" )
-        return 1
-    }
+//    public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
+//        notImplemented( "IO.ioctl" )
+//        return 1
+//    }
 
     public var isatty: Bool {
         return Darwin.isatty( Int32(fileno) ) != 0
@@ -435,11 +433,11 @@ public class IO: Object {
         return each_line( LINE_SEPARATOR, nil, block )
     }
 
-    public var pid: Int {
-        /// no possible without re-implementing popen()
-        notImplemented( "IO.pid" )
-        return -1
-    }
+//    public var pid: Int {
+//        /// no possible without re-implementing popen()
+//        notImplemented( "IO.pid" )
+//        return -1
+//    }
 
     public func print( string: to_s_protocol ) -> Int {
         return Int(fputs( string.to_s, unixFILE ))
@@ -503,10 +501,10 @@ public class IO: Object {
 //        return readlines( dollarSlash, limit )
 //    }
 
-    public func readpartial( maxlen: Int, _ outbuf: Data? = nil ) -> Data? {
-        notImplemented( "IO.readpartial" )
-        return nil
-    }
+//    public func readpartial( maxlen: Int, _ outbuf: Data? = nil ) -> Data? {
+//        notImplemented( "IO.readpartial" )
+//        return nil
+//    }
 
     public func reopen( other_IO: IO ) -> IO {
         self.unixFILE = other_IO.unixFILE ////
@@ -527,10 +525,10 @@ public class IO: Object {
         return unixOK( "IO.seek", fseek( unixFILE, amount, Int32(whence) ), file: file, line: line )
     }
 
-    public func set_encoding( ext_enc: Int ) -> IO? {
-        notImplemented( "IO.set_encoding" )
-        return nil
-    }
+//    public func set_encoding( ext_enc: Int ) -> IO? {
+//        notImplemented( "IO.set_encoding" )
+//        return nil
+//    }
 
     public var stat: Stat? {
         return Stat( fd: fileno, file: __FILE__, line: __LINE__ )
@@ -571,7 +569,7 @@ public class IO: Object {
     }
 
     public func ungetbyte( string: to_s_protocol ) {
-        ungetc( Int32(Array(arrayLiteral: string.to_s)[0])!, unixFILE ) ////
+        ungetc( Int32(string.to_s.characterAtIndex(0)), unixFILE ) ////
     }
 
     public func ungetbyte( byte: Int ) {

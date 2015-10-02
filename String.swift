@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/String.swift#12 $
+//  $Id: //depot/RubyKit/String.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -80,6 +80,10 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
 
     public func characterAtIndex( i: Int ) -> CChar16 {
         return self[i].utf16.first!
+    }
+
+    public var ord: CChar16 {
+        return characterAtIndex(0)
     }
 
 }

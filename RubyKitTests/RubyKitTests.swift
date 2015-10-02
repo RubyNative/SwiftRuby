@@ -5,6 +5,10 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
+//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#1 $
+//
+//  Repo: https://github.com/RubyNative/RubyNative
+//
 
 import XCTest
 import RubyNative

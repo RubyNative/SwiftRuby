@@ -20,12 +20,7 @@ public func systemOK( command: to_s_protocol, file: String?, line: Int = 0 ) -> 
     STATUS = Int(system( command.to_s ) >> 8)
     if STATUS != 0 {
         if file != nil {
-            if warningDisposition != .Ignore {
-                RKLogerr( "system call '\(command.to_s)'", file: file!, line: line )
-            }
-            if warningDisposition == .Fatal {
-                fatalError()
-            }
+            RKError( "system call '\(command.to_s)'", file: file!, line: line )
         }
         return false
     }

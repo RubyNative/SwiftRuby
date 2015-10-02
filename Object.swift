@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Object.swift#15 $
+//  $Id: //depot/RubyKit/Object.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -24,8 +24,22 @@ public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) 
     STDERR.print( "RubyNative: "+msg+" at \(file)#\(line)\n" )
 }
 
-public func RKLogerr( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    RKLog( msg+": \(String( UTF8String: strerror( errno ) )!)", file: file, line: line )
+public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    if warningDisposition != .Ignore {
+        RKLog( msg+": \(String( UTF8String: strerror( errno ) )!)", file: file, line: line )
+    }
+    if warningDisposition == .Fatal {
+        fatalError()
+    }
+}
+
+public func RKFatal( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    RKLog( msg, file: file, line: line )
+    fatalError()
+}
+
+func notImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    RKFatal( "\(what) not implemented", file: file, line: line )
 }
 
 public let ENV = ENVProxy()

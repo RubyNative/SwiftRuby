@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/File.swift#23 $
+//  $Id: //depot/RubyKit/File.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -28,20 +28,11 @@ public var warningDisposition: WarningDisposition = .Warn
 public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
     if returnValue != 0 {
         if file != nil {
-            if warningDisposition != .Ignore {
-                RKLogerr( "\(what.to_s) failed", file: file!, line: line )
-            }
-            if warningDisposition == .Fatal {
-                fatalError()
-            }
+            RKError( "\(what.to_s) failed", file: file!, line: line )
         }
         return false
     }
     return true
-}
-
-func notImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    RKLog( "\(what) not implemented", file: file, line: line )
 }
 
 public class File : IO {
@@ -62,7 +53,7 @@ public class File : IO {
     public init?( filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
         self.filepath = filepath.to_s
         super.init( what: "fopen '\(filepath.to_s)'", unixFILE: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
-        if unixFILE == nil {
+        if ifValid() == nil {
             return nil
         }
     }
@@ -170,10 +161,10 @@ public class File : IO {
         return Stat( file_name, file: file, line: line )?.file == true
     }
 
-    public class func fnmatch( pattern: to_s_protocol, _ path: to_s_protocol, _ flags: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        notImplemented( "File.fnmatch" )
-        return false
-    }
+//    public class func fnmatch( pattern: to_s_protocol, _ path: to_s_protocol, _ flags: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+//        notImplemented( "File.fnmatch" )
+//        return false
+//    }
 
     public class func ftype( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
         return Stat( file_name, file: file, line: line )?.ftype

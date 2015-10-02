@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/StringIO.swift#9 $
+//  $Id: //depot/RubyKit/StringIO.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -63,8 +63,8 @@ public class StringIO: IO {
             return nil
         }
 
-        let sepchar = Int32(sep.to_s.characterAtIndex( 0 ))
-        let endOfLine = UnsafeMutablePointer<Int8>( memchr( data.bytes+offset, sepchar, Int(data.length-offset) ) )
+        let sepchar = sep.to_s.ord
+        let endOfLine = UnsafeMutablePointer<Int8>( memchr( data.bytes+offset, Int32(sepchar), Int(data.length-offset) ) )
 
         if endOfLine != nil {
             endOfLine.memory = 0

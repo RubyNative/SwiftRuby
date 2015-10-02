@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyNative/Dir.swift#21 $
+//  $Id: //depot/RubyKit/Dir.swift#1 $
 //
 //  Repo: https://github.com/RubyNative/RubyNative
 //
@@ -27,12 +27,7 @@ public class Dir: Object {
         dirPointer = opendir( dirpath )
         super.init()
         if dirPointer == nil {
-            if warningDisposition != .Ignore {
-                RKLogerr( "opendir '\(dirpath)' failed", file: file, line: line )
-            }
-            if warningDisposition == .Fatal {
-                fatalError()
-            }
+            RKError( "opendir '\(dirpath)' failed", file: file, line: line )
             return nil
         }
     }
