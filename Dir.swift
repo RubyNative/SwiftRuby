@@ -5,16 +5,16 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Dir.swift#1 $
+//  $Id: //depot/RubyKit/Dir.swift#4 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Dir.html
 //
 
 import Foundation
 
-public class Dir: Object {
+public class Dir: Object, to_a_protocol {
 
     let dirpath: String
     var dirPointer: UnsafeMutablePointer<DIR>
@@ -32,6 +32,14 @@ public class Dir: Object {
         }
     }
 
+    public class func new( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
+        return Dir( dirname: string, file: file, line: line )
+    }
+
+    public class func open( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
+        return new( string, file: file, line: line )
+    }
+    
     public class func chdir( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return unixOK( "Dir.chdir '\(string.to_s)", Darwin.chdir( string.to_s ), file: file, line: line )
     }
@@ -85,8 +93,8 @@ public class Dir: Object {
             .stringByReplacingOccurrencesOfString( "*", withString: "[^/]*" )
             .stringByReplacingOccurrencesOfString( "?", withString: "[^/]" )
             .stringByReplacingOccurrencesOfString( "___", withString: ".*" )
-        //print( regex )
-        return IO.popen( "find \"\(root)\" -print | egrep -e \"^(./)?\(regex)$\"", file: file, line: line )?.readlines()
+        let command = "find -E \"\(root)\" -regex \"^(./)?\(regex)$\"| sed -e s/^.\\\\///"
+        return IO.popen( command, file: file, line: line )?.readlines()
     }
 
     public class func home( user: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
@@ -111,14 +119,6 @@ public class Dir: Object {
 
     public class func mkdir( string: to_s_protocol, _ mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return unixOK( "Dir.mkdir '\(string.to_s)", Darwin.mkdir( string.to_s, mode_t(mode) ), file: file, line: line )
-    }
-
-    public class func new( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
-        return Dir( dirname: string, file: file, line: line )
-    }
-
-    public class func open( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
-        return new( string, file: file, line: line )
     }
 
     public class var pwd: String? {
@@ -183,6 +183,15 @@ public class Dir: Object {
 
     public var tell: Int  {
         return pos
+    }
+
+    public var to_a: [String] {
+        var out = [String]()
+        each {
+            (entry) in
+            out .append( entry )
+        }
+        return out
     }
 
     public var to_path: String {

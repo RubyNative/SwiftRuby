@@ -7,7 +7,7 @@
 //
 //  $Id: //depot/RubyNative/File.swift#3 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/fileutils/rdoc/FileUtils.html
 //
@@ -97,6 +97,10 @@ public class FileUtils {
             return true
         }
         return false
+    }
+
+    public class func cat( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        return systemOK( "cat \(expand( list )) >\"\(dir.to_s)\"", file: file, line: line )
     }
 
     public class func cp( list: to_a_protocol, _ dir: to_s_protocol, _ options: [String]? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {

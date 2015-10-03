@@ -7,7 +7,7 @@
 //
 //  $Id: //depot/RubyNative/Array.swift#3 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Process.html
 //

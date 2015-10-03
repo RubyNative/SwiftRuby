@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Data.swift#1 $
+//  $Id: //depot/RubyKit/Data.swift#4 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Data.html
 //
@@ -51,6 +51,21 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
         self.capacity = capacity
     }
 
+    public func append( extra: to_d_protocol ) -> Int {
+        let extra = extra.to_d
+        let required = length + extra.length
+        if required + 1 > capacity {
+            capacity += max( required - capacity, 10_000 )
+        }
+        memcpy( bytes+length, extra.bytes, extra.length )
+        length += extra.length
+        return extra.length
+    }
+
+    public var to_a: [String] {
+        return [to_s]
+    }
+
     public var to_c: [CChar] {
         var data = [CChar]( count: capacity+1, repeatedValue: 0 )
         memcpy( &data, bytes, capacity+1 )
@@ -62,14 +77,14 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_s: String {
-        return String( UTF8String: bytes )!
+        if let string = String( UTF8String: bytes ) {
+            return string
+        }
+        NSLog( "Data.to_s: Could not convert string %s", bytes )
+        return "Data.to_s conversion error"
     }
 
-    public var to_a: [String] {
-        return [to_s]
-    }
-
-    public var data: NSData {
+    public var to_data: NSData {
         let shouldFree = capacity != 0
         capacity = 0
         return NSData( bytesNoCopy: bytes, length: length, freeWhenDone: shouldFree )

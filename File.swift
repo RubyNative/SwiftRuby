@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/File.swift#1 $
+//  $Id: //depot/RubyKit/File.swift#4 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/File.html
 //
@@ -18,12 +18,6 @@ public let ALT_SEPARATOR = "/"
 public let PATH_SEPARATOR = ":"
 public let SEPARATOR = "/"
 public let Separator = "/"
-
-public enum WarningDisposition {
-    case Ignore, Warn, Fatal
-}
-
-public var warningDisposition: WarningDisposition = .Warn
 
 public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
     if returnValue != 0 {
@@ -232,10 +226,6 @@ public class File : IO {
         return Stat( file_name, file: file, line: line )?.readable_real
     }
 
-    public class func read( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Data? {
-        return File( filepath: file_name, file: file, line: line )?.read()
-    }
-
     public class func readlink( link_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
         var path = [Int8]( count: Int(PATH_MAX+1), repeatedValue: 0 )
         let length = Darwin.readlink( link_name.to_s, &path, path.count ) /// readlinkat for relatives?
@@ -314,7 +304,7 @@ public class File : IO {
     }
 
     public class func write( file_name: to_s_protocol, string: to_d_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> fixnum? {
-        return File( filepath: file_name, file: file, line: line )?.write( string )
+        return File( filepath: file_name, mode: "w", file: file, line: line )?.write( string )
     }
 
     public class func zero( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool? {

@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/StringIO.swift#1 $
+//  $Id: //depot/RubyKit/StringIO.swift#4 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/stringio/rdoc/StringIO.html
 //
@@ -100,7 +100,7 @@ public class StringIO: IO {
     }
 
     public override func rewind( file: String = __FILE__, line: Int = __LINE__ ) -> IO {
-        offset = 0
+        seek( 0, Int(SEEK_SET) )
         return self
     }
 
@@ -123,12 +123,7 @@ public class StringIO: IO {
     }
 
     public override func write( string: to_d_protocol ) -> fixnum {
-        let extra = string.to_d
-        data.capacity += min( extra.length, 10_000 )
-        memcpy( data.bytes+offset, extra.bytes, extra.length )
-        offset += extra.length
-        data.length = max( offset, data.length ) ///
-        return extra.length
+        return data.append( string )
     }
 
 }

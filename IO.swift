@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/IO.swift#1 $
+//  $Id: //depot/RubyKit/IO.swift#4 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/IO.html
 //
@@ -44,7 +44,7 @@ public func FD_ISSET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
 @asmname("fcntl")
 func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
-public class IO: Object {
+public class IO: Object, to_s_protocol, to_d_protocol {
 
     private var _unixFILE = UnsafeMutablePointer<FILE>()
     public var unixFILE: UnsafeMutablePointer<FILE> {
@@ -295,7 +295,7 @@ public class IO: Object {
     }
 
     public func close( file: String = __FILE__, line: Int = __LINE__ ) {
-        if unixFILE != nil {
+        if _unixFILE != nil {
             pclose( unixFILE ) == 0 ||
             unixOK( "IO.fclose \(unixFILE)", fclose( unixFILE ), file: file, line: line )
             unixFILE = nil
@@ -552,8 +552,20 @@ public class IO: Object {
         return pos
     }
 
+    public var to_a: [String] {
+        return readlines()
+    }
+
     public var to_i: Int {
         return fileno
+    }
+
+    public var to_d: Data {
+        if let data = read() {
+            return data
+        }
+        RKLog( "IO.to_d, no data" )
+        return "IO.to_d, no data".to_d
     }
 
     public var to_s: String {
@@ -561,7 +573,7 @@ public class IO: Object {
             return data.to_s
         }
         RKLog( "IO.to_s, no data" )
-        return ""
+        return "IO.to_s, no data"
     }
 
     public var tty: Bool {
@@ -577,7 +589,8 @@ public class IO: Object {
     }
 
     public func write( string: to_d_protocol ) -> fixnum {
-        return fwrite( string.to_d.bytes, 1, string.to_d.length, unixFILE );
+        let data = string.to_d
+        return fwrite( data.bytes, 1, data.length, unixFILE );
     }
 
     public func write_nonblock( string: to_d_protocol, options: Array<String>? = nil ) -> Int {

@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/String.swift#1 $
+//  $Id: //depot/RubyKit/String.swift#3 $
 //
-//  Repo: https://github.com/RubyNative/RubyNative
+//  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/String.html
 //
@@ -17,7 +17,6 @@ import Foundation
 public protocol to_s_protocol: to_a_protocol {
 
     var to_s: String { get }
-    var to_a: [String] { get }
 
 }
 
@@ -65,7 +64,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
         //return Data( bytes: &array, length: Int(strlen(array)) ) //// avoids extra copy but relies on autorelease scope..
         let length = Int(strlen( &array ))
         let data = Data( capacity: length )
-        memcpy( data.bytes, array, length+1 )
+        memcpy( data.bytes, array, length )
         data.length = length
         return data
     }
@@ -78,11 +77,15 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
         return substringWithRange(startIndex.advancedBy(r.startIndex)..<startIndex.advancedBy(r.endIndex))
     }
 
-    public func characterAtIndex( i: Int ) -> CChar16 {
-        return self[i].utf16.first!
+    public func characterAtIndex( i: Int ) -> Int {
+        if let char = self[i].utf16.first {
+            return Int(char)
+        }
+        RKLog( "No character available in string '\(self)' returning ? char" )
+        return "?".ord
     }
 
-    public var ord: CChar16 {
+    public var ord: Int {
         return characterAtIndex(0)
     }
 
