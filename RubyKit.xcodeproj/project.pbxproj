@@ -240,7 +240,6 @@
 				BB3F788D1BACAB9B00435430 /* Frameworks */,
 				BB3F788E1BACAB9B00435430 /* Headers */,
 				BB3F788F1BACAB9B00435430 /* Resources */,
-				BBAD46601BBAB8C800701DE9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -344,23 +343,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		BBAD46601BBAB8C800701DE9 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"macosx\" ]; then\n    mkdir -p ~/Library/CocoaScript/Frameworks &&\n    rsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/CocoaScript/Frameworks\nfi";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		BB3F788C1BACAB9B00435430 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -440,6 +422,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COCOASCRIPT_HOME = $HOME/Library/CocoaScript;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -448,7 +431,7 @@
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(HOME)/Library/CocoaScript/Frameworks",
+					"$(COCOASCRIPT_HOME)/Frameworks/Debug",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -465,13 +448,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/CocoaScript/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Library/CocoaScript/Frameworks/Debug @executable_path/../Library/CocoaScript/Frameworks/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SYMROOT = /tmp/cocoa;
+				SYMROOT = "$(COCOASCRIPT_HOME)/Frameworks";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -494,6 +478,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COCOASCRIPT_HOME = $HOME/Library/CocoaScript;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -502,7 +487,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(HOME)/Library/CocoaScript/Frameworks",
+					"$(COCOASCRIPT_HOME)/Frameworks/Debug",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -513,11 +498,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/CocoaScript/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Library/CocoaScript/Frameworks/Debug @executable_path/../Library/CocoaScript/Frameworks/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SYMROOT = /tmp/cocoa;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "$(COCOASCRIPT_HOME)/Frameworks";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -534,14 +520,16 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(COCOASCRIPT_HOME)/Frameworks/Debug";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
 				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -559,14 +547,16 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(COCOASCRIPT_HOME)/Frameworks/Debug";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
 				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 			};
 			name = Release;

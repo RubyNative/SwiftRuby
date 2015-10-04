@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Object.swift#3 $
+//  $Id: //depot/RubyKit/Object.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -27,16 +27,17 @@ public enum WarningDisposition {
 public var WARNING_DISPOSITION: WarningDisposition = .Warn
 
 public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    STDERR.print( "RubyNative: "+msg+" at \(file)#\(line)\n" )
-}
-
-public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
     if WARNING_DISPOSITION != .Ignore {
-        RKLog( msg+": \(String( UTF8String: strerror( errno ) )!)", file: file, line: line )
+        STDERR.print( "RubyNative: "+msg+" at \(file)#\(line)\n" )
     }
     if WARNING_DISPOSITION == .Fatal {
         fatalError()
     }
+}
+
+public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    let error = String( UTF8String: strerror( errno ) ) ?? "Unavailable error"
+    RKLog( msg+": \(error)", file: file, line: line )
 }
 
 public func RKFatal( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
@@ -44,7 +45,7 @@ public func RKFatal( msg: String, file: String = __FILE__, line: Int = __LINE__ 
     fatalError()
 }
 
-func notImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
+public func RKNotImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
     RKFatal( "\(what) not implemented", file: file, line: line )
 }
 
@@ -55,7 +56,7 @@ public class ENVProxy {
     public subscript( key: to_s_protocol ) -> String? {
         get {
             let val = getenv( key.to_s )
-            return val != nil ? String( UTF8String: val ) : nil
+            return val != nil ? String( UTF8String: val ) ?? "Value not UTF8" : nil
         }
         set {
             if newValue != nil {
@@ -66,7 +67,7 @@ public class ENVProxy {
             }
         }
     }
-    
+
 }
 
 @asmname("instanceVariablesForClass")
@@ -81,11 +82,7 @@ public class Object: NSObject {
     }
 
     public var methods: [String] {
-        var out = [String]()
-        for symName in methodSymbolsForClass( self.dynamicType ) {
-            out.append( _stdlib_demangleName( symName as! String ) )
-        }
-        return out
+        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( $0 as! String ) }
     }
 
 }

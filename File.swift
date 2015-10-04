@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/File.swift#4 $
+//  $Id: //depot/RubyKit/File.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -156,7 +156,7 @@ public class File : IO {
     }
 
 //    public class func fnmatch( pattern: to_s_protocol, _ path: to_s_protocol, _ flags: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-//        notImplemented( "File.fnmatch" )
+//        RKNotImplemented( "File.fnmatch" )
 //        return false
 //    }
 

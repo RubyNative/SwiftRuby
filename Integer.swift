@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Integer.swift#2 $
+//  $Id: //depot/RubyKit/Integer.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -68,17 +68,17 @@ extension Int {
     }
 
 //    public func gcd( int2: Int ) -> Int {
-//        notImplemented( "Integer.gcd" )
+//        RKNotImplemented( "Integer.gcd" )
 //        return -1
 //    }
 //
 //    public func gcdlcm( int2: Int ) -> Int {
-//        notImplemented( "Integer.gcd" )
+//        RKNotImplemented( "Integer.gcd" )
 //        return -1
 //    }
 //
 //    public func lcm( int2: Int ) -> Int {
-//        notImplemented( "Integer.gcd" )
+//        RKNotImplemented( "Integer.gcd" )
 //        return -1
 //    }
 

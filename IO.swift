@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/IO.swift#4 $
+//  $Id: //depot/RubyKit/IO.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -221,13 +221,17 @@ public class IO: Object, to_s_protocol, to_d_protocol {
             time = Time( time_f: timeout! )
         }
 
+        func mutablePointer<T>( inout val: T ) -> UnsafeMutablePointer<T> {
+            return withUnsafeMutablePointer (&val) {
+                UnsafeMutablePointer($0)
+            }
+        }
+
         let selected = Darwin.select( Int32(max_fd),
                         UnsafeMutablePointer<fd_set>( read_flags ),
                         UnsafeMutablePointer<fd_set>( write_flags ),
                         UnsafeMutablePointer<fd_set>( error_flags ),
-            time != nil ? withUnsafeMutablePointer( &time!.value ) {
-                            UnsafeMutablePointer($0)
-                        } : nil )
+            time != nil ? mutablePointer( &time!.value ) : nil )
 
         var out: (readable: [IO], writable: [IO], errored: [IO])?
 
@@ -237,16 +241,10 @@ public class IO: Object, to_s_protocol, to_d_protocol {
         else if selected > 0 {
             var readable = [IO](), writable = [IO](), errored = [IO]()
 
-            func io_array_ptr( inout val: [IO] ) -> UnsafeMutablePointer<[IO]> {
-                return withUnsafeMutablePointer (&val) {
-                    UnsafeMutablePointer($0)
-                }
-            }
-
             for (array, flags, out) in [
-                (read_array, read_flags, io_array_ptr( &readable )),
-                (write_array, write_flags, io_array_ptr( &writable )),
-                (error_array, error_flags, io_array_ptr( &errored ))] {
+                (read_array, read_flags, mutablePointer( &readable )),
+                (write_array, write_flags, mutablePointer( &writable )),
+                (error_array, error_flags, mutablePointer( &errored ))] {
                 if array != nil {
                     for io in array! {
                        if FD_ISSET( io.fileno, flags ) {
@@ -283,7 +281,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
     // MARK: Instance methods
 
 //    public func advise( advice: Int, _ offset: Int = 0, _ len: Int = 0 ) {
-//        notImplemented( "IO.advise" )
+//        RKNotImplemented( "IO.advise" )
 //    }
 
     public func bytes( block: (CChar) -> () ) -> IO {
@@ -303,11 +301,11 @@ public class IO: Object, to_s_protocol, to_d_protocol {
     }
 
 //    public func close_read() {
-//        notImplemented( "IO.close_read" )
+//        RKNotImplemented( "IO.close_read" )
 //    }
 //
 //    public func close_write() {
-//        notImplemented( "IO.close_write" )
+//        RKNotImplemented( "IO.close_write" )
 //    }
 
     public var closed: Bool {
@@ -362,7 +360,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
     }
 
 //    public func fdatasync() {
-//        notImplemented( "IO.fdatasync" )
+//        RKNotImplemented( "IO.fdatasync" )
 //    }
 
     public var fileno: Int {
@@ -421,7 +419,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
     }
 
 //    public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
-//        notImplemented( "IO.ioctl" )
+//        RKNotImplemented( "IO.ioctl" )
 //        return 1
 //    }
 
@@ -435,7 +433,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
 
 //    public var pid: Int {
 //        /// no possible without re-implementing popen()
-//        notImplemented( "IO.pid" )
+//        RKNotImplemented( "IO.pid" )
 //        return -1
 //    }
 
@@ -502,7 +500,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
 //    }
 
 //    public func readpartial( maxlen: Int, _ outbuf: Data? = nil ) -> Data? {
-//        notImplemented( "IO.readpartial" )
+//        RKNotImplemented( "IO.readpartial" )
 //        return nil
 //    }
 
@@ -526,7 +524,7 @@ public class IO: Object, to_s_protocol, to_d_protocol {
     }
 
 //    public func set_encoding( ext_enc: Int ) -> IO? {
-//        notImplemented( "IO.set_encoding" )
+//        RKNotImplemented( "IO.set_encoding" )
 //        return nil
 //    }
 
