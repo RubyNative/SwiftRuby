@@ -356,7 +356,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p ~/Library/CocoaScript/Frameworks &&\nrsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/CocoaScript/Frameworks";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"macosx\" ]; then\n    mkdir -p ~/Library/CocoaScript/Frameworks &&\n    rsync -rilvp --force \"$CONFIGURATION_BUILD_DIR/$FULL_PRODUCT_NAME\" ~/Library/CocoaScript/Frameworks\nfi";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -466,12 +466,12 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/CocoaScript/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SYMROOT = /tmp/build;
+				SYMROOT = /tmp/cocoa;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -514,10 +514,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(HOME)/Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Library/CocoaScript/Frameworks @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SYMROOT = /tmp/build;
+				SYMROOT = /tmp/cocoa;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -542,6 +542,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
 				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -566,6 +567,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.Diamond;
 				PRODUCT_NAME = RubyKit;
 				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 			};
 			name = Release;
 		};

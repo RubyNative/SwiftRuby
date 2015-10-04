@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#6 $
+//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -31,7 +31,7 @@ class RubyNativeTests: XCTestCase {
 
         XCTAssertEqual( "€".to_d.to_s.ord.chr, "€", "basic unicode" )
 
-        let invalid =  "/xx/xx"
+        let invalid =  "/tmp/tmp/tmp"
         XCTAssertFalse( Dir.mkdir( invalid ), "failed create directory " )
         XCTAssertFalse( FileUtils.mkdir( invalid ), "failed create directory " )
 
@@ -82,8 +82,7 @@ class RubyNativeTests: XCTestCase {
         }
 
         let files = ["diff1.txt", "same1.txt", "same2.txt"]
-        XCTAssertEqual( Dir.glob( "*.txt" )!.sort(), files, "read directory" )
-        XCTAssertEqual( Dir.glob( "**.txt", testdir )!.sort(), files.map { testdir+"/"+$0 }, "read directory" )
+        XCTAssertEqual( Dir.glob( "*.txt", testdir )!.sort(), files, "read directory" )
         XCTAssertEqual( Dir.open( "." )!.to_a.sort(), [".", ".."]+files, "read directory" )
         XCTAssertEqual( Kernel.open( "| ls \(testdir)" )!.to_a.sort(), files, "read popen" )
     }

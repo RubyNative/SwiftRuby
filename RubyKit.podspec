@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
     s.authors     = { "johnno1962" => "ruby@johnholdsworth.com" }
 
     s.osx.deployment_target = "10.9"
+    s.ios.deployment_target = "8.0"
     s.source   = { :git => "https://github.com/RubyNative/RubyKit.git", :tag => s.version }
     s.source_files = "*.{m,swift}"
 end

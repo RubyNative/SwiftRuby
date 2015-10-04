@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Dir.swift#4 $
+//  $Id: //depot/RubyKit/Dir.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -93,7 +93,7 @@ public class Dir: Object, to_a_protocol {
             .stringByReplacingOccurrencesOfString( "*", withString: "[^/]*" )
             .stringByReplacingOccurrencesOfString( "?", withString: "[^/]" )
             .stringByReplacingOccurrencesOfString( "___", withString: ".*" )
-        let command = "find -E \"\(root)\" -regex \"^(./)?\(regex)$\"| sed -e s/^.\\\\///"
+        let command = "cd \"\(root)\" && find -E . -regex \"^(./)?\(regex)$\"| sed -e s/^.\\\\///"
         return IO.popen( command, file: file, line: line )?.readlines()
     }
 
