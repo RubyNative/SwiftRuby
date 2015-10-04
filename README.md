@@ -1,6 +1,6 @@
 ### RubyNative
 
-RubyNative is a port of the Ruby core api to Swift intended to be used with [Diamond](https://github.com/RubyNative/Diamond)
+RubyNative is a port of the Ruby core api to Swift intended to be used with [CocoaScript](https://github.com/RubyNative/CocoaScript)
 scripts or any Swift Program that would like simpler access to file i/o than is offered
 by Foundation kit. It also extends Swift's String and Array classes and will provide a
 well integrated Regexp class to take the burden off the programmer dealing with 
