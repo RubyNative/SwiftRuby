@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Dir.swift#5 $
+//  $Id: //depot/RubyKit/Dir.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -14,7 +14,7 @@
 
 import Foundation
 
-public class Dir: Object, to_a_protocol {
+public class Dir: RubyObject, to_a_protocol {
 
     let dirpath: String
     var dirPointer: UnsafeMutablePointer<DIR>

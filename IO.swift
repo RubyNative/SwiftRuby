@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/IO.swift#6 $
+//  $Id: //depot/RubyKit/IO.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -44,7 +44,7 @@ public func FD_ISSET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
 @asmname("fcntl")
 func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
-public class IO: Object, to_s_protocol, to_d_protocol {
+public class IO: RubyObject, to_s_protocol, to_d_protocol {
 
     private var _unixFILE = UnsafeMutablePointer<FILE>()
     public var unixFILE: UnsafeMutablePointer<FILE> {

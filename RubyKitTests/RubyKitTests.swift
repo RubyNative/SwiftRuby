@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#9 $
+//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -85,6 +85,12 @@ class RubyNativeTests: XCTestCase {
         XCTAssertEqual( Dir.glob( "*.txt", testdir )!.sort(), files, "read directory" )
         XCTAssertEqual( Dir.open( "." )!.to_a.sort(), [".", ".."]+files, "read directory" )
         XCTAssertEqual( Kernel.open( "| ls \(testdir)" )!.to_a.sort(), files, "read popen" )
+
+        XCTAssertEqual("🇩🇪🇺🇸\n🇩🇪🇺🇸\n"["^(..)🇺🇸", .AnchorsMatchLines]["$1🇪🇸"], "🇩🇪🇪🇸\n🇩🇪🇪🇸\n", "unicode replace")
+        XCTAssertEqual("🇩🇪🇺🇸\n🇩🇪🇺🇸\n"["^(.*)🇺🇸", "m"]["$1🇪🇸"], "🇩🇪🇪🇸\n🇩🇪🇪🇸\n", "unicode replace")
+
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2], "🇺🇸", "basic subscript")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2..<7], "🇺🇸a🇫🇷a🇮🇹", "range subscript")
     }
     
     func testPerformanceExample() {

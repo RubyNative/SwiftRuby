@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/String.swift#3 $
+//  $Id: //depot/RubyKit/String.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -74,15 +74,15 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
     }
 
     public subscript ( r: Range<Int> ) -> String {
-        return substringWithRange(startIndex.advancedBy(r.startIndex)..<startIndex.advancedBy(r.endIndex))
+        return substringWithRange( startIndex.advancedBy( r.startIndex )..<startIndex.advancedBy( r.endIndex ) )
     }
 
     public func characterAtIndex( i: Int ) -> Int {
         if let char = self[i].utf16.first {
             return Int(char)
         }
-        RKLog( "No character available in string '\(self)' returning ? char" )
-        return "?".ord
+        RKLog( "No character available in string '\(self)' returning nul char" )
+        return 0
     }
 
     public var ord: Int {

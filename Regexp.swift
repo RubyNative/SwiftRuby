@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Regexp.swift#11 $
+//  $Id: //depot/RubyKit/Regexp.swift#16 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -62,10 +62,11 @@ extension NSMutableString {
     
 }
 
-public class Regexp: Object, BooleanType {
+public class Regexp: RubyObject, BooleanType {
 
     let target: NSString
     let regexp: NSRegularExpression
+    var file: RegexpFile?
 
     public convenience init( target: NSString, pattern: String, optionString: String ) {
         var options: UInt = 0
@@ -99,7 +100,7 @@ public class Regexp: Object, BooleanType {
             self.regexp = try NSRegularExpression( pattern: pattern, options: options )
         }
         catch let error as NSError {
-            RKLog( "Regexp pattern: \(pattern) compiler error: \(error)" )
+            RKLog( "Regexp pattern: '\(pattern)' compile error: \(error)" )
             self.regexp = NSRegularExpression()
         }
     }
@@ -283,4 +284,30 @@ public func =~ ( left: MutableRegexp, right: ([String?]) -> String ) -> Bool {
         (match: NSTextCheckingResult, stop: UnsafeMutablePointer<ObjCBool>) in
         return right( left.groupsForMatch( match ) )
     } )
+}
+
+public class RegexpFile {
+
+    let filepath: String
+    let contents: NSMutableString! ////
+
+    public init?( _ path: String, file: String = __FILE__, line: Int = __LINE__ ) {
+        filepath = path
+        contents = File.read( path )?.to_s.mutableString
+        if contents == nil {
+            RKError( "RegexpFile could not read '\(path)'" )
+            return nil
+        }
+    }
+
+    public subscript( pattern: String ) -> MutableRegexp {
+        let regexp = MutableRegexp( target: contents, pattern: pattern )
+        regexp.file = self // retains until after substitution
+        return regexp
+    }
+
+    deinit {
+        File.write( filepath, contents as String )
+    }
+    
 }

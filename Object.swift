@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Object.swift#5 $
+//  $Id: //depot/RubyKit/Object.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -36,7 +36,7 @@ public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) 
 }
 
 public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    let error = String( UTF8String: strerror( errno ) ) ?? "Unavailable error"
+    let error = String( UTF8String: strerror( errno ) ) ?? "Unencodable error"
     RKLog( msg+": \(error)", file: file, line: line )
 }
 
@@ -75,7 +75,7 @@ func instanceVariablesForClass( cls: AnyClass, _: NSMutableArray ) -> NSArray
 @asmname("methodSymbolsForClass")
 func methodSymbolsForClass( cls: AnyClass ) -> NSArray
 
-public class Object: NSObject {
+public class RubyObject: NSObject {
 
     public var instance_variables: [String] {
         return instanceVariablesForClass( self.dynamicType, NSMutableArray() ) as! [String]

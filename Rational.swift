@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Rational.swift#2 $
+//  $Id: //depot/RubyKit/Rational.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -14,6 +14,6 @@
 
 import Foundation
 
-public class Rational: Object {
+public class Rational: RubyObject {
 
 }

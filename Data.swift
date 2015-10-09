@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Data.swift#4 $
+//  $Id: //depot/RubyKit/Data.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -20,7 +20,7 @@ public protocol to_d_protocol {
     
 }
 
-public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
+public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol {
 
     public var bytes: UnsafeMutablePointer<Int8>
 
@@ -40,8 +40,8 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
     }
 
     public init( bytes: UnsafeMutablePointer<Int8>, length: Int = 0 ) {
-        self.length = length
         self.bytes = bytes
+        self.length = length
         super.init()
     }
 
@@ -67,8 +67,8 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_c: [CChar] {
-        var data = [CChar]( count: capacity+1, repeatedValue: 0 )
-        memcpy( &data, bytes, capacity+1 )
+        var data = [CChar]( count: length+1, repeatedValue: 0 )
+        memcpy( &data, bytes, length+1 )
         return data
     }
 
@@ -85,9 +85,7 @@ public class Data: Object, to_s_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_data: NSData {
-        let shouldFree = capacity != 0
-        capacity = 0
-        return NSData( bytesNoCopy: bytes, length: length, freeWhenDone: shouldFree )
+        return NSData( bytes: bytes, length: length )
     }
 
     deinit {
