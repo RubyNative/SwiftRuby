@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Regexp.swift#16 $
+//  $Id: //depot/RubyKit/Regexp.swift#19 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -93,8 +93,7 @@ public class Regexp: RubyObject, BooleanType {
         self.init( target: target, pattern: pattern, options: NSRegularExpressionOptions( rawValue: options ) )
     }
 
-    public init( target: NSString, pattern: String, options: NSRegularExpressionOptions =
-            .AnchorsMatchLines ) {//|.DotMatchesLineSeparators ) {
+    public init( target: NSString, pattern: String, options: NSRegularExpressionOptions = .DotMatchesLineSeparators ) {
         self.target = target
         do {
             self.regexp = try NSRegularExpression( pattern: pattern, options: options )
@@ -143,6 +142,15 @@ public class Regexp: RubyObject, BooleanType {
         return groups
     }
 
+    public func dictionary( options: NSMatchingOptions? = nil ) -> [String:String] {
+        var out = [String:String]()
+        for match in matchResults(options) {
+            out[substring(match.rangeAtIndex(1))!] =
+                substring(match.rangeAtIndex(2))!
+        }
+        return out
+    }
+
     public func match( options: NSMatchingOptions? = nil ) -> String? {
         return substring( range( options ) )
     }
@@ -158,14 +166,14 @@ public class Regexp: RubyObject, BooleanType {
         return matchResults( options ).map { self.groupsForMatch( $0 ) }
     }
 
-    subscript ( groupno: Int ) -> String? {
+    public subscript ( groupno: Int ) -> String? {
         if let match = regexp.firstMatchInString( target as String, options: NSMatchingOptions(rawValue: 0), range: targetRange ) {
             return substring( match.rangeAtIndex( groupno ) )
         }
         return nil
     }
 
-    subscript ( groupno: Int, options: NSMatchingOptions ) -> String? {
+    public subscript ( groupno: Int, options: NSMatchingOptions ) -> String? {
         if let match = regexp.firstMatchInString( target as String, options: options, range: targetRange ) {
             return substring( match.rangeAtIndex( groupno ) )
         }
@@ -196,7 +204,7 @@ public class NotRegexp : Regexp {
 
 public class MutableRegexp: Regexp {
 
-    override subscript ( groupno: Int ) -> String? {
+    override public subscript ( groupno: Int ) -> String? {
         get {
             if let match = regexp.firstMatchInString( target as String, options: NSMatchingOptions(rawValue: 0), range: targetRange ) {
                 return substring( match.rangeAtIndex( groupno ) )
@@ -290,10 +298,12 @@ public class RegexpFile {
 
     let filepath: String
     let contents: NSMutableString! ////
+    let original: String!
 
     public init?( _ path: String, file: String = __FILE__, line: Int = __LINE__ ) {
         filepath = path
         contents = File.read( path )?.to_s.mutableString
+        original = contents as String
         if contents == nil {
             RKError( "RegexpFile could not read '\(path)'" )
             return nil
@@ -306,8 +316,22 @@ public class RegexpFile {
         return regexp
     }
 
+    public subscript ( pattern: String, options: NSRegularExpressionOptions ) -> MutableRegexp {
+        let regexp = MutableRegexp( target: contents, pattern: pattern, options: options )
+        regexp.file = self // retains until after substitution
+        return regexp
+    }
+
+    public subscript ( pattern: String, options: String ) -> MutableRegexp {
+        let regexp = MutableRegexp( target: contents, pattern: pattern, optionString: options )
+        regexp.file = self // retains until after substitution
+        return regexp
+    }
+
     deinit {
-        File.write( filepath, contents as String )
+        if contents != original {
+            File.write( filepath, contents as String )
+        }
     }
     
 }

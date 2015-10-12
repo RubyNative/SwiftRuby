@@ -5,14 +5,15 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Object.swift#7 $
+//  $Id: //depot/RubyKit/Object.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Object.html
 //
 
-import Foundation
+import Darwin
+import Utilities
 
 public let ARGV = Process.arguments
 
@@ -20,15 +21,25 @@ public let STDIN = IO( what: "stdin", unixFILE: stdin )
 public let STDOUT = IO( what: "stdout", unixFILE: stdout )
 public let STDERR = IO( what: "stderr", unixFILE: stderr )
 
+public func U<T>( toUnwrap: T?, name: String? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> T {
+    if toUnwrap == nil {
+        let exceptionName = name != nil ? "Forced unwrap of \(name) fail" : "Forced unwrap fail"
+        _throw( NSException( name: exceptionName, reason: "\(file), \(line)", userInfo: nil ) )
+    }
+    return toUnwrap!
+}
+
 public enum WarningDisposition {
     case Ignore, Warn, Fatal
 }
 
 public var WARNING_DISPOSITION: WarningDisposition = .Warn
+public var LAST_WARNING: String?
 
 public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+    LAST_WARNING = msg+" at \(file)#\(line)\n"
     if WARNING_DISPOSITION != .Ignore {
-        STDERR.print( "RubyNative: "+msg+" at \(file)#\(line)\n" )
+        STDERR.print( "RubyKit: "+LAST_WARNING! )
     }
     if WARNING_DISPOSITION == .Fatal {
         fatalError()
@@ -36,7 +47,7 @@ public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) 
 }
 
 public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    let error = String( UTF8String: strerror( errno ) ) ?? "Unencodable error"
+    let error = String( UTF8String: strerror( errno ) ) ?? "Undecodable error"
     RKLog( msg+": \(error)", file: file, line: line )
 }
 
@@ -70,19 +81,14 @@ public class ENVProxy {
 
 }
 
-@asmname("instanceVariablesForClass")
-func instanceVariablesForClass( cls: AnyClass, _: NSMutableArray ) -> NSArray
-@asmname("methodSymbolsForClass")
-func methodSymbolsForClass( cls: AnyClass ) -> NSArray
-
 public class RubyObject: NSObject {
 
     public var instance_variables: [String] {
-        return instanceVariablesForClass( self.dynamicType, NSMutableArray() ) as! [String]
+        return instanceVariablesForClass( self.dynamicType, NSMutableArray() )
     }
 
     public var methods: [String] {
-        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( $0 as! String ) }
+        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( $0 ) }
     }
 
 }

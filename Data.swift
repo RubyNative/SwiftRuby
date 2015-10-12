@@ -5,14 +5,14 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Data.swift#8 $
+//  $Id: //depot/RubyKit/Data.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Data.html
 //
 
-import Foundation
+import Darwin
 
 public protocol to_d_protocol {
 
@@ -80,12 +80,8 @@ public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol {
         if let string = String( UTF8String: bytes ) {
             return string
         }
-        NSLog( "Data.to_s: Could not convert string %s", bytes )
-        return "Data.to_s conversion error"
-    }
-
-    public var to_data: NSData {
-        return NSData( bytes: bytes, length: length )
+        RKLog( "Data.to_s: Could not convert string to UTF8" )
+        return String( CString: bytes, encoding: ALTERNATE_ENCODING )!
     }
 
     deinit {

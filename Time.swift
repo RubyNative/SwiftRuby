@@ -5,14 +5,14 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Time.swift#4 $
+//  $Id: //depot/RubyKit/Time.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Time.html
 //
 
-import Foundation
+import Darwin
 
 public class Time : RubyObject, to_s_protocol {
 
@@ -263,10 +263,6 @@ public class Time : RubyObject, to_s_protocol {
 
     public var to_s: String {
         return inspect
-    }
-
-    public var to_date: NSDate {
-        return NSDate( timeIntervalSince1970: to_f )
     }
 
     public var tuesday: Bool {

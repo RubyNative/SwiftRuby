@@ -5,14 +5,14 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/IO.swift#7 $
+//  $Id: //depot/RubyKit/IO.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/IO.html
 //
 
-import Foundation
+import Darwin
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
@@ -48,9 +48,6 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
 
     private var _unixFILE = UnsafeMutablePointer<FILE>()
     public var unixFILE: UnsafeMutablePointer<FILE> {
-        set {
-            _unixFILE = newValue
-        }
         get {
             if _unixFILE == nil {
                 RKLog( "Get of nil IO.unixFILE" )
@@ -105,7 +102,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         if unixFILE == nil && what != nil {
             RKError( "\(what!) failed", file: file, line: line )
         }
-        self.unixFILE = unixFILE
+        self._unixFILE = unixFILE
     }
 
     public func ifValid() -> IO? {
@@ -292,12 +289,16 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return each_char( block )
     }
 
-    public func close( file: String = __FILE__, line: Int = __LINE__ ) {
+    public func close( file: String = __FILE__, line: Int = __LINE__ ) -> Int {
         if _unixFILE != nil {
-            pclose( unixFILE ) == 0 ||
-            unixOK( "IO.fclose \(unixFILE)", fclose( unixFILE ), file: file, line: line )
-            unixFILE = nil
+            var status = pclose( unixFILE )
+            if status == -1 {
+                status = fclose( unixFILE )
+            }
+            _unixFILE = nil
+            return Int(status)
         }
+        return -1
     }
 
 //    public func close_read() {
@@ -415,7 +416,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     }
 
     public var internal_encoding: Int {
-        return Int(NSUTF8StringEncoding)
+        return Int(STRING_ENCODING)
     }
 
 //    public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
@@ -505,7 +506,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
 //    }
 
     public func reopen( other_IO: IO ) -> IO {
-        self.unixFILE = other_IO.unixFILE ////
+        _unixFILE = other_IO.unixFILE ////
         return self
     }
 

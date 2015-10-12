@@ -12,7 +12,7 @@
 //  See: http://ruby-doc.org/core-2.2.3/Process.html
 //
 
-import Foundation
+import Darwin
 
 public extension Process {
 

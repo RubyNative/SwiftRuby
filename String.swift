@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/String.swift#5 $
+//  $Id: //depot/RubyKit/String.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -13,6 +13,9 @@
 //
 
 import Foundation
+
+public var STRING_ENCODING = NSUTF8StringEncoding
+public let ALTERNATE_ENCODING = NSISOLatin1StringEncoding
 
 public protocol to_s_protocol: to_a_protocol {
 
@@ -55,8 +58,8 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_c: [CChar] {
-        return cStringUsingEncoding( NSUTF8StringEncoding ) ??
-            "UNLIKELY ERROR ENCODING TO UTF8".cStringUsingEncoding( NSUTF8StringEncoding )!
+        return cStringUsingEncoding( STRING_ENCODING ) ??
+            "UNLIKELY ERROR ENCODING TO UTF8".cStringUsingEncoding( STRING_ENCODING )!
     }
 
     public var to_d: Data {
@@ -78,8 +81,8 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
     }
 
     public func characterAtIndex( i: Int ) -> Int {
-        if let char = self[i].utf16.first {
-            return Int(char)
+        if let char = self[i].unicodeScalars.first {
+            return Int(char.value)
         }
         RKLog( "No character available in string '\(self)' returning nul char" )
         return 0

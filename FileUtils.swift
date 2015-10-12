@@ -12,7 +12,7 @@
 //  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/fileutils/rdoc/FileUtils.html
 //
 
-import Foundation
+import Darwin
 
 public var STATUS = 0
 
@@ -32,7 +32,6 @@ public class FileUtils {
 
     public var pwd: String? {
         return Dir.getwd
-
     }
     
     private class func expand( list: to_a_protocol ) -> String {

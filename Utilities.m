@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Utilities.m#2 $
+//  $Id: //depot/RubyKit/Utilities.m#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -14,7 +14,7 @@
 #import <objc/runtime.h>
 #import <dlfcn.h>
 
-// From Jay Freeman's https://www.youtube.com/watch?v=Ii-02vhsdVk
+// Thanks to Jay Freeman's https://www.youtube.com/watch?v=Ii-02vhsdVk
 
 struct _in_objc_class {
 
@@ -37,7 +37,7 @@ struct _in_objc_class {
     IMP dispatch[1];
 };
 
-NSArray *instanceVariablesForClass( Class cls, NSMutableArray *ivarNames ) {
+NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSString *> *ivarNames ) {
     Class superCls = class_getSuperclass( cls );
     if ( superCls )
         instanceVariablesForClass( superCls, ivarNames );
@@ -64,7 +64,7 @@ NSArray *instanceVariablesForClass( Class cls, NSMutableArray *ivarNames ) {
     return ivarNames;
 }
 
-NSArray *methodSymbolsForClass( Class cls ) {
+NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
     NSMutableArray<NSString *> *syms = [NSMutableArray new];
 
     struct _in_objc_class *swiftClass = (__bridge struct _in_objc_class *)cls;
@@ -72,13 +72,39 @@ NSArray *methodSymbolsForClass( Class cls ) {
     IMP *sym_start = swiftClass->dispatch,
         *sym_end = (IMP *)((char *)swiftClass + swiftClass->mdsize - 2*sizeof(IMP));
 
-    for ( IMP *sym_ptr = sym_start ; sym_ptr < sym_end ; sym_ptr++ ) {
-        Dl_info info;
+    Dl_info info;
+    for ( IMP *sym_ptr = sym_start ; sym_ptr < sym_end ; sym_ptr++ )
         if ( dladdr( *sym_ptr, &info ) && info.dli_sname )
             [syms addObject:[NSString stringWithUTF8String:info.dli_sname]];
-//        else
-//            NSLog( @"%ld!!!!%ld!!!!!!", sym_ptr-sym_start, sym_end-sym_ptr );
-    }
 
     return syms;
+}
+
+static NSString *kLastExceptionKey = @"RubyKitException";
+
+void _try( void (^tryBlock)() ) {
+    [[NSThread currentThread].threadDictionary removeObjectForKey:kLastExceptionKey];
+    @try {
+        tryBlock();
+    }
+    @catch (NSException *e) {
+        [NSThread currentThread].threadDictionary[kLastExceptionKey] = e;
+    }
+}
+
+void _catch( void (^catchBlock)( NSException *e ) ) {
+    NSException *e = [NSThread currentThread].threadDictionary[kLastExceptionKey];
+    if ( e ) {
+        catchBlock( e );
+    }
+}
+
+void _throw( NSException *e ) {
+    @try {
+        @throw e;
+    }
+    @catch ( NSException *e ) {
+        NSLog( @"%@ %@\n%@", e.name, e.reason, e.callStackSymbols );
+        @throw e;
+    }
 }

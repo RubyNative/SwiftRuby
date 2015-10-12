@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/File.swift#6 $
+//  $Id: //depot/RubyKit/File.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -22,7 +22,7 @@ public let Separator = "/"
 public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: String?, line: Int = 0 ) -> Bool {
     if returnValue != 0 {
         if file != nil {
-            RKError( "\(what.to_s) failed", file: file!, line: line )
+            RKError( "\(what.to_s) failed, returning \(returnValue)", file: file!, line: line )
         }
         return false
     }
@@ -74,11 +74,20 @@ public class File : IO {
         }
 
         let fileURL = NSURL( fileURLWithPath: file_name.to_s )
-        return NSURL( string: fileURL.absoluteString, relativeToURL: baseURL )?.absoluteURL.path
+        return NSURL( string: fileURL.absoluteString, relativeToURL: baseURL )?.absoluteURL.path ////
     }
 
     public class func basename( file_name: to_s_protocol, _ suffix: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
-        return NSURL( fileURLWithPath: file_name.to_s ).lastPathComponent
+        var file_name = file_name.to_s
+        if suffix != nil {
+            if suffix!.to_s == ".*" {
+                file_name = removeext( file_name )!
+            }
+            else {
+                RKNotImplemented( "File.basename with suffix ofer than '.*'", file: file, line: line )
+            }
+        }
+        return NSURL( fileURLWithPath: file_name ).lastPathComponent ////
     }
 
     public class func birthtime( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Time? {
@@ -95,20 +104,59 @@ public class File : IO {
 
     public class func chmod( mode_int: Int, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         var ok = true
-        file_names.to_a.each {
-            (file_name) in
+        for file_name in file_names.to_a {
             ok = ok && unixOK( "File.chmod '\(file_name)'", Darwin.chmod( file_name, mode_t(mode_int) ), file: file, line: line )
         }
         return ok
     }
 
-    public class func chown( owner_int: Int?, _ group_int: Int?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chown( owner_s: to_s_protocol?, _ group_s: to_s_protocol?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+
+        var owner_int = owner_s != nil ? Int( owner_s!.to_s ) : nil
+        if owner_int == nil && owner_s != nil {
+            owner_int = user_uid( owner_s!, file: file, line: line )
+            if owner_int == nil {
+                return false
+            }
+        }
+
+        var group_int = group_s != nil ? Int( group_s!.to_s ) : nil
+        if group_int == nil && group_s != nil {
+            group_int = group_gid( group_s!, file: file, line: line )
+            if group_int == nil {
+                return false
+            }
+        }
+
         var ok = true
-        file_names.to_a.each {
-            (file_name) in
+        for file_name in file_names.to_a {
             ok = ok && unixOK( "File.chown '\(file_name)'", Darwin.chown( file_name, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
         }
         return ok
+    }
+
+    public class func user_uid( user_s: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Int? {
+        var buff = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
+        var ret = UnsafeMutablePointer<passwd>()
+        var info = passwd()
+
+        if !unixOK( "File.getpwnam \(user_s.to_s)", getpwnam_r( user_s.to_s, &info, &buff, buff.count, &ret ), file: file, line: line ) {
+            return nil
+        }
+
+        return Int(info.pw_uid)
+    }
+
+    public class func group_gid( group_s: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Int? {
+        var buff = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
+        var ret = UnsafeMutablePointer<group>()
+        var info = group()
+
+        if !unixOK( "File.getgrnam \(group_s.to_s)", getgrnam_r( group_s.to_s, &info, &buff, buff.count, &ret ), file: file, line: line ) {
+            return nil
+        }
+
+        return Int(info.gr_gid)
     }
 
     public class func ctime( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Time? {
@@ -169,7 +217,7 @@ public class File : IO {
     }
 
     public class func identical( file_1: to_s_protocol, _ file_2: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        return Stat( file_1, file: file, line: line )?.ino == Stat( file_2, file: file, line: line )?.ino
+        return Stat( file_1, file: file, line: line ) == Stat( file_2, file: file, line: line )
     }
 
     public class func join( strings: [String], file: String = __FILE__, line: Int = __LINE__ ) -> String {
@@ -178,17 +226,32 @@ public class File : IO {
 
     public class func lchmod( mode_int: Int, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         var ok = true
-        file_names.to_a.each {
-            (file_name) in
-            ok = ok &&  unixOK( "File.lchmod '\(file_name)'", Darwin.lchmod( file_name, mode_t(mode_int) ), file: file, line: line )
+        for file_name in file_names.to_a {
+            ok = ok && unixOK( "File.lchmod '\(file_name)'", Darwin.lchmod( file_name, mode_t(mode_int) ), file: file, line: line )
         }
         return ok
     }
 
-    public class func lchown( owner_int: Int?, _ group_int: Int?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func lchown( owner_s: to_s_protocol?, _ group_s: to_s_protocol?, _ file_names: to_a_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+
+        var owner_int = owner_s != nil ? Int( owner_s!.to_s ) : nil
+        if owner_int == nil && owner_s != nil {
+            owner_int = user_uid( owner_s!, file: file, line: line )
+            if owner_int == nil {
+                return false
+            }
+        }
+
+        var group_int = group_s != nil ? Int( group_s!.to_s ) : nil
+        if group_int == nil && group_s != nil {
+            group_int = group_gid( group_s!, file: file, line: line )
+            if group_int == nil {
+                return false
+            }
+       }
+
         var ok = true
-        file_names.to_a.each {
-            (file_name) in
+        for file_name in file_names.to_a {
             ok = ok &&  unixOK( "File.lchown '\(file_name.to_s)'", Darwin.lchown( file_name.to_s, uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
         }
         return ok
@@ -237,13 +300,23 @@ public class File : IO {
     }
 
     public class func realdirpath( file_name: to_s_protocol, _ dir_string: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
-        return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path
+        if dir_string != nil {
+            RKNotImplemented( "File.realdirpath with dir_string argument", file: file, line: line )
+        }
+        return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path ////
     }
     
     public class func realpath( file_name: to_s_protocol, _ dir_string: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
-        return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path
+        if dir_string != nil {
+            RKNotImplemented( "File.realpath with dir_string argument", file: file, line: line )
+        }
+        return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path ////
     }
     
+    public class func removeext( file_name: to_s_protocol, _ suffix: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
+        return NSURL( fileURLWithPath: file_name.to_s ).URLByDeletingPathExtension?.path
+    }
+
     public class func rename( old_name: to_s_protocol, _ new_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return unixOK( "File.rename '\(old_name.to_s)' '\(new_name.to_s)'", Darwin.rename( old_name.to_s, new_name.to_s ), file: file, line: line )
     }
@@ -325,7 +398,24 @@ public class File : IO {
         return unixOK( "File.chmod \(mode_int) '\(filepath)'", Darwin.chmod( filepath, mode_t(mode_int) ), file: file, line: line )
     }
 
-    public func chown( owner_int: Int?, _ group_int: Int?, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public func chown( owner_s: to_s_protocol?, _ group_s: to_s_protocol?, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+
+        var owner_int = owner_s != nil ? Int( owner_s!.to_s ) : nil
+        if owner_int == nil && owner_s != nil {
+            owner_int = File.user_uid( owner_s!, file: file, line: line )
+            if owner_int == nil {
+                return false
+            }
+        }
+
+        var group_int = group_s != nil ? Int( group_s!.to_s ) : nil
+        if group_int == nil && group_s != nil {
+            group_int = File.group_gid( group_s!, file: file, line: line )
+            if group_int == nil {
+                return false
+            }
+        }
+
         return unixOK( "File.chown '\(filepath)' \(owner_int) \(group_int)", Darwin.chown( filepath,
             uid_t(owner_int ?? -1), gid_t(group_int ?? -1) ), file: file, line: line )
     }

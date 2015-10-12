@@ -63,6 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB1ECBAA1BCC22CD00963CFF /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		BB1ECBAB1BCC22F800963CFF /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		BB319ECE1BB882F3002FB64B /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
 		BB3F78911BACAB9B00435430 /* RubyKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3F78A21BACAC3600435430 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,11 +134,13 @@
 			isa = PBXGroup;
 			children = (
 				BB3F78A21BACAC3600435430 /* Info.plist */,
-				BB5C0D9F1BB7599C00C0E190 /* Utilities.m */,
 				BB8EE2E51BB22FFD00348257 /* main.swift */,
 				BB5C0D891BB7437B00C0E190 /* Object.swift */,
 				BB319ECE1BB882F3002FB64B /* Kernel.swift */,
 				BBB3FE4D1BBB709B009E718C /* Process.swift */,
+				BB1ECBAB1BCC22F800963CFF /* module.map */,
+				BB1ECBAA1BCC22CD00963CFF /* Utilities.h */,
+				BB5C0D9F1BB7599C00C0E190 /* Utilities.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -448,12 +452,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug @executable_path/../Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Frameworks/$(PLATFORM_NAME)/Debug @executable_path/../Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SYMROOT = "$(COCOASCRIPT_HOME)/Frameworks/$(PLATFORM_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -498,11 +503,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug @executable_path/../Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Frameworks/$(PLATFORM_NAME)/Debug @executable_path/../Library/CocoaScript/Frameworks/$(PLATFORM_NAME)/Debug $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SYMROOT = "$(COCOASCRIPT_HOME)/Frameworks/$(PLATFORM_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -520,10 +526,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
 				PRODUCT_NAME = RubyKit;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -544,10 +546,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
 				PRODUCT_NAME = RubyKit;
 				STRIP_INSTALLED_PRODUCT = NO;

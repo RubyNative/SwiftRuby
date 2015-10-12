@@ -5,14 +5,14 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Stat.swift#3 $
+//  $Id: //depot/RubyKit/Stat.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/File/Stat.html
 //
 
-import Foundation
+import Darwin
 
 // from <sys/stat.h> (not in Foundation)
 
@@ -77,6 +77,10 @@ public func S_ISLNK(m: Int) -> Bool {
 
 public func S_ISSOCK(m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFSOCK)	/* socket */
+}
+
+public func ==(lhs: Stat, rhs: Stat) -> Bool {
+    return lhs.dev ==  rhs.dev && lhs.ino == rhs.ino
 }
 
 public class Stat : RubyObject {

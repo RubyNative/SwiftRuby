@@ -5,29 +5,28 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Dir.swift#6 $
+//  $Id: //depot/RubyKit/Dir.swift#10 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
 //  See: http://ruby-doc.org/core-2.2.3/Dir.html
 //
 
-import Foundation
+import Darwin
 
 public class Dir: RubyObject, to_a_protocol {
 
     let dirpath: String
-    var dirPointer: UnsafeMutablePointer<DIR>
-    var closed = false
+    var unixDIR: UnsafeMutablePointer<DIR>
 
     // Dir[ string [, string ...] ] → array
 
     init?( dirname: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) {
         dirpath = dirname.to_s
-        dirPointer = opendir( dirpath )
+        unixDIR = opendir( dirpath )
         super.init()
-        if dirPointer == nil {
-            RKError( "opendir '\(dirpath)' failed", file: file, line: line )
+        if unixDIR == nil {
+            RKError( "opendir '\(dirpath.to_s)' failed", file: file, line: line )
             return nil
         }
     }
@@ -99,18 +98,18 @@ public class Dir: RubyObject, to_a_protocol {
 
     public class func home( user: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
         var user = user?.to_s
-        var cwd = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
+        var buff = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
         var ret = UnsafeMutablePointer<passwd>()
         var info = passwd()
 
         if user == nil || user == "" {
-            if !unixOK( "Dir.home", getpwuid_r( getuid(), &info, &cwd, cwd.count, &ret ), file: file, line: line ) {
+            if !unixOK( "Dir.getpwuid", getpwuid_r( geteuid(), &info, &buff, buff.count, &ret ), file: file, line: line ) {
                 return nil
             }
             user = String( UTF8String: info.pw_name )
         }
 
-        if !unixOK( "Dir.home \(user)", getpwnam_r( user!, &info, &cwd, cwd.count, &ret ), file: file, line: line ) {
+        if !unixOK( "Dir.getpwnam \(user!.to_s)", getpwnam_r( user!, &info, &buff, buff.count, &ret ), file: file, line: line ) {
             return nil
         }
 
@@ -136,8 +135,9 @@ public class Dir: RubyObject, to_a_protocol {
     // MARK: Instance methods
 
     public func close( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
-        closed = true
-        return unixOK( "Dir.closedir '\(dirpath)'",  closedir( dirPointer ), file: file, line: line )
+        let ok = unixOK( "Dir.closedir '\(dirpath)'",  closedir( unixDIR ), file: file, line: line )
+        unixDIR = nil
+        return ok
     }
 
     public func each( block: (String) -> () ) -> Dir {
@@ -148,7 +148,7 @@ public class Dir: RubyObject, to_a_protocol {
     }
 
     public var fileno: Int {
-        return Int(dirfd(dirPointer))
+        return Int(dirfd( unixDIR ))
     }
 
     public var inspect: String {
@@ -160,28 +160,28 @@ public class Dir: RubyObject, to_a_protocol {
     }
 
     public var pos: Int  {
-        return Int(telldir( dirPointer ))
+        return Int(telldir( unixDIR ))
     }
 
     public func read() -> String? {
-        let ent = readdir( dirPointer )
+        let ent = readdir( unixDIR )
         if ent != nil {
             return withUnsafeMutablePointer (&ent.memory.d_name) {
-                String( UTF8String: UnsafeMutablePointer($0) ) //!!
+                String( UTF8String: UnsafeMutablePointer($0) )
             }
         }
         return nil
     }
 
     public func rewind() {
-        Darwin.rewinddir( dirPointer )
+        Darwin.rewinddir( unixDIR )
     }
 
-    public func seek( pos: Int ) {
-        seekdir( dirPointer, pos )
+    public func seek( pos: Int ) -> Int {
+        return Int(seekdir( unixDIR, pos ))
     }
 
-    public var tell: Int  {
+    public var tell: Int {
         return pos
     }
 
@@ -199,7 +199,7 @@ public class Dir: RubyObject, to_a_protocol {
     }
 
     deinit {
-        if !closed {
+        if unixDIR != nil {
             close()
         }
     }
