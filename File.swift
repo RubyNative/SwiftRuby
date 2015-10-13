@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/File.swift#11 $
+//  $Id: //depot/RubyKit/File.swift#14 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -46,7 +46,7 @@ public class File : IO {
 
     public init?( filepath: to_s_protocol, mode: to_s_protocol = "r", file: String, line: Int ) {
         self.filepath = filepath.to_s
-        super.init( what: "fopen '\(filepath.to_s)', mode \(mode.to_s)", unixFILE: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
+        super.init( what: "fopen '\(filepath.to_s)', mode '\(mode.to_s)'", unixFILE: fopen( filepath.to_s, mode.to_s ), file: file, line: line )
         if ifValid() == nil {
             return nil
         }
@@ -359,6 +359,10 @@ public class File : IO {
 
     public class func unlink( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
         return delete( file_name.to_s, file: file, line: line )
+    }
+
+    public class func unlink_f( file_name: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+        return File.exists( file_name ) ? unlink( file_name.to_s, file: file, line: line ) : true
     }
 
     public class func utime( file_name: to_s_protocol, _ actime: to_i_protocol, _ modtime: to_i_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {

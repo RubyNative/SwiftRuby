@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Regexp.swift#19 $
+//  $Id: //depot/RubyKit/Regexp.swift#21 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -14,13 +14,13 @@
 
 import Foundation
 
-infix operator =~ { associativity left precedence 140 }
+infix operator =~ { associativity left precedence 135 }
 
 public func =~ ( lhs: String, rhs: String ) -> Regexp {
     return Regexp( target: lhs, pattern: rhs )
 }
 
-infix operator !~ { associativity left precedence 140 }
+infix operator !~ { associativity left precedence 135 }
 
 public func !~ ( lhs: String, rhs: String ) -> NotRegexp {
     return NotRegexp( target: lhs, pattern: rhs )
@@ -305,7 +305,7 @@ public class RegexpFile {
         contents = File.read( path )?.to_s.mutableString
         original = contents as String
         if contents == nil {
-            RKError( "RegexpFile could not read '\(path)'" )
+            RKError( "RegexpFile could not read '\(path)'", file: file, line: line )
             return nil
         }
     }

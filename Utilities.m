@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Utilities.m#5 $
+//  $Id: //depot/RubyKit/Utilities.m#6 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -81,15 +81,19 @@ NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
 }
 
 static NSString *kLastExceptionKey = @"RubyKitException";
+static NSString *kCatchLevels = @"RubyCatchLevels";
 
 void _try( void (^tryBlock)() ) {
-    [[NSThread currentThread].threadDictionary removeObjectForKey:kLastExceptionKey];
+    NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
+    threadDictionary[kCatchLevels] = @([threadDictionary[kCatchLevels] intValue]+1);
+    threadDictionary[kLastExceptionKey]  = nil;
     @try {
         tryBlock();
     }
     @catch (NSException *e) {
-        [NSThread currentThread].threadDictionary[kLastExceptionKey] = e;
+        threadDictionary[kLastExceptionKey] = e;
     }
+    threadDictionary[kCatchLevels] = @([threadDictionary[kCatchLevels] intValue]-1);
 }
 
 void _catch( void (^catchBlock)( NSException *e ) ) {
@@ -100,11 +104,10 @@ void _catch( void (^catchBlock)( NSException *e ) ) {
 }
 
 void _throw( NSException *e ) {
-    @try {
+    if ( [[NSThread currentThread].threadDictionary[kCatchLevels] intValue] > 0 )
         @throw e;
-    }
-    @catch ( NSException *e ) {
-        NSLog( @"%@ %@\n%@", e.name, e.reason, e.callStackSymbols );
-        @throw e;
+    else {
+        NSLog( @"RubyKit: Uncaught Exception: name: %@, reason: %@, userInfo: %@", e.name, e.reason, e.userInfo );
+        abort();
     }
 }

@@ -16,8 +16,8 @@ import Darwin
 
 public var STATUS = 0
 
-public func systemOK( command: to_s_protocol, file: String?, line: Int = 0 ) -> Bool {
-    STATUS = Int(system( command.to_s ) >> 8)
+public func systemOK( command: to_s_protocol, file: String? = __FILE__, line: Int = __LINE__ ) -> Bool {
+    STATUS = Int(system( command.to_s ))
     if STATUS != 0 {
         if file != nil {
             RKLog( "system call '\(command.to_s)' failed", file: file!, line: line )

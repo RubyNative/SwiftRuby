@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#11 $
+//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -73,7 +73,7 @@ class RubyNativeTests: XCTestCase {
         XCTAssertTrue( FileUtils.compare_stream( File.open( "same1.txt" )!, File.open( "same2.txt" )! ), "stream compare" )
         XCTAssertFalse( FileUtils.compare_stream( File.open( "same1.txt" )!, File.open( "diff1.txt" )! ), "stream diff" )
 
-        XCTAssert( fabs( Time().to_f - File.mtime( "diff1.txt" )!.to_f ) < 1.0, "modification time" )
+        XCTAssert( fabs( Time().to_f - File.mtime( "diff1.txt" )!.to_f ) <= 1.0, "modification time" )
 
         WARNING_DISPOSITION = .Ignore
         for mode in [0o700, 0o070, 0o007, 0o000] {
@@ -91,6 +91,12 @@ class RubyNativeTests: XCTestCase {
 
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2], "🇺🇸", "basic subscript")
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2..<7], "🇺🇸a🇫🇷a🇮🇹", "range subscript")
+
+        let testPath = "/a/b/c.d"
+        XCTAssertEqual( File.dirname( testPath ), "/a/b", "dirname" )
+        XCTAssertEqual( File.basename( testPath ), "c.d", "basename" )
+        XCTAssertEqual( File.extname( testPath ), "d", "extname" )
+        XCTAssertEqual( File.removeext( testPath ), "/a/b/c", "removeext" )
     }
     
     func testPerformanceExample() {

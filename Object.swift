@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Object.swift#12 $
+//  $Id: //depot/RubyKit/Object.swift#16 $
 //
 //  Repo: https://github.com/RubyNative/RubyKit
 //
@@ -21,6 +21,13 @@ public let STDIN = IO( what: "stdin", unixFILE: stdin )
 public let STDOUT = IO( what: "stdout", unixFILE: stdout )
 public let STDERR = IO( what: "stderr", unixFILE: stderr )
 
+@asmname("_try")
+public func _try( tryBlock: () -> () )
+@asmname("_catch")
+public func _catch( catchBlock: (ex: NSException) -> () )
+@asmname("_throw")
+public func _throw( ex: NSException )
+
 public func U<T>( toUnwrap: T?, name: String? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> T {
     if toUnwrap == nil {
         let exceptionName = name != nil ? "Forced unwrap of \(name) fail" : "Forced unwrap fail"
@@ -30,7 +37,7 @@ public func U<T>( toUnwrap: T?, name: String? = nil, file: String = __FILE__, li
 }
 
 public enum WarningDisposition {
-    case Ignore, Warn, Fatal
+    case Ignore, Warn, Throw, Fatal
 }
 
 public var WARNING_DISPOSITION: WarningDisposition = .Warn
@@ -38,6 +45,9 @@ public var LAST_WARNING: String?
 
 public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
     LAST_WARNING = msg+" at \(file)#\(line)\n"
+    if WARNING_DISPOSITION == .Throw {
+        _throw( NSException( name: msg, reason: LAST_WARNING, userInfo: nil ) )
+    }
     if WARNING_DISPOSITION != .Ignore {
         STDERR.print( "RubyKit: "+LAST_WARNING! )
     }
@@ -46,17 +56,17 @@ public func RKLog( msg: String, file: String = __FILE__, line: Int = __LINE__ ) 
     }
 }
 
-public func RKError( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
-    let error = String( UTF8String: strerror( errno ) ) ?? "Undecodable error"
+public func RKError( msg: String, file: String, line: Int ) {
+    let error = String( UTF8String: strerror( errno ) ) ?? "Undecodable strerror"
     RKLog( msg+": \(error)", file: file, line: line )
 }
 
-public func RKFatal( msg: String, file: String = __FILE__, line: Int = __LINE__ ) {
+public func RKFatal( msg: String, file: String, line: Int ) {
     RKLog( msg, file: file, line: line )
     fatalError()
 }
 
-public func RKNotImplemented( what: String, file: String = __FILE__, line: Int = __LINE__ ) {
+public func RKNotImplemented( what: String, file: String, line: Int ) {
     RKFatal( "\(what) not implemented", file: file, line: line )
 }
 
