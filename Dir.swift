@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Dir.swift#10 $
+//  $Id: //depot/SwiftRuby/Dir.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/Dir.html
 //
@@ -21,7 +21,7 @@ public class Dir: RubyObject, to_a_protocol {
 
     // Dir[ string [, string ...] ] → array
 
-    init?( dirname: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) {
+    init?( dirname: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
         dirpath = dirname.to_s
         unixDIR = opendir( dirpath )
         super.init()
@@ -31,27 +31,27 @@ public class Dir: RubyObject, to_a_protocol {
         }
     }
 
-    public class func new( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
+    public class func new( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Dir? {
         return Dir( dirname: string, file: file, line: line )
     }
 
-    public class func open( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Dir? {
+    public class func open( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Dir? {
         return new( string, file: file, line: line )
     }
     
-    public class func chdir( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chdir( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "Dir.chdir '\(string.to_s)", Darwin.chdir( string.to_s ), file: file, line: line )
     }
 
-    public class func chroot( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func chroot( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "Dir.chroot '\(string.to_s)", Darwin.chroot( string.to_s ), file: file, line: line )
     }
 
-    public class func delete( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func delete( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "Dir.rmdir '\(string.to_s)", Darwin.rmdir( string.to_s ), file: file, line: line )
     }
 
-    public class func entries( dirname: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> [String] {
+    public class func entries( dirname: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String] {
         var out = [String]()
         foreach( dirname ) {
             (name) in
@@ -60,11 +60,11 @@ public class Dir: RubyObject, to_a_protocol {
         return out
     }
 
-    public class func exist( dirname: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func exist( dirname: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return File.exist( dirname, file: file, line: line )
     }
 
-    public class func exists( dirname: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func exists( dirname: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return exist( dirname, file: file, line: line )
     }
 
@@ -85,7 +85,7 @@ public class Dir: RubyObject, to_a_protocol {
         return String( UTF8String: cwd )
     }
 
-    public class func glob( pattern: to_s_protocol, _ root: String = ".", file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
+    public class func glob( pattern: to_s_protocol, _ root: String = ".", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
         let regex = pattern.to_s
             .stringByReplacingOccurrencesOfString( ".", withString: "\\." )
             .stringByReplacingOccurrencesOfString( "**", withString: "___" )
@@ -96,7 +96,7 @@ public class Dir: RubyObject, to_a_protocol {
         return IO.popen( command, file: file, line: line )?.readlines()
     }
 
-    public class func home( user: to_s_protocol? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> String? {
+    public class func home( user: to_s_protocol? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> String? {
         var user = user?.to_s
         var buff = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
         var ret = UnsafeMutablePointer<passwd>()
@@ -116,7 +116,7 @@ public class Dir: RubyObject, to_a_protocol {
         return String( UTF8String: info.pw_dir )
     }
 
-    public class func mkdir( string: to_s_protocol, _ mode: Int = 0o755, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func mkdir( string: to_s_protocol, _ mode: Int = 0o755, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "Dir.mkdir '\(string.to_s)", Darwin.mkdir( string.to_s, mode_t(mode) ), file: file, line: line )
     }
 
@@ -124,17 +124,17 @@ public class Dir: RubyObject, to_a_protocol {
         return getwd
     }
 
-    public class func rmdir( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func rmdir( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
-    public class func unlink( string: to_s_protocol, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public class func unlink( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
     // MARK: Instance methods
 
-    public func close( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public func close( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         let ok = unixOK( "Dir.closedir '\(dirpath)'",  closedir( unixDIR ), file: file, line: line )
         unixDIR = nil
         return ok

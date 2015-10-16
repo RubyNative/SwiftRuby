@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Data.swift#10 $
+//  $Id: //depot/SwiftRuby/Data.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/Data.html
 //
@@ -20,7 +20,7 @@ public protocol to_d_protocol {
     
 }
 
-public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol {
+public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol, to_a_protocol {
 
     public var bytes: UnsafeMutablePointer<Int8>
 
@@ -51,6 +51,13 @@ public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol {
         self.capacity = capacity
     }
 
+    public convenience init( array: [CChar] ) {
+        let alen = array.count
+        self.init( capacity: alen )
+        memcpy( bytes, array, alen )
+        length = alen-1
+    }
+
     public func append( extra: to_d_protocol ) -> Int {
         let extra = extra.to_d
         let required = length + extra.length
@@ -77,10 +84,10 @@ public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_s: String {
-        if let string = String( UTF8String: bytes ) {
+        if let string = String( CString: bytes, encoding: STRING_ENCODING ) {
             return string
         }
-        RKLog( "Data.to_s: Could not convert string to UTF8" )
+        RKLog( "Data.to_s: Could not create string from UTF8" )
         return String( CString: bytes, encoding: ALTERNATE_ENCODING )!
     }
 

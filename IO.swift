@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/IO.swift#11 $
+//  $Id: //depot/SwiftRuby/IO.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/IO.html
 //
@@ -97,7 +97,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         }
     }
 
-    public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: String = __FILE__, line: Int = __LINE__ ) {
+    public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
         super.init()
         if unixFILE == nil && what != nil {
             RKError( "\(what!) failed", file: file, line: line )
@@ -133,7 +133,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return copied
     }
 
-    public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line ).ifValid()
     }
 
@@ -148,25 +148,25 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         foreach( name, LINE_SEPARATOR, limit, block )
     }
 
-    public class func new( fd: Int, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func new( fd: Int, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
-    public class func open( fd: Int, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func open( fd: Int, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
-    public class func pipe( file: String = __FILE__, line: Int = __LINE__ ) -> (reader: IO?, writer: IO?) {
+    public class func pipe( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> (reader: IO?, writer: IO?) {
         var fds = [Int32](count: 0, repeatedValue: 0)
         Darwin.pipe( &fds )
         return (IO.new( Int(fds[0]), "r", file: file, line: line ), IO.new( Int(fds[1]), "w", file: file, line: line ))
     }
 
-    public class func popen( command: to_s_protocol, _ mode: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public class func popen( command: to_s_protocol, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return IO( what: "IO.popen '\(command)'", unixFILE: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line ).ifValid()
     }
 
-    public class func read( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> Data? {
+    public class func read( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Data? {
         if let ioFile = File.open( name, "r" ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
@@ -176,7 +176,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return nil
     }
 
-    public class func readlines( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
+    public class func readlines( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
         if let ioFile = File.open( name, "r", file: file, line: line ) {
             var out = [String]()
             ioFile.each_line( sep, limit, {
@@ -188,12 +188,12 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return nil
     }
 
-    public class func readlines( name: to_s_protocol, _ limit: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> [String]? {
+    public class func readlines( name: to_s_protocol, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
         return readlines( name, LINE_SEPARATOR, limit, file: file, line: line )
     }
 
     public class func select( read_array: [IO]?, _ write_array: [IO]? = nil, _ error_array: [IO]? = nil,
-                        timeout: Double? = nil, file: String = __FILE__, line: Int = __LINE__ )
+                        timeout: Double? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ )
                             -> (readable: [IO], writable: [IO], errored: [IO])? {
 
         let read_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
@@ -265,7 +265,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     }
 
 
-    public class func write( name: to_s_protocol, _ string: to_d_protocol, _ offset: Int? = 0, _ open_args: String? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> fixnum? {
+    public class func write( name: to_s_protocol, _ string: to_d_protocol, _ offset: Int? = 0, _ open_args: String? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> fixnum? {
         if let ioFile = File.open( name, open_args ?? "w", file: file, line: line ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
@@ -289,7 +289,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return each_char( block )
     }
 
-    public func close( file: String = __FILE__, line: Int = __LINE__ ) -> Int {
+    public func close( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Int {
         if _unixFILE != nil {
             var status = pclose( unixFILE )
             if status == -1 {
@@ -368,11 +368,11 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return Int(Darwin.fileno( unixFILE ))
     }
 
-    public func flush( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public func flush( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "IO.fflush", fflush( unixFILE ), file: file, line: line )
     }
 
-    public func fsync( file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public func fsync( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return flush() && unixOK( "IO.fsync", Darwin.fsync( Int32(fileno) ), file: file, line: line )
     }
 
@@ -510,17 +510,17 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return self
     }
 
-    public func reopen( path: to_s_protocol, _ mode_str: to_s_protocol = "r", file: String = __FILE__, line: Int = __LINE__ ) -> IO? {
+    public func reopen( path: to_s_protocol, _ mode_str: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.unixFILE ) == nil ? 1 : 0,
                         file: file, line: line ) ? self : nil
     }
 
-    public func rewind( file: String = __FILE__, line: Int = __LINE__ ) -> IO {
+    public func rewind( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO {
         Darwin.rewind( unixFILE )
         return self
     }
 
-    public func seek( amount: Int, _ whence: Int = Int(SEEK_SET), file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public func seek( amount: Int, _ whence: Int = Int(SEEK_SET), file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         return unixOK( "IO.seek", fseek( unixFILE, amount, Int32(whence) ), file: file, line: line )
     }
 

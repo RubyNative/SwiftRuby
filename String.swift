@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/String.swift#7 $
+//  $Id: //depot/SwiftRuby/String.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/String.html
 //
@@ -63,13 +63,7 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
     }
 
     public var to_d: Data {
-        var array = self.to_c
-        //return Data( bytes: &array, length: Int(strlen(array)) ) //// avoids extra copy but relies on autorelease scope..
-        let length = Int(strlen( &array ))
-        let data = Data( capacity: length )
-        memcpy( data.bytes, array, length )
-        data.length = length
-        return data
+        return Data( array: self.to_c )
     }
 
     public subscript ( i: Int ) -> String {

@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Stat.swift#5 $
+//  $Id: //depot/SwiftRuby/Stat.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/File/Stat.html
 //
@@ -87,18 +87,18 @@ public class Stat : RubyObject {
 
     public var info = stat()
 
-    public class func new( filename: to_s_protocol, statLink: Bool = false, file: String, line: Int ) -> Stat? {
+    public class func new( filename: to_s_protocol, statLink: Bool = false, file: StaticString, line: UInt ) -> Stat? {
         return Stat( filename, statLink: statLink, file: file, line: line )
     }
 
-    public convenience init?( fd: Int, file: String, line: Int ) {
+    public convenience init?( fd: Int, file: StaticString, line: UInt ) {
         self.init()
         if !unixOK( "fstat \(fd)", fstat( Int32(fd), &info ), file: file, line: line ) {
             return nil
         }
     }
 
-    public convenience init?( _ filepath: to_s_protocol, statLink: Bool = false, file: String?, line: Int = 0 ) {
+    public convenience init?( _ filepath: to_s_protocol, statLink: Bool = false, file: StaticString?, line: UInt = 0 ) {
         self.init()
         if statLink {
             if !unixOK( "lstat \(filepath.to_s)", lstat( filepath.to_s, &info ), file: file, line: line ) {

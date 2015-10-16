@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/StringIO.swift#5 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/stdlib-2.2.3/libdoc/stringio/rdoc/StringIO.html
 //
@@ -30,16 +30,16 @@ public class StringIO: IO {
         }
     }
 
-    public init( _ string: to_d_protocol = "", file: String = __FILE__, line: Int = __LINE__ ) {
+    public init( _ string: to_d_protocol = "", file: StaticString = __FILE__, line: UInt = __LINE__ ) {
         data = string.to_d
         super.init( what: nil, unixFILE: nil )
     }
 
-    public class func new( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> StringIO {
+    public class func new( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
         return StringIO( string, file: file, line: line )
     }
 
-    public class func open( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: String = __FILE__, line: Int = __LINE__ ) -> StringIO {
+    public class func open( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
         return new( string, mode, perm, file: file, line: line )
     }
 
@@ -99,12 +99,12 @@ public class StringIO: IO {
         return data
     }
 
-    public override func rewind( file: String = __FILE__, line: Int = __LINE__ ) -> IO {
+    public override func rewind( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO {
         seek( 0, Int(SEEK_SET) )
         return self
     }
 
-    public override func seek( amount: Int, _ whence: Int, file: String = __FILE__, line: Int = __LINE__ ) -> Bool {
+    public override func seek( amount: Int, _ whence: Int, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
         switch Int32(whence) {
         case SEEK_SET:
             offset = amount

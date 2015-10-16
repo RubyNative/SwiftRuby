@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Utilities.m#6 $
+//  $Id: //depot/SwiftRuby/Utilities.m#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 
 #import <Foundation/Foundation.h>
@@ -80,7 +80,7 @@ NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
     return syms;
 }
 
-static NSString *kLastExceptionKey = @"RubyKitException";
+static NSString *kLastExceptionKey = @"SwiftRubyException";
 static NSString *kCatchLevels = @"RubyCatchLevels";
 
 void _try( void (^tryBlock)() ) {
@@ -107,7 +107,7 @@ void _throw( NSException *e ) {
     if ( [[NSThread currentThread].threadDictionary[kCatchLevels] intValue] > 0 )
         @throw e;
     else {
-        NSLog( @"RubyKit: Uncaught Exception: name: %@, reason: %@, userInfo: %@", e.name, e.reason, e.userInfo );
+        NSLog( @"SwiftRuby: Uncaught Exception: name: %@, reason: %@, userInfo: %@", e.name, e.reason, e.userInfo );
         abort();
     }
 }

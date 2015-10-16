@@ -5,13 +5,13 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/RubyKitTests/RubyKitTests.swift#12 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#1 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 
 import XCTest
-import RubyKit
+import SwiftRuby
 
 class RubyNativeTests: XCTestCase {
     

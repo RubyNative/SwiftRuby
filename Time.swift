@@ -5,9 +5,9 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/RubyKit/Time.swift#5 $
+//  $Id: //depot/SwiftRuby/Time.swift#2 $
 //
-//  Repo: https://github.com/RubyNative/RubyKit
+//  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/Time.html
 //
@@ -163,9 +163,9 @@ public class Time : RubyObject, to_s_protocol {
         return gmt_offset
     }
 
-    override public var hash: fixnum {
-        return super.hash
-    }
+//    public var hash: fixnum {
+//        return super.hash
+//    }
 
     public var hour: Int {
         return Int(settm().tm_hour)

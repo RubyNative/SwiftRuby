@@ -35,8 +35,8 @@
 		BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE491BBB6FD9009E718C /* FileUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE4E1BBB709B009E718C /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4D1BBB709B009E718C /* Process.swift */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */; settings = {ASSET_TAGS = (); }; };
-		BBB3FE911BBBFDA5009E718C /* RubyKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */; };
-		BBB3FE931BBBFDA5009E718C /* RubyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* RubyKit.framework */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE911BBBFDA5009E718C /* SwiftRubyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* SwiftRubyTests.swift */; };
+		BBB3FE931BBBFDA5009E718C /* SwiftRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* SwiftRuby.framework */; settings = {ASSET_TAGS = (); }; };
 		BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BBB3FE9B1BBC02DC009E718C /* LICENSE */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -66,9 +66,9 @@
 		BB1ECBAA1BCC22CD00963CFF /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		BB1ECBAB1BCC22F800963CFF /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		BB319ECE1BB882F3002FB64B /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
-		BB3F78911BACAB9B00435430 /* RubyKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB3F78911BACAB9B00435430 /* SwiftRuby.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftRuby.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3F78A21BACAC3600435430 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BB45AF5A1BB0CC8A00428322 /* RubyKit */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubyKit; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB45AF5A1BB0CC8A00428322 /* SwiftRuby */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftRuby; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB5C0D891BB7437B00C0E190 /* Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
 		BB5C0D8B1BB7438B00C0E190 /* IO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IO.swift; sourceTree = "<group>"; };
 		BB5C0D8D1BB7439B00C0E190 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -97,11 +97,11 @@
 		BBB3FE4D1BBB709B009E718C /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regexp.swift; sourceTree = "<group>"; };
 		BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubyKitTests.swift; sourceTree = "<group>"; };
+		BBB3FE901BBBFDA5009E718C /* SwiftRubyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftRubyTests.swift; sourceTree = "<group>"; };
 		BBB3FE921BBBFDA5009E718C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBB3FE991BBC02C9009E718C /* MISSING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MISSING.md; sourceTree = "<group>"; };
 		BBB3FE9B1BBC02DC009E718C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		BBB3FEA21BBC16E2009E718C /* RubyKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = RubyKit.podspec; sourceTree = "<group>"; };
+		BBB3FEA21BBC16E2009E718C /* SwiftRuby.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SwiftRuby.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBB3FE931BBBFDA5009E718C /* RubyKit.framework in Frameworks */,
+				BBB3FE931BBBFDA5009E718C /* SwiftRuby.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,12 +179,12 @@
 				BBB3FE9B1BBC02DC009E718C /* LICENSE */,
 				BBB3FE451BBB30F9009E718C /* README.md */,
 				BBB3FE991BBC02C9009E718C /* MISSING.md */,
-				BBB3FEA21BBC16E2009E718C /* RubyKit.podspec */,
+				BBB3FEA21BBC16E2009E718C /* SwiftRuby.podspec */,
 				BB319EEA1BB8CC80002FB64B /* Core */,
 				BB319EEB1BB8CC90002FB64B /* Types */,
 				BB319EEC1BB8CCA1002FB64B /* IO */,
 				BBAD463D1BB8D0DC00701DE9 /* Networking */,
-				BBB3FE8F1BBBFDA5009E718C /* RubyKitTests */,
+				BBB3FE8F1BBBFDA5009E718C /* SwiftRubyTests */,
 				BB3F78921BACAB9B00435430 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -192,8 +192,8 @@
 		BB3F78921BACAB9B00435430 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB3F78911BACAB9B00435430 /* RubyKit.framework */,
-				BB45AF5A1BB0CC8A00428322 /* RubyKit */,
+				BB3F78911BACAB9B00435430 /* SwiftRuby.framework */,
+				BB45AF5A1BB0CC8A00428322 /* SwiftRuby */,
 				BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */,
 			);
 			name = Products;
@@ -214,13 +214,13 @@
 			name = Networking;
 			sourceTree = "<group>";
 		};
-		BBB3FE8F1BBBFDA5009E718C /* RubyKitTests */ = {
+		BBB3FE8F1BBBFDA5009E718C /* SwiftRubyTests */ = {
 			isa = PBXGroup;
 			children = (
-				BBB3FE901BBBFDA5009E718C /* RubyKitTests.swift */,
+				BBB3FE901BBBFDA5009E718C /* SwiftRubyTests.swift */,
 				BBB3FE921BBBFDA5009E718C /* Info.plist */,
 			);
-			path = RubyKitTests;
+			path = SwiftRubyTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,8 +250,8 @@
 			dependencies = (
 			);
 			name = Framework;
-			productName = RubyKit;
-			productReference = BB3F78911BACAB9B00435430 /* RubyKit.framework */;
+			productName = SwiftRuby;
+			productReference = BB3F78911BACAB9B00435430 /* SwiftRuby.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BB45AF591BB0CC8A00428322 /* Binary */ = {
@@ -267,8 +267,8 @@
 			dependencies = (
 			);
 			name = Binary;
-			productName = RubyKit;
-			productReference = BB45AF5A1BB0CC8A00428322 /* RubyKit */;
+			productName = SwiftRuby;
+			productReference = BB45AF5A1BB0CC8A00428322 /* SwiftRuby */;
 			productType = "com.apple.product-type.tool";
 		};
 		BBB3FE8D1BBBFDA5009E718C /* Tests */ = {
@@ -285,7 +285,7 @@
 				BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */,
 			);
 			name = Tests;
-			productName = RubyKitTests;
+			productName = SwiftRubyTests;
 			productReference = BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -310,7 +310,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyKit" */;
+			buildConfigurationList = BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "SwiftRuby" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -394,7 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBB3FE911BBBFDA5009E718C /* RubyKitTests.swift in Sources */,
+				BBB3FE911BBBFDA5009E718C /* SwiftRubyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,16 +426,16 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COCOASCRIPT_HOME = $HOME/Library/CocoaScript;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DIAMOND_HOME = $HOME/Library/Diamond;
 				DSTROOT = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(COCOASCRIPT_HOME)/Frameworks",
+					"$(DIAMOND_HOME)/Frameworks",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -452,7 +452,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Frameworks @executable_path/../Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(DIAMOND_HOME)/Frameworks @executable_path/../Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -460,7 +460,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SYMROOT = "$(COCOASCRIPT_HOME)/Build/$(PLATFORM_NAME)";
+				SYMROOT = "$(DIAMOND_HOME)/Build/$(PLATFORM_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -483,16 +483,16 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COCOASCRIPT_HOME = $HOME/Library/CocoaScript;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DIAMOND_HOME = $HOME/Library/Diamond;
 				DSTROOT = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(COCOASCRIPT_HOME)/Frameworks",
+					"$(DIAMOND_HOME)/Frameworks",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -503,13 +503,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(COCOASCRIPT_HOME)/Frameworks @executable_path/../Library/CocoaScript/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(DIAMOND_HOME)/Frameworks @executable_path/../Library/Diamond/Frameworks $(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
-				SYMROOT = "$(COCOASCRIPT_HOME)/Build/$(PLATFORM_NAME)";
+				SYMROOT = "$(DIAMOND_HOME)/Build/$(PLATFORM_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -526,8 +526,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
-				PRODUCT_NAME = RubyKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRuby;
+				PRODUCT_NAME = SwiftRuby;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -546,8 +546,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKit;
-				PRODUCT_NAME = RubyKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRuby;
+				PRODUCT_NAME = SwiftRuby;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 			};
@@ -557,7 +557,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "$(HOME)/bin";
-				PRODUCT_NAME = RubyKit;
+				PRODUCT_NAME = SwiftRuby;
 				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
 			};
 			name = Debug;
@@ -566,7 +566,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "$(HOME)/bin";
-				PRODUCT_NAME = RubyKit;
+				PRODUCT_NAME = SwiftRuby;
 				SWIFT_OBJC_BRIDGING_HEADER = BridgingHeader.h;
 			};
 			name = Release;
@@ -575,8 +575,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = RubyKitTests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKitTests;
+				INFOPLIST_FILE = SwiftRubyTests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRubyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -585,8 +585,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = RubyKitTests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.RubyKitTests;
+				INFOPLIST_FILE = SwiftRubyTests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRubyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -594,7 +594,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "RubyKit" */ = {
+		BB3F788B1BACAB9B00435430 /* Build configuration list for PBXProject "SwiftRuby" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB3F78971BACAB9B00435430 /* Debug */,
