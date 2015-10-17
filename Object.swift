@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#3 $
+//  $Id: //depot/SwiftRuby/Object.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -13,7 +13,7 @@
 //
 
 import Darwin
-import Utilities
+import SwiftRubyUtilities
 
 public let ARGV = Process.arguments
 
@@ -28,7 +28,7 @@ public enum WarningDisposition {
 public var WARNING_DISPOSITION: WarningDisposition = .Warn
 public var LAST_WARNING: String?
 
-public func RKLog( msg: String, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
+public func SRLog( msg: String, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
     LAST_WARNING = msg+" at \(file)#\(line)"
     if WARNING_DISPOSITION == .Throw {
         _throw( NSException( name: msg, reason: LAST_WARNING, userInfo: ["msg": msg, "file": String(file), "line": "\(line)"] ) )
@@ -41,18 +41,18 @@ public func RKLog( msg: String, file: StaticString = __FILE__, line: UInt = __LI
     }
 }
 
-public func RKError( msg: String, file: StaticString, line: UInt ) {
+public func SRError( msg: String, file: StaticString, line: UInt ) {
     let error = String( UTF8String: strerror( errno ) ) ?? "Undecodable strerror"
-    RKLog( msg+": \(error)", file: file, line: line )
+    SRLog( msg+": \(error)", file: file, line: line )
 }
 
-public func RKFatal( msg: String, file: StaticString, line: UInt ) {
-    RKLog( msg, file: file, line: line )
+public func SRFatal( msg: String, file: StaticString, line: UInt ) {
+    SRLog( msg, file: file, line: line )
     fatalError()
 }
 
-public func RKNotImplemented( what: String, file: StaticString, line: UInt ) {
-    RKFatal( "\(what) not implemented", file: file, line: line )
+public func SRNotImplemented( what: String, file: StaticString, line: UInt ) {
+    SRFatal( "\(what) not implemented", file: file, line: line )
 }
 
 public let ENV = ENVProxy()
@@ -78,6 +78,10 @@ public class ENVProxy {
 
 public class RubyObject {
 
+//    public var hash: fixnum {
+//        return super.hash
+//    }
+    
     public var instance_variables: [String] {
         return instanceVariablesForClass( self.dynamicType, NSMutableArray() )
     }

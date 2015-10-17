@@ -20,7 +20,7 @@ public func systemOK( command: to_s_protocol, file: StaticString? = __FILE__, li
     STATUS = Int(system( command.to_s ))
     if STATUS != 0 {
         if file != nil {
-            RKLog( "system call '\(command.to_s)' failed", file: file!, line: line )
+            SRLog( "system call '\(command.to_s)' failed", file: file!, line: line )
         }
         return false
     }

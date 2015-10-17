@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Dir.swift#2 $
+//  $Id: //depot/SwiftRuby/Dir.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -26,7 +26,7 @@ public class Dir: RubyObject, to_a_protocol {
         unixDIR = opendir( dirpath )
         super.init()
         if unixDIR == nil {
-            RKError( "opendir '\(dirpath.to_s)' failed", file: file, line: line )
+            SRError( "opendir '\(dirpath.to_s)' failed", file: file, line: line )
             return nil
         }
     }

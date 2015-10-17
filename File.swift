@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/File.swift#2 $
+//  $Id: //depot/SwiftRuby/File.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -22,7 +22,7 @@ public let Separator = "/"
 public func unixOK( what: to_s_protocol, _ returnValue: Int32, file: StaticString?, line: UInt = 0 ) -> Bool {
     if returnValue != 0 {
         if file != nil {
-            RKError( "\(what.to_s) failed, returning \(returnValue)", file: file!, line: line )
+            SRError( "\(what.to_s) failed, returning \(returnValue)", file: file!, line: line )
         }
         return false
     }
@@ -84,7 +84,7 @@ public class File : IO {
                 file_name = removeext( file_name )!
             }
             else {
-                RKNotImplemented( "File.basename with suffix ofer than '.*'", file: file, line: line )
+                SRNotImplemented( "File.basename with suffix ofer than '.*'", file: file, line: line )
             }
         }
         return NSURL( fileURLWithPath: file_name ).lastPathComponent ////
@@ -304,14 +304,14 @@ public class File : IO {
 
     public class func realdirpath( file_name: to_s_protocol, _ dir_string: to_s_protocol? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> String? {
         if dir_string != nil {
-            RKNotImplemented( "File.realdirpath with dir_string argument", file: file, line: line )
+            SRNotImplemented( "File.realdirpath with dir_string argument", file: file, line: line )
         }
         return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path ////
     }
     
     public class func realpath( file_name: to_s_protocol, _ dir_string: to_s_protocol? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> String? {
         if dir_string != nil {
-            RKNotImplemented( "File.realpath with dir_string argument", file: file, line: line )
+            SRNotImplemented( "File.realpath with dir_string argument", file: file, line: line )
         }
         return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path ////
     }

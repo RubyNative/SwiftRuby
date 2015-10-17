@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#2 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -116,7 +116,7 @@ public class StringIO: IO {
             return false
         }
         if offset < 0 || offset > data.length {
-            RKLog( "Invalid StringIO.seek \(amount), \(whence) -> \(offset) outside 0-\(data.length)", file: file, line: line )
+            SRLog( "Invalid StringIO.seek \(amount), \(whence) -> \(offset) outside 0-\(data.length)", file: file, line: line )
             return false
         }
         return true

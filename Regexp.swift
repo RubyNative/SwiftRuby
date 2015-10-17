@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#2 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -42,6 +42,34 @@ extension String {
 
     public var mutableString: NSMutableString {
         return NSMutableString( string: self )
+    }
+
+    public func gsub( pattern: String, _ template: String ) -> String {
+        let out = self.mutableString
+        out[pattern] =~ template
+        return out as String
+    }
+
+    public func sub( pattern: String, _ template: String ) -> String {
+        let out = self.mutableString
+        out[pattern] =~ [template]
+        return out as String
+    }
+
+    public func slice( pattern: String, _ capture: Int = 0 ) -> String? {
+        return Regexp( target: self, pattern: pattern )[capture]
+    }
+
+    public subscript ( pattern: String, capture: Int ) -> String? {
+        return slice( pattern, capture )
+    }
+
+    public func match( pattern: String ) -> Regexp {
+        return Regexp( target: self, pattern: pattern )
+    }
+
+    public func scan( pattern: String ) -> [[String?]] {
+        return Regexp( target: self, pattern: pattern ).allGroups()
     }
 
 }
@@ -99,7 +127,7 @@ public class Regexp: RubyObject, BooleanType {
             self.regexp = try NSRegularExpression( pattern: pattern, options: options )
         }
         catch let error as NSError {
-            RKLog( "Regexp pattern: '\(pattern)' compile error: \(error)" )
+            SRLog( "Regexp pattern: '\(pattern)' compile error: \(error)" )
             self.regexp = NSRegularExpression()
         }
     }
@@ -162,7 +190,7 @@ public class Regexp: RubyObject, BooleanType {
         return nil
     }
 
-    public func scan( options: NSMatchingOptions? = nil ) -> [[String?]] {
+    public func allGroups( options: NSMatchingOptions? = nil ) -> [[String?]] {
         return matchResults( options ).map { self.groupsForMatch( $0 ) }
     }
 
@@ -220,11 +248,11 @@ public class MutableRegexp: Regexp {
                         mutableTarget.replaceCharactersInRange( match.rangeAtIndex(groupno), withString: replacement )
                     }
                 } else {
-                    RKLog( "Group modify on non-mutable" )
+                    SRLog( "Group modify on non-mutable" )
                 }
             }
             else {
-                RKLog( "nil replacement in group modify" )
+                SRLog( "nil replacement in group modify" )
             }
 
         }
@@ -251,7 +279,7 @@ public class MutableRegexp: Regexp {
                 return true
             }
         } else {
-            RKLog( "Modify substitute on non-mutable" )
+            SRLog( "Modify substitute on non-mutable" )
         }
         return false
     }
@@ -305,7 +333,7 @@ public class RegexpFile {
         contents = File.read( path )?.to_s.mutableString
         original = contents as String
         if contents == nil {
-            RKError( "RegexpFile could not read '\(path)'", file: file, line: line )
+            SRError( "RegexpFile could not read '\(path)'", file: file, line: line )
             return nil
         }
     }

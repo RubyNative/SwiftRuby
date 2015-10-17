@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Stat.swift#2 $
+//  $Id: //depot/SwiftRuby/Stat.swift#4 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -93,7 +93,7 @@ public class Stat : RubyObject {
 
     public convenience init?( fd: Int, file: StaticString, line: UInt ) {
         self.init()
-        if !unixOK( "fstat \(fd)", fstat( Int32(fd), &info ), file: file, line: line ) {
+        if !unixOK( "Stat.fstat #\(fd)", fstat( Int32(fd), &info ), file: file, line: line ) || info.st_dev == 0 {
             return nil
         }
     }
@@ -101,12 +101,12 @@ public class Stat : RubyObject {
     public convenience init?( _ filepath: to_s_protocol, statLink: Bool = false, file: StaticString?, line: UInt = 0 ) {
         self.init()
         if statLink {
-            if !unixOK( "lstat \(filepath.to_s)", lstat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK( "Stat.lstat \(filepath.to_s)", lstat( filepath.to_s, &info ), file: file, line: line ) {
                 return nil
             }
         }
         else {
-            if !unixOK( "stat \(filepath.to_s)", stat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK( "Stat.stat \(filepath.to_s)", stat( filepath.to_s, &info ), file: file, line: line ) {
                 return nil
             }
         }

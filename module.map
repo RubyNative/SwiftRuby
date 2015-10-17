@@ -1,4 +1,4 @@
-module Utilities [system] {
+module SwiftRubyUtilities [system] {
     header "Utilities.h"
     export *
 }

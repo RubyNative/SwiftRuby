@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#1 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -75,6 +75,9 @@ class RubyNativeTests: XCTestCase {
 
         XCTAssert( fabs( Time().to_f - File.mtime( "diff1.txt" )!.to_f ) <= 1.0, "modification time" )
 
+        let largeFile = "/Applications/Xcode.app/Contents/Frameworks/IDEKit.framework/IDEKit"
+        XCTAssert( File.open( largeFile )!.read()! == IO.popen( "cat \(largeFile)" )!.read()!, "large file" )
+
         WARNING_DISPOSITION = .Ignore
         for mode in [0o700, 0o070, 0o007, 0o000] {
             File.chmod( mode, "diff1.txt" )
@@ -82,21 +85,31 @@ class RubyNativeTests: XCTestCase {
         }
 
         let files = ["diff1.txt", "same1.txt", "same2.txt"]
-        XCTAssertEqual( Dir.glob( "*.txt", testdir )!.sort(), files, "read directory" )
+        XCTAssertEqual( Dir.glob( "*.txt", testdir )!.sort(), files, "glob directory" )
         XCTAssertEqual( Dir.open( "." )!.to_a.sort(), [".", ".."]+files, "read directory" )
-        XCTAssertEqual( Kernel.open( "| ls \(testdir)" )!.to_a.sort(), files, "read popen" )
+        XCTAssertEqual( Kernel.open( "| ls \(testdir)" )!.to_a, files, "read popen" )
 
         XCTAssertEqual("🇩🇪🇺🇸\n🇩🇪🇺🇸\n"["^(..)🇺🇸", .AnchorsMatchLines]["$1🇪🇸"], "🇩🇪🇪🇸\n🇩🇪🇪🇸\n", "unicode replace")
         XCTAssertEqual("🇩🇪🇺🇸\n🇩🇪🇺🇸\n"["^(.*)🇺🇸", "m"]["$1🇪🇸"], "🇩🇪🇪🇸\n🇩🇪🇪🇸\n", "unicode replace")
 
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2], "🇺🇸", "basic subscript")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2, 3], "🇺🇸a🇫🇷", "simple subscript")
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[2..<7], "🇺🇸a🇫🇷a🇮🇹", "range subscript")
+
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧".sub("a", "b"), "🇩🇪b🇺🇸a🇫🇷a🇮🇹a🇬🇧", "single replace")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"["🇺🇸(.)"][1], "a", "regexp group")
+
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-1], "🇬🇧", "regexp group")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-3, -1], "🇮🇹a", "regexp group")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-5, NSNotFound], "🇫🇷a🇮🇹a🇬🇧", "regexp group")
 
         let testPath = "/a/b/c.d"
         XCTAssertEqual( File.dirname( testPath ), "/a/b", "dirname" )
         XCTAssertEqual( File.basename( testPath ), "c.d", "basename" )
         XCTAssertEqual( File.extname( testPath ), "d", "extname" )
         XCTAssertEqual( File.removeext( testPath ), "/a/b/c", "removeext" )
+
+        XCTAssertEqual( Dir.home(), ENV["HOME"], "home directory" )
     }
     
     func testPerformanceExample() {

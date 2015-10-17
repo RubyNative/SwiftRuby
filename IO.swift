@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/IO.swift#2 $
+//  $Id: //depot/SwiftRuby/IO.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -40,6 +40,12 @@ public func FD_ISSET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
     return (set.memory & Int32(1<<(fd&selectBitMask))) != 0
 }
 
+public func ==(lhs: IO, rhs: IO) -> Bool {
+    if let lhData = lhs.read(), rhData = rhs.read() {
+        return lhData == rhData
+    }
+    return false
+}
 
 @asmname("fcntl")
 func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
@@ -50,7 +56,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     public var unixFILE: UnsafeMutablePointer<FILE> {
         get {
             if _unixFILE == nil {
-                RKLog( "Get of nil IO.unixFILE" )
+                SRLog( "Get of nil IO.unixFILE" )
             }
             return _unixFILE
         }
@@ -100,7 +106,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
         super.init()
         if unixFILE == nil && what != nil {
-            RKError( "\(what!) failed", file: file, line: line )
+            SRError( "\(what!) failed", file: file, line: line )
         }
         self._unixFILE = unixFILE
     }
@@ -465,9 +471,17 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     }
     
     public func read( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
-        let data = outbuf ?? Data( capacity: length ?? stat?.size ?? 1_000_000 ) ////
-        data.length = fread( data.bytes, 1, data.capacity, unixFILE )
-        return data.length != 0 ? data : nil
+        let data = outbuf ?? Data( capacity: (length ?? stat?.size ?? 1_000_000)+1 ) ////
+        while true {
+            let toread = data.capacity-data.length
+            let wasread = fread( data.bytes+data.length, 1, toread, unixFILE )
+            data.length += wasread
+            if wasread != toread {
+                break
+            }
+            data.capacity *= 2
+        }
+        return ferror( unixFILE ) == 0 || feof( unixFILE ) != 0 ? data : nil
     }
 
     public func read_nonblock( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
@@ -563,7 +577,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         if let data = read() {
             return data
         }
-        RKLog( "IO.to_d, no data" )
+        SRLog( "IO.to_d, no data" )
         return "IO.to_d, no data".to_d
     }
 
@@ -571,7 +585,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         if let data = read() {
             return data.to_s
         }
-        RKLog( "IO.to_s, no data" )
+        SRLog( "IO.to_s, no data" )
         return "IO.to_s, no data"
     }
 

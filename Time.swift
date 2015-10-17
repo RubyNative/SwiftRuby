@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Time.swift#2 $
+//  $Id: //depot/SwiftRuby/Time.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -44,12 +44,12 @@ public class Time : RubyObject, to_s_protocol {
     }
 
     public convenience init( spec: timespec ) {
-        self.init( seconds: spec.tv_sec, usec: spec.tv_nsec/1000 )
+        self.init( seconds: spec.tv_sec, usec: spec.tv_nsec/1_000 )
     }
 
     public convenience init( time_f: Double ) {
         let time_i = Int(time_f.to_f)
-        self.init( seconds: time_i, usec: Int((time_f.to_f-Double(time_i))*Double(CLOCKS_PER_SEC)) )
+        self.init( seconds: time_i, usec: Int((time_f.to_f-Double(time_i))*1_000_000) )
     }
 
     // MARK: Class methods
@@ -163,10 +163,6 @@ public class Time : RubyObject, to_s_protocol {
         return gmt_offset
     }
 
-//    public var hash: fixnum {
-//        return super.hash
-//    }
-
     public var hour: Int {
         return Int(settm().tm_hour)
     }
@@ -208,7 +204,7 @@ public class Time : RubyObject, to_s_protocol {
     }
 
     public var nsec: Int {
-        return Int(value.tv_usec) * 1000
+        return Int(value.tv_usec) * 1_000
     }
 
     public func round( ndigits: Int ) -> Time {
@@ -250,7 +246,7 @@ public class Time : RubyObject, to_s_protocol {
     }
 
     public var to_f: Double {
-        return Double(value.tv_sec) + Double(value.tv_usec)/Double(CLOCKS_PER_SEC)
+        return Double(value.tv_sec) + Double(value.tv_usec)/1_000_000
     }
 
     public var to_i: Int {
@@ -270,7 +266,7 @@ public class Time : RubyObject, to_s_protocol {
     }
 
     public var tv_nsec: Int {
-        return Int(value.tv_usec) * 1000
+        return Int(value.tv_usec) * 1_000
     }
 
     public var tv_sec: Int {
@@ -313,7 +309,7 @@ public class Time : RubyObject, to_s_protocol {
         return Int(settm().tm_yday)
     }
 
-    public var _zone: String {
+    public var zone: String {
         return String( UTF8String: settm().tm_zone )!
     }
 

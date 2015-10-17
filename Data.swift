@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Data.swift#2 $
+//  $Id: //depot/SwiftRuby/Data.swift#4 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -20,14 +20,18 @@ public protocol to_d_protocol {
     
 }
 
-public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol, to_a_protocol {
+public func ==(lhs: Data, rhs: Data) -> Bool {
+    return lhs.length == rhs.length && memcmp( lhs.bytes, rhs.bytes, lhs.length ) == 0
+}
+
+public class Data: RubyObject, to_s_protocol, to_a_protocol, to_c_protocol, to_d_protocol {
 
     public var bytes: UnsafeMutablePointer<Int8>
 
     public var length = 0 {
         didSet {
             if length > capacity {
-                RKFatal( "Data length \(length) > capacity \(capacity)", file: __FILE__, line: __LINE__ )
+                SRFatal( "Data length \(length) > capacity \(capacity)", file: __FILE__, line: __LINE__ )
             }
             bytes[length] = 0
         }
@@ -74,8 +78,8 @@ public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol, to_a
     }
 
     public var to_c: [CChar] {
-        var data = [CChar]( count: length+1, repeatedValue: 0 )
-        memcpy( &data, bytes, length+1 )
+        var data = [CChar]( count: length+1, repeatedValue: 0 ) ///
+        memcpy( &data, bytes, data.count )
         return data
     }
 
@@ -87,8 +91,9 @@ public class Data: RubyObject, to_s_protocol, to_d_protocol, to_c_protocol, to_a
         if let string = String( CString: bytes, encoding: STRING_ENCODING ) {
             return string
         }
-        RKLog( "Data.to_s: Could not create string from UTF8" )
-        return String( CString: bytes, encoding: ALTERNATE_ENCODING )!
+
+        SRLog( "Data.to_s: Could not decode string from input" )
+        return U(String( CString: bytes, encoding: FALLBACK_INPUT_ENCODING ))
     }
 
     deinit {
