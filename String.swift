@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/String.swift#3 $
+//  $Id: //depot/SwiftRuby/String.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -18,6 +18,12 @@ public var STRING_ENCODING = NSUTF8StringEncoding
 
 public let FALLBACK_INPUT_ENCODING = NSISOLatin1StringEncoding
 public let FALLBACK_OUTPUT_ENCODING = NSUTF8StringEncoding
+
+public enum StringIndexDisposition {
+    case WarnAndFail, Truncate
+}
+
+public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .Truncate
 
 public protocol to_s_protocol: to_a_protocol {
 
@@ -85,16 +91,38 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
         return dummy
     }
     
-    public var downcase: String {
-        return self.lowercaseString
-    }
-
     public func characterAtIndex( i: Int ) -> Int {
         if let char = self[i].unicodeScalars.first {
             return Int(char.value)
         }
         SRLog( "No character available in string '\(self)' returning nul char" )
         return 0
+    }
+
+    public var downcase: String {
+        return self.lowercaseString
+    }
+
+    public func each_byte( block: (UInt8) -> () ) {
+        for char in utf8 {
+            block( char )
+        }
+    }
+
+    public func each_char( block: (UInt16) -> () ) {
+        for char in utf16 {
+            block( char )
+        }
+    }
+
+    public func each_codepoint( block: (String) -> () ) {
+        for char in characters {
+            block( String( char ) )
+        }
+    }
+
+    public func each_line( block: (String) -> () ) {
+        StringIO( self ).each_line( LINE_SEPARATOR, nil, block )
     }
 
     public var length: Int {
@@ -114,9 +142,15 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
         }
         if vstart < 0 {
             SRLog( "String.str( \(start), \(len) ) start before front of string '\(self)', length \(length)" )
+            if STRING_INDEX_DISPOSITION == .Truncate {
+                vstart = 0
+            }
         }
         else if vstart > length {
             SRLog( "String.str( \(start), \(len) ) start after end of string '\(self)', length \(length)" )
+            if STRING_INDEX_DISPOSITION == .Truncate {
+                vstart = length
+            }
         }
 
         if len < 0 {
@@ -127,9 +161,15 @@ extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
         }
         if vlen < 0 {
             SRLog( "String.str( \(start), \(len) ) start + len before start of substring '\(self)', length \(length)" )
+            if STRING_INDEX_DISPOSITION == .Truncate {
+                vlen = 0
+            }
         }
         else if vstart + vlen > length {
             SRLog( "String.str( \(start), \(len) ) start + len after end of string '\(self)', length \(length)" )
+            if STRING_INDEX_DISPOSITION == .Truncate {
+                vlen = length - vstart
+            }
         }
 
         return self[vstart..<vstart+vlen]

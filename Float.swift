@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Float.swift#2 $
+//  $Id: //depot/SwiftRuby/Float.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -18,7 +18,7 @@ public protocol to_f_protocol {
 
 }
 
-extension Double {
+extension Double: to_f_protocol {
 
     public var to_s: String {
         return String( self )

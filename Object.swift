@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#5 $
+//  $Id: //depot/SwiftRuby/Object.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -78,10 +78,10 @@ public class ENVProxy {
 
 public class RubyObject {
 
-//    public var hash: fixnum {
-//        return super.hash
-//    }
-    
+    public var hash: fixnum {
+        return unsafeBitCast( self, Int.self )
+    }
+
     public var instance_variables: [String] {
         return instanceVariablesForClass( self.dynamicType, NSMutableArray() )
     }

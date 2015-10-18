@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#3 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -40,6 +40,10 @@ extension String {
         return Regexp( target: self, pattern: pattern, optionString: optionString )
     }
 
+    public subscript ( pattern: String, capture: Int ) -> String? {
+        return slice( pattern, capture )
+    }
+
     public var mutableString: NSMutableString {
         return NSMutableString( string: self )
     }
@@ -50,26 +54,39 @@ extension String {
         return out as String
     }
 
-    public func sub( pattern: String, _ template: String ) -> String {
-        let out = self.mutableString
-        out[pattern] =~ [template]
-        return out as String
+    public func index( pattern: String ) -> Int? {
+        let range = Regexp( target: self, pattern: pattern ).range()
+        return range.location != NSNotFound ? range.location : nil
+    }
+
+    public var lstrip: String {
+        return self["^\\s+"][""]
+    }
+
+    public func match( pattern: String ) -> [String?]? {
+        return Regexp( target: self, pattern: pattern ).groups()
+    }
+
+    public var rstrip: String {
+        return self["\\s*+"][""]
     }
 
     public func slice( pattern: String, _ capture: Int = 0 ) -> String? {
         return Regexp( target: self, pattern: pattern )[capture]
     }
 
-    public subscript ( pattern: String, capture: Int ) -> String? {
-        return slice( pattern, capture )
-    }
-
-    public func match( pattern: String ) -> Regexp {
-        return Regexp( target: self, pattern: pattern )
-    }
-
     public func scan( pattern: String ) -> [[String?]] {
         return Regexp( target: self, pattern: pattern ).allGroups()
+    }
+
+    public var strip: String {
+        return self["^\\s+|\\s+$"][""]
+    }
+
+    public func sub( pattern: String, _ template: String ) -> String {
+        let out = self.mutableString
+        out[pattern] =~ [template]
+        return out as String
     }
 
 }

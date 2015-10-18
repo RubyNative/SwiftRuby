@@ -5,13 +5,13 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#5 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
 
 import XCTest
-import SwiftRuby
+@testable import SwiftRuby
 
 class RubyNativeTests: XCTestCase {
     
@@ -98,10 +98,21 @@ class RubyNativeTests: XCTestCase {
 
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧".sub("a", "b"), "🇩🇪b🇺🇸a🇫🇷a🇮🇹a🇬🇧", "single replace")
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"["🇺🇸(.)"][1], "a", "regexp group")
+        XCTAssertEqual("   abc   ".index( "abc" ), 3, "index")
+        XCTAssertEqual("   abc   ".strip, "abc", "strip")
 
-        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-1], "🇬🇧", "regexp group")
-        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-3, -1], "🇮🇹a", "regexp group")
-        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-5, NSNotFound], "🇫🇷a🇮🇹a🇬🇧", "regexp group")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-1], "🇬🇧", "-ve subscript")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-3, -1], "🇮🇹a", "two --ve subscript")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-5, NSNotFound], "🇫🇷a🇮🇹a🇬🇧", "-ve to end")
+
+        WARNING_DISPOSITION = .Warn
+        STRING_INDEX_DISPOSITION = .Truncate
+
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[0, 20], "🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧", "start + len")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-20, -1], "🇩🇪a🇺🇸a🇫🇷a🇮🇹a", "start < front")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-2, 20], "a🇬🇧", "start + end > back")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-2, -20], "", "end < start")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[20, 0], "", "start > back")
 
         let testPath = "/a/b/c.d"
         XCTAssertEqual( File.dirname( testPath ), "/a/b", "dirname" )

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Integer.swift#2 $
+//  $Id: //depot/SwiftRuby/Integer.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -20,7 +20,7 @@ public protocol to_i_protocol {
     
 }
 
-extension Int {
+extension Int: to_i_protocol {
 
     public var to_i: Int {
         return self
