@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#2 $
+//  $Id: //depot/SwiftRuby/Utilities.m#4 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -56,7 +56,7 @@ NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSStri
     else {
         unsigned ic;
         Ivar *ivars = class_copyIvarList( cls, &ic );
-        for ( int i=0 ; i<ic ; i++ )
+        for ( unsigned i=0 ; i<ic ; i++ )
             [ivarNames addObject:[NSString stringWithFormat:@"%@.%@", NSStringFromClass( cls ),
                                   [NSString stringWithUTF8String:ivar_getName( ivars[i] )]]];
     }
@@ -81,7 +81,7 @@ NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
 }
 
 static NSString *kLastExceptionKey = @"SwiftRubyException";
-static NSString *kCatchLevels = @"RubyCatchLevels";
+static NSString *kCatchLevels = @"SwiftRubyCatchLevels";
 
 void _try( void (^tryBlock)() ) {
     NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
