@@ -1,11 +1,11 @@
 //
 //  Regex.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#5 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -138,7 +138,8 @@ public class Regexp: RubyObject, BooleanType {
         self.init( target: target, pattern: pattern, options: NSRegularExpressionOptions( rawValue: options ) )
     }
 
-    public init( target: NSString, pattern: String, options: NSRegularExpressionOptions = .DotMatchesLineSeparators ) {
+    public init( target: NSString, pattern: String,
+                options: NSRegularExpressionOptions = NSRegularExpressionOptions( rawValue: 0 ) ) {
         self.target = target
         do {
             self.regexp = try NSRegularExpression( pattern: pattern, options: options )

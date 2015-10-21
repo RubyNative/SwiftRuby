@@ -1,11 +1,11 @@
 //
 //  String.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/String.swift#6 $
+//  $Id: //depot/SwiftRuby/String.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -23,7 +23,7 @@ public enum StringIndexDisposition {
     case WarnAndFail, Truncate
 }
 
-public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .Truncate
+public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .WarnAndFail
 
 public protocol to_s_protocol: to_a_protocol {
 

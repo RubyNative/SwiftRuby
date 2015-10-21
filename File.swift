@@ -1,11 +1,11 @@
 //
 //  File.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/File.swift#3 $
+//  $Id: //depot/SwiftRuby/File.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -81,7 +81,7 @@ public class File : IO {
         var file_name = file_name.to_s
         if suffix != nil {
             if suffix!.to_s == ".*" {
-                file_name = removeext( file_name )!
+                file_name = extremoved( file_name )!
             }
             else {
                 SRNotImplemented( "File.basename with suffix ofer than '.*'", file: file, line: line )
@@ -316,7 +316,7 @@ public class File : IO {
         return NSURL( fileURLWithPath: file_name.to_s ).URLByResolvingSymlinksInPath?.path ////
     }
     
-    public class func removeext( file_name: to_s_protocol, _ suffix: to_s_protocol? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> String? {
+    public class func extremoved( file_name: to_s_protocol, _ suffix: to_s_protocol? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> String? {
         return NSURL( fileURLWithPath: file_name.to_s ).URLByDeletingPathExtension?.path
     }
 

@@ -1,11 +1,11 @@
 //
 //  Array.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Array.swift#2 $
+//  $Id: //depot/SwiftRuby/Array.swift#3 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //

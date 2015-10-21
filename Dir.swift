@@ -1,11 +1,11 @@
 //
 //  Dir.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Dir.swift#3 $
+//  $Id: //depot/SwiftRuby/Dir.swift#4 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -30,6 +30,8 @@ public class Dir: RubyObject, to_a_protocol {
             return nil
         }
     }
+
+    // MARK: Class Methods
 
     public class func new( string: to_s_protocol, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Dir? {
         return Dir( dirname: string, file: file, line: line )

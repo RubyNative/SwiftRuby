@@ -1,11 +1,11 @@
 //
 //  StringIO.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#3 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#4 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //

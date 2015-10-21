@@ -1,16 +1,21 @@
 //
 //  Kernel.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Kernel.swift#2 $
+//  $Id: //depot/SwiftRuby/Kernel.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/Kernel.html
 //
+
+import Foundation
+
+@asmname ("execArgv")
+func execArgv( executable: NSString, argv: NSArray )
 
 public class Kernel: RubyObject {
 
@@ -24,6 +29,18 @@ public class Kernel: RubyObject {
         else {
             return File.open( path, mode, perm, file: file, line: line )
         }
+    }
+
+    public class func exec( command: to_s_protocol ) {
+        exec( "/bin/bash", ["-c", command.to_s] )
+    }
+
+    public class func exec( executable: to_s_protocol, _ arguments: to_a_protocol ) {
+        exec( [executable.to_s, executable.to_s], arguments.to_a )
+    }
+
+    public class func exec( executable: to_a_protocol, _ arguments: to_a_protocol ) {
+        execArgv( executable.to_a[0].to_s, argv: [executable.to_a[1]]+arguments.to_a )
     }
 
 }

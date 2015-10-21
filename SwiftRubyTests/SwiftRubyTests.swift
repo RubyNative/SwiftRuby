@@ -1,11 +1,11 @@
 //
-//  RubyNativeTests.swift
-//  RubyNativeTests
+//  SwiftRubyTests.swift
+//  SwiftRubyTests
 //
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#9 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -102,7 +102,7 @@ class RubyNativeTests: XCTestCase {
         XCTAssertEqual("   abc   ".strip, "abc", "strip")
 
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-1], "🇬🇧", "-ve subscript")
-        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-3, -1], "🇮🇹a", "two --ve subscript")
+        XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-3, -1], "🇮🇹a", "two -ve subscript")
         XCTAssertEqual("🇩🇪a🇺🇸a🇫🇷a🇮🇹a🇬🇧"[-5, NSNotFound], "🇫🇷a🇮🇹a🇬🇧", "-ve to end")
 
         WARNING_DISPOSITION = .Warn
@@ -118,7 +118,7 @@ class RubyNativeTests: XCTestCase {
         XCTAssertEqual( File.dirname( testPath ), "/a/b", "dirname" )
         XCTAssertEqual( File.basename( testPath ), "c.d", "basename" )
         XCTAssertEqual( File.extname( testPath ), "d", "extname" )
-        XCTAssertEqual( File.removeext( testPath ), "/a/b/c", "removeext" )
+        XCTAssertEqual( File.extremoved( testPath ), "/a/b/c", "removeext" )
 
         XCTAssertEqual( Dir.home(), ENV["HOME"], "home directory" )
     }

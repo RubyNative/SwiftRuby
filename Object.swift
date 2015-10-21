@@ -1,19 +1,18 @@
 //
 //  Object.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#6 $
+//  $Id: //depot/SwiftRuby/Object.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
 //  See: http://ruby-doc.org/core-2.2.3/Object.html
 //
 
-import Darwin
-import SwiftRubyUtilities
+import Foundation
 
 public let ARGV = Process.arguments
 
@@ -76,6 +75,12 @@ public class ENVProxy {
 
 }
 
+@asmname ("instanceVariablesForClass")
+func instanceVariablesForClass( cls: AnyClass, _ ivarNames: NSMutableArray ) -> NSArray
+
+@asmname ("methodSymbolsForClass")
+func methodSymbolsForClass( cls: AnyClass ) -> NSArray
+
 public class RubyObject {
 
     public var hash: fixnum {
@@ -83,19 +88,21 @@ public class RubyObject {
     }
 
     public var instance_variables: [String] {
-        return instanceVariablesForClass( self.dynamicType, NSMutableArray() )
+        return instanceVariablesForClass( self.dynamicType, NSMutableArray() ) as! [String]
     }
 
     public var methods: [String] {
-        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( $0 ) }
+        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( String( $0 ) ) }
     }
 
 }
 
 @asmname("_try")
 public func _try( tryBlock: () -> () )
+
 @asmname("_catch")
 public func _catch( catchBlock: (ex: NSException) -> () )
+
 @asmname("_throw")
 public func _throw( ex: NSException )
 

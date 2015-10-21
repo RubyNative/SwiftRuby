@@ -1,6 +1,6 @@
 //
 //  public class func swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
@@ -211,8 +211,8 @@ public class FileUtils {
         return ln_s( src, dest, options, file: file, line: line )
     }
 
-    public class func rsync( list: to_a_protocol, _ dir: to_s_protocol, _ args: to_s_protocol = "-rlp", _ options: [String]? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
-        return systemOK( "rsync \(args) \(expand( list )) \"\(dir.to_s)\"", file: file, line: line )
+    public class func rsync( list: to_a_protocol, _ dest: to_s_protocol, _ args: to_s_protocol = "-a", _ options: [String]? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
+        return systemOK( "rsync \(args) \(expand( list )) \"\(dest.to_s)\"", file: file, line: line )
     }
 
     public class func touch( list: to_a_protocol, _ options: [String]? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {

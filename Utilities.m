@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#4 $
+//  $Id: //depot/SwiftRuby/Utilities.m#12 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -85,7 +85,8 @@ static NSString *kCatchLevels = @"SwiftRubyCatchLevels";
 
 void _try( void (^tryBlock)() ) {
     NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
-    threadDictionary[kCatchLevels] = @([threadDictionary[kCatchLevels] intValue]+1);
+    int catchLevels = [threadDictionary[kCatchLevels] intValue];
+    threadDictionary[kCatchLevels] = @(catchLevels+1);
     threadDictionary[kLastExceptionKey]  = nil;
     @try {
         tryBlock();
@@ -93,12 +94,14 @@ void _try( void (^tryBlock)() ) {
     @catch (NSException *e) {
         threadDictionary[kLastExceptionKey] = e;
     }
-    threadDictionary[kCatchLevels] = @([threadDictionary[kCatchLevels] intValue]-1);
+    threadDictionary[kCatchLevels] = @(catchLevels);
 }
 
 void _catch( void (^catchBlock)( NSException *e ) ) {
-    NSException *e = [NSThread currentThread].threadDictionary[kLastExceptionKey];
+    NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
+    NSException *e = threadDictionary[kLastExceptionKey];
     if ( e ) {
+        threadDictionary[kLastExceptionKey]  = nil;
         catchBlock( e );
     }
 }
@@ -107,7 +110,16 @@ void _throw( NSException *e ) {
     if ( [[NSThread currentThread].threadDictionary[kCatchLevels] intValue] > 0 )
         @throw e;
     else {
-        NSLog( @"SwiftRuby: Uncaught Exception: name: %@, reason: %@, userInfo: %@", e.name, e.reason, e.userInfo );
+        fputs( [[NSString stringWithFormat:@"SwiftRuby: Uncaught Exception: name: %@, reason: %@, userInfo: %@\n",
+                e.name, e.reason, e.userInfo] UTF8String], stderr );
         abort();
     }
+}
+
+void execArgv( NSString *executable, NSArray<NSString *> *arguments ) {
+    const char **argv = calloc( arguments.count+1, sizeof *argv );
+    for ( int i=0 ; i<arguments.count ; i++ )
+        argv[i] = [arguments[i] UTF8String];
+    execv( [executable UTF8String], (char * const *)argv );
+    NSLog( @"execArgv: execv( %@, ... ) failed", executable );
 }

@@ -1,11 +1,11 @@
 //
 //  IO.swift
-//  RubyNative
+//  SwiftRuby
 //
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/IO.swift#6 $
+//  $Id: //depot/SwiftRuby/IO.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -13,6 +13,9 @@
 //
 
 import Darwin
+
+@asmname("fcntl")
+func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
@@ -46,9 +49,6 @@ public func ==(lhs: IO, rhs: IO) -> Bool {
     }
     return false
 }
-
-@asmname("fcntl")
-func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
 public class IO: RubyObject, to_s_protocol, to_d_protocol {
 
@@ -439,7 +439,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     }
 
 //    public var pid: Int {
-//        /// no possible without re-implementing popen()
+//        /// not possible without re-implementing popen()
 //        RKNotImplemented( "IO.pid" )
 //        return -1
 //    }

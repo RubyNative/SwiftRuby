@@ -55,7 +55,6 @@
 
 /* Begin PBXFileReference section */
 		BB1ECBAA1BCC22CD00963CFF /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
-		BB1ECBAB1BCC22F800963CFF /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		BB319ECE1BB882F3002FB64B /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
 		BB3F78911BACAB9B00435430 /* SwiftRuby.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftRuby.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB3F78A21BACAC3600435430 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,7 +77,7 @@
 		BBB3FE451BBB30F9009E718C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BBB3FE491BBB6FD9009E718C /* FileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
 		BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regexp.swift; sourceTree = "<group>"; };
-		BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBB3FE8E1BBBFDA5009E718C /* SwiftRubyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftRubyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBB3FE901BBBFDA5009E718C /* SwiftRubyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftRubyTests.swift; sourceTree = "<group>"; };
 		BBB3FE921BBBFDA5009E718C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBB3FE991BBC02C9009E718C /* MISSING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MISSING.md; sourceTree = "<group>"; };
@@ -119,7 +118,6 @@
 				BB8EE2E51BB22FFD00348257 /* main.swift */,
 				BB5C0D891BB7437B00C0E190 /* Object.swift */,
 				BB319ECE1BB882F3002FB64B /* Kernel.swift */,
-				BB1ECBAB1BCC22F800963CFF /* module.map */,
 				BB1ECBAA1BCC22CD00963CFF /* Utilities.h */,
 				BB5C0D9F1BB7599C00C0E190 /* Utilities.m */,
 			);
@@ -174,7 +172,7 @@
 			children = (
 				BB3F78911BACAB9B00435430 /* SwiftRuby.framework */,
 				BB45AF5A1BB0CC8A00428322 /* SwiftRuby */,
-				BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */,
+				BBB3FE8E1BBBFDA5009E718C /* SwiftRubyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,9 +199,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		BB3F78901BACAB9B00435430 /* Framework */ = {
+		BB3F78901BACAB9B00435430 /* SwiftRuby */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "Framework" */;
+			buildConfigurationList = BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "SwiftRuby" */;
 			buildPhases = (
 				BB3F788C1BACAB9B00435430 /* Sources */,
 				BB3F788D1BACAB9B00435430 /* Frameworks */,
@@ -214,7 +212,7 @@
 			);
 			dependencies = (
 			);
-			name = Framework;
+			name = SwiftRuby;
 			productName = SwiftRuby;
 			productReference = BB3F78911BACAB9B00435430 /* SwiftRuby.framework */;
 			productType = "com.apple.product-type.framework";
@@ -236,9 +234,9 @@
 			productReference = BB45AF5A1BB0CC8A00428322 /* SwiftRuby */;
 			productType = "com.apple.product-type.tool";
 		};
-		BBB3FE8D1BBBFDA5009E718C /* Tests */ = {
+		BBB3FE8D1BBBFDA5009E718C /* SwiftRubyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildConfigurationList = BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "SwiftRubyTests" */;
 			buildPhases = (
 				BBB3FE8A1BBBFDA5009E718C /* Sources */,
 				BBB3FE8B1BBBFDA5009E718C /* Frameworks */,
@@ -249,9 +247,9 @@
 			dependencies = (
 				BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */,
 			);
-			name = Tests;
+			name = SwiftRubyTests;
 			productName = SwiftRubyTests;
-			productReference = BBB3FE8E1BBBFDA5009E718C /* Tests.xctest */;
+			productReference = BBB3FE8E1BBBFDA5009E718C /* SwiftRubyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -287,9 +285,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BB3F78901BACAB9B00435430 /* Framework */,
+				BB3F78901BACAB9B00435430 /* SwiftRuby */,
+				BBB3FE8D1BBBFDA5009E718C /* SwiftRubyTests */,
 				BB45AF591BB0CC8A00428322 /* Binary */,
-				BBB3FE8D1BBBFDA5009E718C /* Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -359,7 +357,7 @@
 /* Begin PBXTargetDependency section */
 		BBB3FE951BBBFDA5009E718C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB3F78901BACAB9B00435430 /* Framework */;
+			target = BB3F78901BACAB9B00435430 /* SwiftRuby */;
 			targetProxy = BBB3FE941BBBFDA5009E718C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -482,8 +480,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRuby;
-				PRODUCT_NAME = SwiftRuby;
+				PRODUCT_BUNDLE_IDENTIFIER = org.rubynative.SwiftRuby;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -502,8 +500,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRuby;
-				PRODUCT_NAME = SwiftRuby;
+				PRODUCT_BUNDLE_IDENTIFIER = org.rubynative.SwiftRuby;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 			};
@@ -559,7 +557,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "Framework" */ = {
+		BB3F78991BACAB9B00435430 /* Build configuration list for PBXNativeTarget "SwiftRuby" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB3F789A1BACAB9B00435430 /* Debug */,
@@ -577,7 +575,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "Tests" */ = {
+		BBB3FE981BBBFDA8009E718C /* Build configuration list for PBXNativeTarget "SwiftRubyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBB3FE961BBBFDA5009E718C /* Debug */,
