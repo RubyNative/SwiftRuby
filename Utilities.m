@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#12 $
+//  $Id: //depot/SwiftRuby/Utilities.m#13 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -118,7 +118,7 @@ void _throw( NSException *e ) {
 
 void execArgv( NSString *executable, NSArray<NSString *> *arguments ) {
     const char **argv = calloc( arguments.count+1, sizeof *argv );
-    for ( int i=0 ; i<arguments.count ; i++ )
+    for ( NSUInteger i=0 ; i<arguments.count ; i++ )
         argv[i] = [arguments[i] UTF8String];
     execv( [executable UTF8String], (char * const *)argv );
     NSLog( @"execArgv: execv( %@, ... ) failed", executable );

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#4 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -30,16 +30,16 @@ public class StringIO: IO {
         }
     }
 
-    public init( _ string: to_d_protocol = "", file: StaticString = __FILE__, line: UInt = __LINE__ ) {
+    public init( _ string: data_like = "", file: StaticString = __FILE__, line: UInt = __LINE__ ) {
         data = string.to_d
         super.init( what: nil, unixFILE: nil )
     }
 
-    public class func new( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
+    public class func new( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
         return StringIO( string, file: file, line: line )
     }
 
-    public class func open( string: to_d_protocol, _ mode: to_s_protocol = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
+    public class func open( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
         return new( string, mode, perm, file: file, line: line )
     }
 
@@ -58,7 +58,7 @@ public class StringIO: IO {
         return !eof ? String( data.bytes[offset++] ) : nil
     }
 
-    override func gets( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
+    override func gets( sep: string_like = LINE_SEPARATOR ) -> String? {
         if eof {
             return nil
         }
@@ -83,7 +83,7 @@ public class StringIO: IO {
         return out
     }
 
-    public override func print( string: to_s_protocol ) -> Int {
+    public override func print( string: string_like ) -> Int {
         return write( string.to_s )
     }
 
@@ -122,7 +122,7 @@ public class StringIO: IO {
         return true
     }
 
-    public override func write( string: to_d_protocol ) -> fixnum {
+    public override func write( string: data_like ) -> fixnum {
         return data.append( string )
     }
 

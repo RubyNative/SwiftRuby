@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/IO.swift#7 $
+//  $Id: //depot/SwiftRuby/IO.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -50,7 +50,7 @@ public func ==(lhs: IO, rhs: IO) -> Bool {
     return false
 }
 
-public class IO: RubyObject, to_s_protocol, to_d_protocol {
+public class IO: RubyObject, string_like, data_like {
 
     private var _unixFILE = UnsafeMutablePointer<FILE>()
     public var unixFILE: UnsafeMutablePointer<FILE> {
@@ -117,11 +117,11 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
 
     // MARK: Class methods
 
-    public class func binread( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil ) -> Data? {
+    public class func binread( name: string_like, _ length: Int? = nil, _ offset: Int? = nil ) -> Data? {
         return self.read( name, length, offset )
     }
 
-    public class func binwrite( name: to_s_protocol, _ string: to_d_protocol, _ offset: Int? = nil ) -> fixnum? {
+    public class func binwrite( name: string_like, _ string: data_like, _ offset: Int? = nil ) -> fixnum? {
         return self.write( name, string, offset )
     }
 
@@ -139,26 +139,26 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return copied
     }
 
-    public class func for_fd( fd: Int, _ mode: to_s_protocol, opt: Array<String>? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public class func for_fd( fd: Int, _ mode: string_like, opt: Array<String>? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line ).ifValid()
     }
 
-    public class func foreach( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR,
+    public class func foreach( name: string_like, _ sep: string_like = LINE_SEPARATOR,
                                 _ limit: Int? = nil, _ block: (line: String) -> () ) {
         if let ioFile = File.open( name, "r" ) {
             ioFile.each_line( sep, limit, block )
         }
     }
 
-    public class func foreach( name: to_s_protocol, _ limit: Int? = nil, _ block: (line: String) -> () ) {
+    public class func foreach( name: string_like, _ limit: Int? = nil, _ block: (line: String) -> () ) {
         foreach( name, LINE_SEPARATOR, limit, block )
     }
 
-    public class func new( fd: Int, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public class func new( fd: Int, _ mode: string_like = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
-    public class func open( fd: Int, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public class func open( fd: Int, _ mode: string_like = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
@@ -168,11 +168,11 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return (IO.new( Int(fds[0]), "r", file: file, line: line ), IO.new( Int(fds[1]), "w", file: file, line: line ))
     }
 
-    public class func popen( command: to_s_protocol, _ mode: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public class func popen( command: string_like, _ mode: string_like = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return IO( what: "IO.popen '\(command)'", unixFILE: Darwin.popen( command.to_s, mode.to_s ), file: file, line: line ).ifValid()
     }
 
-    public class func read( name: to_s_protocol, _ length: Int? = nil, _ offset: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Data? {
+    public class func read( name: string_like, _ length: Int? = nil, _ offset: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Data? {
         if let ioFile = File.open( name, "r" ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
@@ -182,7 +182,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return nil
     }
 
-    public class func readlines( name: to_s_protocol, _ sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
+    public class func readlines( name: string_like, _ sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
         if let ioFile = File.open( name, "r", file: file, line: line ) {
             var out = [String]()
             ioFile.each_line( sep, limit, {
@@ -194,7 +194,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return nil
     }
 
-    public class func readlines( name: to_s_protocol, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
+    public class func readlines( name: string_like, _ limit: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> [String]? {
         return readlines( name, LINE_SEPARATOR, limit, file: file, line: line )
     }
 
@@ -266,12 +266,12 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return out
     }
 
-    public class func sysopen( path: to_s_protocol, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
+    public class func sysopen( path: string_like, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
         return Int(Darwin.open( path.to_s, CInt(mode), mode_t(perm) ))
     }
 
 
-    public class func write( name: to_s_protocol, _ string: to_d_protocol, _ offset: Int? = 0, _ open_args: String? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> fixnum? {
+    public class func write( name: string_like, _ string: data_like, _ offset: Int? = 0, _ open_args: String? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> fixnum? {
         if let ioFile = File.open( name, open_args ?? "w", file: file, line: line ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
@@ -339,7 +339,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return each_line( LINE_SEPARATOR, limit, block )
     }
 
-    public func each( sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    public func each( sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
         return each_line( sep, limit, block )
     }
 
@@ -347,7 +347,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
 //        return each_line( dollarSlash, limit, block )
 //    }
 //
-    public func each_line( sep: to_s_protocol = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    public func each_line( sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
         var count = 0
         while let line = readline( sep ) {
             block( line: line )
@@ -401,7 +401,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
     static public let newline = Int8("\n".ord)
     static public let retchar = Int8("\r".ord)
 
-    func gets( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
+    func gets( sep: string_like = LINE_SEPARATOR ) -> String? {
         let data = Data( capacity: 1_000_000 ) //// TODO: should loop
         if fgets( data.bytes, Int32(data.capacity), unixFILE ) == nil {
             return nil
@@ -444,17 +444,17 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
 //        return -1
 //    }
 
-    public func print( string: to_s_protocol ) -> Int {
+    public func print( string: string_like ) -> Int {
         return Int(fputs( string.to_s, unixFILE ))
     }
 
-    public func print( strings: to_a_protocol ) {
+    public func print( strings: array_like ) {
         for string in strings.to_a {
             print( string )
         }
     }
 
-    func printf( string: to_s_protocol ) {
+    func printf( string: string_like ) {
         print( string )
     }
 
@@ -462,11 +462,11 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return Int(fputc( Int32(obj), unixFILE ))
     }
 
-    public func puts( string: to_s_protocol ) -> Int {
+    public func puts( string: string_like ) -> Int {
         return print( string )
     }
 
-    public func puts( strings: to_a_protocol ) {
+    public func puts( strings: array_like ) {
         return print( strings )
     }
     
@@ -497,11 +497,11 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return getc
     }
 
-    public func readline( sep: to_s_protocol = LINE_SEPARATOR ) -> String? {
+    public func readline( sep: string_like = LINE_SEPARATOR ) -> String? {
         return gets( sep )
     }
 
-    public func readlines( /*sep: to_s_protocol = dollarSlash, _*/ limit: Int? = nil ) -> [String] {
+    public func readlines( /*sep: string_like = dollarSlash, _*/ limit: Int? = nil ) -> [String] {
         var out = [String]()
         each_line( LINE_SEPARATOR, limit, {
             (line) in
@@ -524,7 +524,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return self
     }
 
-    public func reopen( path: to_s_protocol, _ mode_str: to_s_protocol = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public func reopen( path: string_like, _ mode_str: string_like = "r", file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
         return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.unixFILE ) == nil ? 1 : 0,
                         file: file, line: line ) ? self : nil
     }
@@ -557,7 +557,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return Int(lseek( Int32(fileno), off_t(offset), Int32(whence) ))
     }
 
-    public func syswrite( string: to_d_protocol ) -> Int {
+    public func syswrite( string: data_like ) -> Int {
         return Int(Darwin.write( Int32(fileno), string.to_d.bytes, string.to_d.length ))
     }
 
@@ -593,7 +593,7 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         return isatty
     }
 
-    public func ungetbyte( string: to_s_protocol ) {
+    public func ungetbyte( string: string_like ) {
         ungetc( Int32(string.to_s.characterAtIndex(0)), unixFILE ) ////
     }
 
@@ -601,12 +601,12 @@ public class IO: RubyObject, to_s_protocol, to_d_protocol {
         ungetc( Int32(byte), unixFILE )
     }
 
-    public func write( string: to_d_protocol ) -> fixnum {
+    public func write( string: data_like ) -> fixnum {
         let data = string.to_d
         return fwrite( data.bytes, 1, data.length, unixFILE );
     }
 
-    public func write_nonblock( string: to_d_protocol, options: Array<String>? = nil ) -> Int {
+    public func write_nonblock( string: data_like, options: Array<String>? = nil ) -> Int {
         nonblock = true
         return write( string )
     }

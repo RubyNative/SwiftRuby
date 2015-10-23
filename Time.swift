@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Time.swift#8 $
+//  $Id: //depot/SwiftRuby/Time.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -14,7 +14,7 @@
 
 import Darwin
 
-public class Time : RubyObject, to_s_protocol {
+public class Time : RubyObject, string_like {
 
     public var value = timeval()
     public var tzone = timezone()
@@ -58,7 +58,7 @@ public class Time : RubyObject, to_s_protocol {
         return Time( seconds: Int(time.value.tv_sec), usec: Int(time.value.tv_usec) )
     }
 
-    public class func at( time_f: to_f_protocol ) -> Time {
+    public class func at( time_f: float_like ) -> Time {
         return Time( time_f: time_f.to_f )
     }
 
@@ -66,11 +66,11 @@ public class Time : RubyObject, to_s_protocol {
         return Time( seconds: time, usec: Int(usec.to_f) )
     }
 
-    public class func at( time: to_s_protocol, format: to_s_protocol = "%Y-%m-%d %H:%M:%S %z" ) -> Time {
+    public class func at( time: string_like, format: string_like = "%Y-%m-%d %H:%M:%S %z" ) -> Time {
         return strptime( time, format: format )
     }
 
-    public class func strptime( time: to_s_protocol, format: to_s_protocol ) -> Time {
+    public class func strptime( time: string_like, format: string_like ) -> Time {
         var mktm = tm()
         Darwin.strptime( time.to_s, format.to_s, &mktm )
         return Time( seconds: mktime( &mktm ) )
@@ -220,7 +220,7 @@ public class Time : RubyObject, to_s_protocol {
         return Int(settm().tm_sec)
     }
 
-    public func strftime( format: to_s_protocol ) -> String {
+    public func strftime( format: string_like ) -> String {
         var out = [Int8]( count: 1000, repeatedValue: 0 )
         var tmp = settm()
         Darwin.strftime( &out, out.count, format.to_s,  &tmp )

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Data.swift#5 $
+//  $Id: //depot/SwiftRuby/Data.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -14,7 +14,7 @@
 
 import Darwin
 
-public protocol to_d_protocol {
+public protocol data_like {
 
     var to_d: Data { get }
     
@@ -24,7 +24,7 @@ public func ==(lhs: Data, rhs: Data) -> Bool {
     return lhs.length == rhs.length && memcmp( lhs.bytes, rhs.bytes, lhs.length ) == 0
 }
 
-public class Data: RubyObject, to_s_protocol, to_a_protocol, to_c_protocol, to_d_protocol {
+public class Data: RubyObject, string_like, array_like, char_like, data_like {
 
     public var bytes: UnsafeMutablePointer<Int8>
 
@@ -62,7 +62,7 @@ public class Data: RubyObject, to_s_protocol, to_a_protocol, to_c_protocol, to_d
         length = alen-1
     }
 
-    public func append( extra: to_d_protocol ) -> Int {
+    public func append( extra: data_like ) -> Int {
         let extra = extra.to_d
         let required = length + extra.length
         if required + 1 > capacity {

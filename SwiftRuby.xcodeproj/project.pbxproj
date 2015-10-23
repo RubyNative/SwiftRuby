@@ -24,11 +24,11 @@
 		BB1E3E0F1BBAF6F900C8F408 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D911BB743AF00C0E190 /* Time.swift */; };
 		BB1E3E101BBAF6F900C8F408 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5C0D8F1BB743A600C0E190 /* Stat.swift */; };
 		BB8EE2E71BB2307700348257 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8EE2E51BB22FFD00348257 /* main.swift */; };
-		BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE491BBB6FD9009E718C /* FileUtils.swift */; settings = {ASSET_TAGS = (); }; };
-		BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE4A1BBB6FD9009E718C /* FileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE491BBB6FD9009E718C /* FileUtils.swift */; };
+		BBB3FE501BBB7B2E009E718C /* Regexp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE4F1BBB7B2E009E718C /* Regexp.swift */; };
 		BBB3FE911BBBFDA5009E718C /* SwiftRubyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3FE901BBBFDA5009E718C /* SwiftRubyTests.swift */; };
-		BBB3FE931BBBFDA5009E718C /* SwiftRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* SwiftRuby.framework */; settings = {ASSET_TAGS = (); }; };
-		BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BBB3FE9B1BBC02DC009E718C /* LICENSE */; settings = {ASSET_TAGS = (); }; };
+		BBB3FE931BBBFDA5009E718C /* SwiftRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F78911BACAB9B00435430 /* SwiftRuby.framework */; };
+		BBB3FE9C1BBC02DC009E718C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BBB3FE9B1BBC02DC009E718C /* LICENSE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -474,7 +474,6 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -493,7 +492,6 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
 				DSTROOT = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

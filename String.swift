@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/String.swift#8 $
+//  $Id: //depot/SwiftRuby/String.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -25,19 +25,19 @@ public enum StringIndexDisposition {
 
 public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .WarnAndFail
 
-public protocol to_s_protocol: to_a_protocol {
+public protocol string_like: array_like {
 
     var to_s: String { get }
 
 }
 
-public protocol to_c_protocol {
+public protocol char_like {
 
     var to_c: [CChar] { get }
     
 }
 
-extension String: to_s_protocol, to_a_protocol, to_d_protocol, to_c_protocol {
+extension String: string_like, array_like, data_like, char_like {
 
     public subscript ( i: Int ) -> String {
         return slice( i )
