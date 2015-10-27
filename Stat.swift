@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Stat.swift#6 $
+//  $Id: //depot/SwiftRuby/Stat.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -87,7 +87,7 @@ public class Stat : RubyObject {
 
     public var info = stat()
 
-    public class func new( filename: string_like, statLink: Bool = false, file: StaticString, line: UInt ) -> Stat? {
+    public class func new( filename: string_like, statLink: Bool = false, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Stat? {
         return Stat( filename, statLink: statLink, file: file, line: line )
     }
 

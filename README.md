@@ -26,6 +26,10 @@ Input arguments are generally protocols such as `string_like` or `data_like`
 to allow for automatic conversion between types. Return values are concrete
 types String Int, Float or Data or an instance.
 
+A flavour of the common SwiftRuby idioms implemented thus far is given below:
+
+![Icon](http://injectionforxcode.johnholdsworth.com/ruby.png)
+
 SwiftRuby has avoided operator overloading as much as Ruby with one exception:
 subscripting when working with Strings. There are two general forms. Subscripting
 with integers to extract ranges fro Strings and subscripting with Strings to
