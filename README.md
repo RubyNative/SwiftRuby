@@ -18,7 +18,7 @@ be available when Swift is released for Linux. For now the project has minimal
 dependencies on Foundation classes NSURL and NSRegularExpression for things that it
 would not be worth replicating until the smoke clears for Swift on Linux.
 
-At present Ruby's [Dir](http://ruby-doc.org/core-2.2.3/Dir.html), [IO](http://ruby-doc.org/core-2.2.3/IO.html),
+At this stage, Ruby's [Dir](http://ruby-doc.org/core-2.2.3/Dir.html), [IO](http://ruby-doc.org/core-2.2.3/IO.html),
 [File](http://ruby-doc.org/core-2.2.3/File.html), [StringIO](http://ruby-doc.org/stdlib-2.2.3/libdoc/stringio/rdoc/StringIO.html),
 [Time](http://ruby-doc.org/core-2.2.3/Time.html) and [Stat](http://ruby-doc.org/core-2.2.3/File/Stat.html) classes have been implemented.
 These classes follow the original documented functionality as closely as possible.
@@ -40,12 +40,12 @@ String internals simple extensions have been defined to make scripting easier:
 
 ### Subscripting Strings with a String as syntax for Regexp
 
-When you think about it the logical index into a string is a Regexp. Ruby toys with
-this idea but SwiftRuby takes this much further. This is best explained by examples:
+If you think about it, the logical index into a string is a Regexp. Ruby toys with this idea
+but SwiftRuby takes this much further. This is best explained by the following examples:
 
 ![Icon](http://injectionforxcode.johnholdsworth.com/regexps.png)
 
-### License
+### MIT License
 
-SwiftRuby is available under an MIT License. The authors can be contacted on
-Twitter [@Injection4Xcode](https://twitter.com/#!/@Injection4Xcode).
+SwiftRuby is available under an MIT License. If you have any comments or suggestions, the
+authors can be contacted on Twitter [@Injection4Xcode](https://twitter.com/#!/@Injection4Xcode).
