@@ -51,5 +51,6 @@ but SwiftRuby takes this much further. This is best explained by the following e
 
 ### License is MIT
 
-SwiftRuby is available under an MIT License. If you have any comments or suggestions, the
+SwiftRuby is also available as a CocoaPod for use without using the [Diamond](https://github.com/RubyNative/Diamond)
+script interpreter and is available under an MIT License. If you have any comments or suggestions, the
 authors can be contacted on Twitter [@Injection4Xcode](https://twitter.com/#!/@Injection4Xcode).
