@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = "SwiftRuby"
-    s.version     = "0.1"
+    s.version     = "0.2"
     s.summary     = "Port of Ruby api to Swift for scripting"
     s.homepage    = "https://github.com/RubyNative/SwiftRuby"
     s.social_media_url = "https://twitter.com/Injection4Xcode"
