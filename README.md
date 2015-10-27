@@ -1,7 +1,7 @@
 ### SwiftRuby
 
 RubyNative is a port of the Ruby core api to Swift intended to be used with [Diamond](https://github.com/RubyNative/Diamond)
-script interpretor or any Swift Program that would like simpler access to file i/o than is offered
+script interpreter or any Swift Program that would like simpler access to file i/o than is offered
 by Foundation kit. It also extends Swift's String and Array classes and will provide a
 well integrated Regexp class to take the burden off the programmer dealing with 
 uncompromising Swift Strings.
@@ -26,13 +26,13 @@ Input arguments are generally protocols such as `string_like` or `data_like`
 to allow for automatic conversion between types. Return values are concrete
 types String Int, Float or Data or an instance.
 
-A flavour of the common SwiftRuby idioms implemented thus far is given below:
+A flavour of the common Ruby idioms implemented in Swift thus far is given below:
 
 ![Icon](http://injectionforxcode.johnholdsworth.com/ruby.png)
 
-SwiftRuby has avoided operator overloading as much as Ruby with one exception:
+SwiftRuby has avoided using operator overloading as much as Ruby with one exception:
 subscripting when working with Strings. There are two general forms. Subscripting
-with integers to extract ranges fro Strings and subscripting with Strings to
+with integers to extract ranges from Strings and subscripting with Strings to
 provide a succinct syntax for Regular Expressions.
 
 ### Subscripting Strings
@@ -49,7 +49,7 @@ but SwiftRuby takes this much further. This is best explained by the following e
 
 ![Icon](http://injectionforxcode.johnholdsworth.com/regexps.png)
 
-### MIT License
+### License is MIT
 
 SwiftRuby is available under an MIT License. If you have any comments or suggestions, the
 authors can be contacted on Twitter [@Injection4Xcode](https://twitter.com/#!/@Injection4Xcode).
