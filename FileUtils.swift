@@ -17,18 +17,18 @@ import Darwin
 public var STATUS = 0
 
 public func systemOK( command: string_like, file: StaticString? = __FILE__, line: UInt = __LINE__ ) -> Bool {
-    if #available(iOS 8, *) {
-        SRNotImplemented( "system() depricated since iOS 8", file: file!, line: line )
-    } else {
-        STATUS = Int(system( command.to_s ))
-        if STATUS != 0 {
-            if file != nil {
-                SRLog( "system call '\(command.to_s)' failed", file: file!, line: line )
-            }
-            return false
+#if OSX
+    STATUS = Int(system( command.to_s ))
+    if STATUS != 0 {
+        if file != nil {
+            SRLog( "system call '\(command.to_s)' failed", file: file!, line: line )
         }
-        STATUS >>= 8
+        return false
     }
+    STATUS >>= 8
+#else
+    SRNotImplemented( "system() depricated since iOS 8", file: file!, line: line )
+#endif
     return true
 }
 
