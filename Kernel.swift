@@ -68,6 +68,9 @@ public func SRNotImplemented( what: String, file: StaticString, line: UInt ) {
 @asmname ("execArgv")
 func execArgv( executable: NSString, argv: NSArray )
 
+@asmname ("spawnArgv")
+func spawnArgv( executable: NSString, argv: NSArray ) -> pid_t
+
 public class Kernel: RubyObject {
 
     public class func open( path: string_like, _ mode: string_like = "r", _ perm: Int = 0o644, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
@@ -92,6 +95,10 @@ public class Kernel: RubyObject {
 
     public class func exec( executable: array_like, _ arguments: array_like ) {
         execArgv( executable.to_a[0].to_s, argv: [executable.to_a[1]]+arguments.to_a )
+    }
+
+    public class func spawn( command: string_like ) -> Int {
+        return Int(spawnArgv( "/bin/bash", argv: ["/bin/bash", "-c", command.to_s] ))
     }
 
 }

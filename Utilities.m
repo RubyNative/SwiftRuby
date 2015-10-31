@@ -10,9 +10,11 @@
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
 
-#import <Foundation/Foundation.h>
+#import "Utilities.h"
+
 #import <objc/runtime.h>
 #import <dlfcn.h>
+#import <spawn.h>
 
 // Thanks to Jay Freeman's https://www.youtube.com/watch?v=Ii-02vhsdVk
 
@@ -81,7 +83,7 @@ NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
 }
 
 static NSString *kLastExceptionKey = @"SwiftRubyException";
-static NSString *kCatchLevels = @"SwiftRubyCatchLevels";
+NSString *kCatchLevels = @"SwiftRubyCatchLevels";
 
 void _try( void (^tryBlock)() ) {
     NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
@@ -121,5 +123,16 @@ void execArgv( NSString *executable, NSArray<NSString *> *arguments ) {
     for ( NSUInteger i=0 ; i<arguments.count ; i++ )
         argv[i] = [arguments[i] UTF8String];
     execv( [executable UTF8String], (char * const *)argv );
-    NSLog( @"execArgv: execv( %@, ... ) failed", executable );
+    NSLog( @"execArgv: execv( %@, ... ) failed: %s", executable, strerror(errno) );
+}
+
+pid_t spawnArgv( NSString *executable, NSArray<NSString *> *arguments ) {
+    const char **argv = calloc( arguments.count+1, sizeof *argv );
+    for ( NSUInteger i=0 ; i<arguments.count ; i++ )
+        argv[i] = [arguments[i] UTF8String];
+    pid_t pid = 0;
+    if ( posix_spawnp( &pid, [executable UTF8String], NULL, NULL, (char * const *)argv, NULL ) != 0 )
+        NSLog( @"spawnArgv: posix_spawnp( %@, ... ) failed: %s", executable, strerror(errno) );
+    free( argv );
+    return pid;
 }

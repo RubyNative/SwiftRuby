@@ -18,10 +18,13 @@
 extern NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSString *> *ivarNames );
 extern NSArray<NSString *> *methodSymbolsForClass( Class cls );
 
+extern NSString *kCatchLevels;
+
 extern void _try( void (^tryBlock)() );
 extern void _catch( void (^catchBlock)( NSException *e ) );
 extern void _throw( NSException *e );
 
 extern void execArgv( NSString *executable, NSArray<NSString *> *arguments );
+extern pid_t spawnArgv( NSString *executable, NSArray<NSString *> *arguments );
 
 #endif /* Utilities_h */
