@@ -18,12 +18,7 @@ public var STATUS = 0
 
 public func systemOK( command: string_like, file: StaticString? = __FILE__, line: UInt = __LINE__ ) -> Bool {
 #if os(iOS)
-    let pid = Kernel.spawn( command )
-    var status: Int32 = 0
-    if pid == 0 || waitpid( pid_t(pid), &status, 0 ) < 0 || status != 0 {
-        STATUS = Int(status) >> 8
-        return false
-    }
+    SRNotImplemented( "system() depricated since iOS 8", file: file!, line: line )
 #else
     STATUS = Int(system( command.to_s ))
     if STATUS != 0 {
@@ -32,8 +27,8 @@ public func systemOK( command: string_like, file: StaticString? = __FILE__, line
         }
         return false
     }
+    STATUS >>= 8
 #endif
-    STATUS = 0
     return true
 }
 
