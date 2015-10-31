@@ -17,19 +17,19 @@ import Darwin
 public var STATUS = 0
 
 public func systemOK( command: string_like, file: StaticString? = __FILE__, line: UInt = __LINE__ ) -> Bool {
-#if iOS
-    let pid = Kernel.spawn( command )
-    var status: Int32 = 0
-    if pid == 0 || waitpid( pid_t(pid), &status, 0 ) < 0 || status != 0 {
-        STATUS = Int(status) >> 8
-        return false
-    }
-#else
+#if os(iOS)
     STATUS = Int(system( command.to_s ))
     if STATUS != 0 {
         if file != nil {
             SRLog( "system call '\(command.to_s)' failed", file: file!, line: line )
         }
+        return false
+    }
+#else
+    let pid = Kernel.spawn( command )
+    var status: Int32 = 0
+    if pid == 0 || waitpid( pid_t(pid), &status, 0 ) < 0 || status != 0 {
+        STATUS = Int(status) >> 8
         return false
     }
 #endif
