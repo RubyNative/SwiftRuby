@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/File.swift#7 $
+//  $Id: //depot/SwiftRuby/File.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -365,7 +365,7 @@ public class File : IO {
     }
 
     public class func unlink_f( file_name: string_like, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
-        return File.exists( file_name ) ? unlink( file_name, file: file, line: line ) : true
+        return File.exists( file_name ) || File.lstat( file_name ) != nil ? unlink( file_name, file: file, line: line ) : true
     }
 
     public class func utime( file_name: string_like, _ actime: int_like, _ modtime: int_like, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
