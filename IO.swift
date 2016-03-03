@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/IO.swift#8 $
+//  $Id: //depot/SwiftRuby/IO.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -13,9 +13,7 @@
 //
 
 import Darwin
-
-@asmname("fcntl")
-func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
+import SwiftRubyUtilities
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
@@ -351,8 +349,11 @@ public class IO: RubyObject, string_like, data_like {
         var count = 0
         while let line = readline( sep ) {
             block( line: line )
-            if limit != nil && ++count >= limit! {
-                break
+            if limit != nil {
+                count += 1
+                if count >= limit! {
+                    break
+                }
             }
         }
         return self
@@ -363,7 +364,7 @@ public class IO: RubyObject, string_like, data_like {
     }
 
     public func fcntl( arg: Int, _ arg2: Int = 0 ) -> Int {
-        return Int(_fcntl( Int32(fileno), Int32(arg), Int32(arg2) ))
+        return Int(fcntl3( Int32(fileno), Int32(arg), Int32(arg2) ))
     }
 
 //    public func fdatasync() {
@@ -406,13 +407,15 @@ public class IO: RubyObject, string_like, data_like {
         if fgets( data.bytes, Int32(data.capacity), unixFILE ) == nil {
             return nil
         }
-        lineno++
+        lineno += 1
         data.length = Int(strlen( data.bytes ))
         if data.length > 0 && data.bytes[data.length-1] == IO.newline {
-            data.bytes[--data.length] = 0
+            data.length -= 1
+            data.bytes[data.length] = 0
         }
         if data.length > 0 && data.bytes[data.length-1] == IO.retchar {
-            data.bytes[--data.length] = 0
+            data.length -= 1
+            data.bytes[data.length] = 0
         }
         return data.to_s
     }

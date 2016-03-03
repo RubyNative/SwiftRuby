@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#14 $
+//  $Id: //depot/SwiftRuby/Utilities.m#15 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -135,4 +135,8 @@ pid_t spawnArgv( NSString *executable, NSArray<NSString *> *arguments ) {
         NSLog( @"spawnArgv: posix_spawnp( %@, ... ) failed: %s", executable, strerror(errno) );
     free( argv );
     return pid;
+}
+
+int fcntl3( int fildes, int cmd, int flags ) {
+    return fcntl( fildes, cmd, flags );
 }

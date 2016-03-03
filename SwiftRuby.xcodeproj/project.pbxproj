@@ -82,6 +82,7 @@
 		BBB3FE991BBC02C9009E718C /* MISSING.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = MISSING.md; sourceTree = "<group>"; };
 		BBB3FE9B1BBC02DC009E718C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		BBB3FEA21BBC16E2009E718C /* SwiftRuby.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SwiftRuby.podspec; sourceTree = "<group>"; };
+		BBBBC67F1C88746E00948E4B /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +114,7 @@
 		BB319EEA1BB8CC80002FB64B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				BBBBC67F1C88746E00948E4B /* module.map */,
 				BB3F78A21BACAC3600435430 /* Info.plist */,
 				BB6B2F191BE5751600D03601 /* main.swift */,
 				BB5C0D891BB7437B00C0E190 /* Object.swift */,

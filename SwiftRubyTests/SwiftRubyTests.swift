@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#12 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -73,7 +73,7 @@ class RubyNativeTests: XCTestCase {
         XCTAssertTrue( FileUtils.compare_stream( File.open( "same1.txt" )!, File.open( "same2.txt" )! ), "stream compare" )
         XCTAssertFalse( FileUtils.compare_stream( File.open( "same1.txt" )!, File.open( "diff1.txt" )! ), "stream diff" )
 
-        XCTAssert( fabs( Time().to_f - File.mtime( "diff1.txt" )!.to_f ) <= 1.0, "modification time" )
+        XCTAssert( fabs( Time().to_f - File.mtime( "diff1.txt" )!.to_f ) <= 5.0, "modification time" )
 
         let largeFile = "/Applications/Xcode.app/Contents/Frameworks/IDEKit.framework/IDEKit"
         XCTAssert( File.open( largeFile )!.read()! == IO.popen( "cat \(largeFile)" )!.read()!, "large file" )

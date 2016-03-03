@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#11 $
+//  $Id: //depot/SwiftRuby/Object.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -13,6 +13,7 @@
 //
 
 import Foundation
+import SwiftRubyUtilities
 
 public let ARGV = Process.arguments
 
@@ -41,12 +42,6 @@ public class ENVProxy {
 
 }
 
-@asmname ("instanceVariablesForClass")
-func instanceVariablesForClass( cls: AnyClass, _ ivarNames: NSMutableArray ) -> NSArray
-
-@asmname ("methodSymbolsForClass")
-func methodSymbolsForClass( cls: AnyClass ) -> NSArray
-
 public class RubyObject {
 
     public var hash: fixnum {
@@ -54,7 +49,7 @@ public class RubyObject {
     }
 
     public var instance_variables: [String] {
-        return instanceVariablesForClass( self.dynamicType, NSMutableArray() ) as! [String]
+        return instanceVariablesForClass( self.dynamicType, NSMutableArray() )
     }
 
     public var methods: [String] {

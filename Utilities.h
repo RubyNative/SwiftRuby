@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 12/10/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.h#4 $
+//  $Id: //depot/SwiftRuby/Utilities.h#5 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -15,16 +15,17 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSString *> *ivarNames );
-extern NSArray<NSString *> *methodSymbolsForClass( Class cls );
+extern NSArray<NSString *> * _Nonnull instanceVariablesForClass( Class cls, NSMutableArray<NSString *> * _Nonnull ivarNames );
+extern NSArray<NSString *> * _Nonnull methodSymbolsForClass( Class cls );
 
-extern NSString *kCatchLevels;
+extern __nonnull NSString *kCatchLevels;
 
 extern void _try( void (^tryBlock)() );
-extern void _catch( void (^catchBlock)( NSException *e ) );
-extern void _throw( NSException *e );
+extern void _catch( void (^catchBlock)( NSException * _Nonnull e ) );
+extern void _throw( _Nonnull NSException *e );
 
-extern void execArgv( NSString *executable, NSArray<NSString *> *arguments );
-extern pid_t spawnArgv( NSString *executable, NSArray<NSString *> *arguments );
+extern void execArgv( NSString * _Nonnull executable, NSArray<NSString *> * _Nonnull arguments );
+extern pid_t spawnArgv( NSString * _Nonnull executable, NSArray<NSString *> * _Nonnull arguments );
+extern int fcntl3( int fildes, int cmd, int flags );
 
 #endif /* Utilities_h */

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#7 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -318,7 +318,8 @@ public func =~ ( left: MutableRegexp, right: [String] ) -> Bool {
     return left.substituteMatches( {
         (match: NSTextCheckingResult, stop: UnsafeMutablePointer<ObjCBool>) in
 
-        if ++matchNumber == right.count {
+        matchNumber += 1
+        if matchNumber == right.count {
             stop.memory = true
         }
 

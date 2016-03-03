@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#5 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -45,7 +45,8 @@ public class StringIO: IO {
 
     public override func each_byte( block: (CChar) -> () ) -> IO {
         while !eof {
-            block( data.bytes[offset++] )
+            block( data.bytes[offset] )
+            offset += 1
         }
         return self
     }
@@ -55,7 +56,9 @@ public class StringIO: IO {
     }
 
     public override var getc: String? {
-        return !eof ? String( data.bytes[offset++] ) : nil
+        let ret: String? = !eof ? String( data.bytes[offset] ) : nil
+        offset += 1
+        return ret
     }
 
     override func gets( sep: string_like = LINE_SEPARATOR ) -> String? {
@@ -91,7 +94,8 @@ public class StringIO: IO {
         if data.capacity <  data.length + 1 {
             data.capacity += 10_000 ////
         }
-        data.bytes[data.length++] = Int8(obj)
+        data.bytes[data.length] = Int8(obj)
+        data.length += 1
         return 1
     }
 

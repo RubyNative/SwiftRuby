@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Integer.swift#5 $
+//  $Id: //depot/SwiftRuby/Integer.swift#6 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -55,8 +55,10 @@ extension Int: int_like {
     }
 
     public func downto( limit: Int, block: (i: Int) -> () ) -> Int {
-        for var i = self; i >= limit ; i-- {
+        var i = self
+        while i >= limit {
             block( i: i )
+            i  -= 1
         }
         return self
     }
@@ -101,15 +103,19 @@ extension Int: int_like {
     }
 
     public func times( block: (i: Int) -> () ) -> Int {
-        for var i = 1; i <= self ; i++ {
+        var i = 1
+        while i <= self {
             block( i: i )
+            i += 1
         }
         return self
     }
 
     public func upto( limit: Int, block: (i: Int) -> () ) -> Int {
-        for var i = self; i <= limit ; i++ {
+        var i = self
+        while i <= limit {
             block( i: i )
+            i += 1
         }
         return self
     }
