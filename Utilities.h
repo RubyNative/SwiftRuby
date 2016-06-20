@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 12/10/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.h#7 $
+//  $Id: //depot/SwiftRuby/Utilities.h#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -25,7 +25,7 @@ extern void _catch( void (^ _Nonnull catchBlock)( NSException * _Nonnull e ) );
 extern void _throw( NSException * _Nonnull e );
 
 extern int _system( const char * _Nonnull command );
-extern FILE * _Nonnull _popen( const char * _Nonnull command, const char * _Nonnull perm );
+extern FILE * _Nullable _popen( const char * _Nonnull command, const char * _Nonnull perm );
 extern int _pclose( FILE * _Nonnull fp );
 
 extern void execArgv( NSString * _Nonnull executable, NSArray<NSString *> * _Nonnull arguments );
