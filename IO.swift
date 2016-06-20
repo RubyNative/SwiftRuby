@@ -13,7 +13,6 @@
 //
 
 import Darwin
-import SwiftRubyUtilities
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK

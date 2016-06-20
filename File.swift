@@ -74,7 +74,11 @@ public class File : IO {
         }
 
         let fileURL = NSURL( fileURLWithPath: file_name.to_s )
+        #if swift(>=2.3)
         return NSURL( string: fileURL.absoluteString!, relativeToURL: baseURL )?.absoluteURL!.path ////
+        #else
+        return NSURL( string: fileURL.absoluteString, relativeToURL: baseURL )?.absoluteURL.path ////
+        #endif
     }
 
     public class func basename( file_name: string_like, _ suffix: string_like? = nil, file: StaticString = #file, line: UInt = #line ) -> String? {

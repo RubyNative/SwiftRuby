@@ -13,7 +13,6 @@
 //
 
 import Foundation
-import SwiftRubyUtilities
 
 public func U<T>( toUnwrap: T?, name: String? = nil, file: StaticString = #file, line: UInt = #line ) -> T {
     if toUnwrap == nil {
