@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Kernel.swift#13 $
+//  $Id: //depot/SwiftRuby/Kernel.swift#14 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -13,6 +13,15 @@
 //
 
 import Foundation
+
+@_silgen_name("_try")
+public func _try( tryBlock: () -> () )
+
+@_silgen_name("_catch")
+public func _catch( catchBlock: (ex: NSException) -> () )
+
+@_silgen_name("_throw")
+public func _throw( ex: NSException )
 
 public func U<T>( toUnwrap: T?, name: String? = nil, file: StaticString = #file, line: UInt = #line ) -> T {
     if toUnwrap == nil {
@@ -55,6 +64,12 @@ public func SRFatal( msg: String, file: StaticString, line: UInt ) {
 public func SRNotImplemented( what: String, file: StaticString, line: UInt ) {
     SRFatal( "\(what) not implemented", file: file, line: line )
 }
+
+@_silgen_name("execArgv")
+func execArgv( executable: NSString, _ argv: NSArray )
+
+@_silgen_name("spawnArgv")
+func spawnArgv( executable: NSString, _ argv: NSArray ) -> pid_t
 
 public class Kernel: RubyObject {
 

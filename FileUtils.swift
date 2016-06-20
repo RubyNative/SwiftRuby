@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/FileUtils.swift#14 $
+//  $Id: //depot/SwiftRuby/FileUtils.swift#15 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -15,6 +15,9 @@
 import Darwin
 
 public var STATUS = 0
+
+@_silgen_name("_system")
+func _system( command: UnsafePointer<Int8> ) -> Int32
 
 public func systemOK( command: string_like, file: StaticString? = #file, line: UInt = #line ) -> Bool {
 #if os(iOS)

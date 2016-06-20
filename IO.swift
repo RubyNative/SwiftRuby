@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/IO.swift#10 $
+//  $Id: //depot/SwiftRuby/IO.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -16,6 +16,15 @@ import Darwin
 
 public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
+
+@_silgen_name("fcntl")
+func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
+
+@_silgen_name("_popen")
+func _popen( command: UnsafePointer<Int8>, _ perms: UnsafePointer<Int8> ) -> UnsafeMutablePointer<FILE>
+
+@_silgen_name("_pclose")
+func _pclose( fp: UnsafeMutablePointer<FILE> ) -> Int32
 
 private let selectBitsPerFlag: Int32 = 32
 private let selectShift = 5
@@ -363,7 +372,7 @@ public class IO: RubyObject, string_like, data_like {
     }
 
     public func fcntl( arg: Int, _ arg2: Int = 0 ) -> Int {
-        return Int(fcntl3( Int32(fileno), Int32(arg), Int32(arg2) ))
+        return Int(_fcntl( Int32(fileno), Int32(arg), Int32(arg2) ))
     }
 
 //    public func fdatasync() {

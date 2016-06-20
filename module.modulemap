@@ -1,4 +1,0 @@
-module SwiftRuby [system] {
-    header "Utilities.h"
-    export *
-}
