@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#15 $
+//  $Id: //depot/SwiftRuby/Utilities.m#16 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -139,4 +139,16 @@ pid_t spawnArgv( NSString *executable, NSArray<NSString *> *arguments ) {
 
 int fcntl3( int fildes, int cmd, int flags ) {
     return fcntl( fildes, cmd, flags );
+}
+
+int _system( const char *command ) {
+    return system( command );
+}
+
+FILE *_popen( const char *command, const char *perm ) {
+    return popen( command, perm );
+}
+
+int _pclose( FILE *fp ) {
+    return pclose( fp );
 }

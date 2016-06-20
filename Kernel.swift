@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 27/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Kernel.swift#12 $
+//  $Id: //depot/SwiftRuby/Kernel.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -15,7 +15,7 @@
 import Foundation
 import SwiftRubyUtilities
 
-public func U<T>( toUnwrap: T?, name: String? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> T {
+public func U<T>( toUnwrap: T?, name: String? = nil, file: StaticString = #file, line: UInt = #line ) -> T {
     if toUnwrap == nil {
         let msg = name != nil ? "Forced unwrap of \(name) fail" : "Forced unwrap fail"
         _throw( NSException( name: msg, reason: "\(file), \(line)", userInfo: ["msg": msg, "file": String(file), "line": "\(line)"] ) )
@@ -30,7 +30,7 @@ public enum WarningDisposition {
 public var WARNING_DISPOSITION: WarningDisposition = .Warn
 public var LAST_WARNING: String?
 
-public func SRLog( msg: String, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
+public func SRLog( msg: String, file: StaticString = #file, line: UInt = #line ) {
     LAST_WARNING = msg+" at \(file)#\(line)"
     if WARNING_DISPOSITION == .Throw {
         _throw( NSException( name: msg, reason: LAST_WARNING, userInfo: ["msg": msg, "file": String(file), "line": "\(line)"] ) )
@@ -59,7 +59,7 @@ public func SRNotImplemented( what: String, file: StaticString, line: UInt ) {
 
 public class Kernel: RubyObject {
 
-    public class func open( path: string_like, _ mode: string_like = "r", _ perm: Int = 0o644, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO? {
+    public class func open( path: string_like, _ mode: string_like = "r", _ perm: Int = 0o644, file: StaticString = #file, line: UInt = #line ) -> IO? {
         let path = path.to_s
         let index1 = path.startIndex.advancedBy(1)
 

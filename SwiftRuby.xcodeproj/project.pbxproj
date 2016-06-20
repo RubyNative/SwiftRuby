@@ -265,12 +265,14 @@
 				TargetAttributes = {
 					BB3F78901BACAB9B00435430 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 					BB45AF591BB0CC8A00428322 = {
 						CreatedOnToolsVersion = 7.0;
 					};
 					BBB3FE8D1BBBFDA5009E718C = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -484,6 +486,7 @@
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -502,6 +505,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -530,6 +534,7 @@
 				INFOPLIST_FILE = SwiftRubyTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRubyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -540,6 +545,7 @@
 				INFOPLIST_FILE = SwiftRubyTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnholdsworth.SwiftRubyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#8 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -348,7 +348,7 @@ public class RegexpFile {
     let contents: NSMutableString! ////
     let original: String!
 
-    public init?( _ path: String, file: StaticString = __FILE__, line: UInt = __LINE__ ) {
+    public init?( _ path: String, file: StaticString = #file, line: UInt = #line ) {
         filepath = path
         contents = File.read( path )?.to_s.mutableString
         original = contents as String

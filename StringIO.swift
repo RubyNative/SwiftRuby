@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#6 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -30,16 +30,16 @@ public class StringIO: IO {
         }
     }
 
-    public init( _ string: data_like = "", file: StaticString = __FILE__, line: UInt = __LINE__ ) {
+    public init( _ string: data_like = "", file: StaticString = #file, line: UInt = #line ) {
         data = string.to_d
         super.init( what: nil, unixFILE: nil )
     }
 
-    public class func new( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
+    public class func new( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
         return StringIO( string, file: file, line: line )
     }
 
-    public class func open( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> StringIO {
+    public class func open( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
         return new( string, mode, perm, file: file, line: line )
     }
 
@@ -103,12 +103,12 @@ public class StringIO: IO {
         return data
     }
 
-    public override func rewind( file: StaticString = __FILE__, line: UInt = __LINE__ ) -> IO {
+    public override func rewind( file: StaticString = #file, line: UInt = #line ) -> IO {
         seek( 0, Int(SEEK_SET) )
         return self
     }
 
-    public override func seek( amount: Int, _ whence: Int, file: StaticString = __FILE__, line: UInt = __LINE__ ) -> Bool {
+    public override func seek( amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
         switch Int32(whence) {
         case SEEK_SET:
             offset = amount

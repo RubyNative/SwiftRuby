@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Data.swift#8 $
+//  $Id: //depot/SwiftRuby/Data.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -31,7 +31,7 @@ public class Data: RubyObject, string_like, array_like, char_like, data_like {
     public var length = 0 {
         didSet {
             if length > capacity {
-                SRFatal( "Data length \(length) > capacity \(capacity)", file: __FILE__, line: __LINE__ )
+                SRFatal( "Data length \(length) > capacity \(capacity)", file: #file, line: #line )
             }
             bytes[length] = 0
         }
