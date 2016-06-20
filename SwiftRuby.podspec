@@ -14,4 +14,6 @@ Pod::Spec.new do |s|
     s.source_files = "*.{swift,h,m}"
     s.preserve_path = 'module.modulemap'
     s.module_map = 'module.modulemap'
+    core.pod_target_xcconfig = { 'HEADER_SEARCH_PATHS' => '$(PODS_ROOT)/SwiftRuby' }
+    core.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(PODS_ROOT)/SwiftRuby' }
 end
