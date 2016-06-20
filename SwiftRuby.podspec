@@ -11,5 +11,7 @@ Pod::Spec.new do |s|
     s.osx.deployment_target = "10.9"
     s.ios.deployment_target = "8.0"
     s.source   = { :git => "https://github.com/RubyNative/SwiftRuby.git", :tag => s.version }
-    s.source_files = "*.{swift,h,m,map}"
+    s.source_files = "*.{swift,h,m}"
+    s.preserve_path = 'module.map'
+    s.module_map = 'module.map'
 end
