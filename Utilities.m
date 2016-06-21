@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#16 $
+//  $Id: //depot/SwiftRuby/Utilities.m#17 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -142,7 +142,10 @@ int fcntl3( int fildes, int cmd, int flags ) {
 }
 
 int _system( const char *command ) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return system( command );
+#pragma clang diagnostic pop
 }
 
 FILE *_popen( const char *command, const char *perm ) {
