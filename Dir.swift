@@ -14,10 +14,10 @@
 
 import Darwin
 
-public class Dir: RubyObject, array_like {
+open class Dir: RubyObject, array_like {
 
     let dirpath: String
-    var unixDIR: UnsafeMutablePointer<DIR>
+    var unixDIR: UnsafeMutablePointer<DIR>?
 
     // Dir[ string [, string ...] ] → array
 
@@ -33,27 +33,27 @@ public class Dir: RubyObject, array_like {
 
     // MARK: Class Methods
 
-    public class func new( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Dir? {
+    open class func new( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Dir? {
         return Dir( dirname: string, file: file, line: line )
     }
 
-    public class func open( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Dir? {
+    open class func open( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Dir? {
         return new( string, file: file, line: line )
     }
     
-    public class func chdir( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func chdir( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "Dir.chdir '\(string.to_s)", Darwin.chdir( string.to_s ), file: file, line: line )
     }
 
-    public class func chroot( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func chroot( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "Dir.chroot '\(string.to_s)", Darwin.chroot( string.to_s ), file: file, line: line )
     }
 
-    public class func delete( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func delete( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "Dir.rmdir '\(string.to_s)", Darwin.rmdir( string.to_s ), file: file, line: line )
     }
 
-    public class func entries( dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> [String] {
+    open class func entries( _ dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> [String] {
         var out = [String]()
         foreach( dirname ) {
             (name) in
@@ -62,15 +62,15 @@ public class Dir: RubyObject, array_like {
         return out
     }
 
-    public class func exist( dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func exist( _ dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return File.exist( dirname, file: file, line: line )
     }
 
-    public class func exists( dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func exists( _ dirname: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return exist( dirname, file: file, line: line )
     }
 
-    public class func foreach( dirname: string_like, _ block: (String) -> () ) {
+    open class func foreach( _ dirname: string_like, _ block: (String) -> () ) {
         if let dir = Dir( dirname: dirname, file: #file, line: #line ) {
             dir.each {
                 (name) in
@@ -79,115 +79,117 @@ public class Dir: RubyObject, array_like {
         }
     }
 
-    public class var getwd: String? {
-        var cwd = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
+    open class var getwd: String? {
+        var cwd = [Int8]( repeating: 0, count: Int(PATH_MAX) )
         if !unixOK( "Dir.getwd", Darwin.getcwd( &cwd, cwd.count ) != nil ? 0 : 1, file: #file, line: #line ) {
             return nil
         }
-        return String( UTF8String: cwd )
+        return String( validatingUTF8: cwd )
     }
 
-    public class func glob( pattern: string_like, _ root: String = ".", file: StaticString = #file, line: UInt = #line ) -> [String]? {
+    open class func glob( _ pattern: string_like, _ root: String = ".", file: StaticString = #file, line: UInt = #line ) -> [String]? {
         let regex = pattern.to_s
-            .stringByReplacingOccurrencesOfString( ".", withString: "\\." )
-            .stringByReplacingOccurrencesOfString( "**", withString: "___" )
-            .stringByReplacingOccurrencesOfString( "*", withString: "[^/]*" )
-            .stringByReplacingOccurrencesOfString( "?", withString: "[^/]" )
-            .stringByReplacingOccurrencesOfString( "___", withString: ".*" )
+            .replacingOccurrences( of: ".", with: "\\." )
+            .replacingOccurrences( of: "**", with: "___" )
+            .replacingOccurrences( of: "*", with: "[^/]*" )
+            .replacingOccurrences( of: "?", with: "[^/]" )
+            .replacingOccurrences( of: "___", with: ".*" )
         let command = "cd \"\(root)\" && find -E . -regex \"^(./)?\(regex)$\"| sed -e s/^.\\\\///"
         return IO.popen( command, file: file, line: line )?.readlines()
     }
 
-    public class func home( user: string_like? = nil, file: StaticString = #file, line: UInt = #line ) -> String? {
+    open class func home( _ user: string_like? = nil, file: StaticString = #file, line: UInt = #line ) -> String? {
         var user = user?.to_s
-        var buff = [Int8]( count: Int(PATH_MAX), repeatedValue: 0 )
-        var ret = UnsafeMutablePointer<passwd>(nil)
+        var buff = [Int8]( repeating: 0, count: Int(PATH_MAX) )
+        var ret: UnsafeMutablePointer<passwd>?
         var info = passwd()
 
         if user == nil || user == "" {
             if !unixOK( "Dir.getpwuid", getpwuid_r( geteuid(), &info, &buff, buff.count, &ret ), file: file, line: line ) {
                 return nil
             }
-            user = String( UTF8String: info.pw_name )
+            user = String( validatingUTF8: info.pw_name )
         }
 
         if !unixOK( "Dir.getpwnam \(user!.to_s)", getpwnam_r( user!, &info, &buff, buff.count, &ret ), file: file, line: line ) {
             return nil
         }
 
-        return String( UTF8String: info.pw_dir )
+        return String( validatingUTF8: info.pw_dir )
     }
 
-    public class func mkdir( string: string_like, _ mode: Int = 0o755, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func mkdir( _ string: string_like, _ mode: Int = 0o755, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "Dir.mkdir '\(string.to_s)", Darwin.mkdir( string.to_s, mode_t(mode) ), file: file, line: line )
     }
 
-    public class var pwd: String? {
+    open class var pwd: String? {
         return getwd
     }
 
-    public class func rmdir( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func rmdir( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
-    public class func unlink( string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open class func unlink( _ string: string_like, file: StaticString = #file, line: UInt = #line ) -> Bool {
         return delete( string, file: file, line: line )
     }
 
     // MARK: Instance methods
 
-    public func close( file: StaticString = #file, line: UInt = #line ) -> Bool {
+    @discardableResult
+    open func close( _ file: StaticString = #file, line: UInt = #line ) -> Bool {
         let ok = unixOK( "Dir.closedir '\(dirpath)'",  closedir( unixDIR ), file: file, line: line )
         unixDIR = nil
         return ok
     }
 
-    public func each( block: (String) -> () ) -> Dir {
+    @discardableResult
+    open func each( _ block: (String) -> () ) -> Dir {
         while let name = read() {
             block( name )
         }
         return self
     }
 
-    public var fileno: Int {
+    open var fileno: Int {
         return Int(dirfd( unixDIR ))
     }
 
-    public var inspect: String {
+    open var inspect: String {
         return dirpath
     }
 
-    public var path: String {
+    open var path: String {
         return dirpath
     }
 
-    public var pos: Int  {
+    open var pos: Int  {
         return Int(telldir( unixDIR ))
     }
 
-    public func read() -> String? {
+    open func read() -> String? {
         let ent = readdir( unixDIR )
         if ent != nil {
-            return withUnsafeMutablePointer (&ent.memory.d_name) {
-                String( UTF8String: UnsafeMutablePointer($0) )
+            return withUnsafeMutablePointer (to: &ent!.pointee.d_name) {
+                String( validatingUTF8: UnsafeMutableRawPointer($0).assumingMemoryBound(to: CChar.self) )
             }
         }
         return nil
     }
 
-    public func rewind() {
+    open func rewind() {
         Darwin.rewinddir( unixDIR )
     }
 
-    public func seek( pos: Int ) -> Int {
-        return Int(seekdir( unixDIR, pos ))
+    open func seek( _ pos: Int ) {
+        seekdir( unixDIR, pos )
     }
 
-    public var tell: Int {
+    open var tell: Int {
         return pos
     }
 
-    public var to_a: [String] {
+    open var to_a: [String] {
         var out = [String]()
         each {
             (entry) in
@@ -196,7 +198,7 @@ public class Dir: RubyObject, array_like {
         return out
     }
 
-    public var to_path: String {
+    open var to_path: String {
         return dirpath
     }
 

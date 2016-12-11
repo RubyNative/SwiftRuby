@@ -17,27 +17,27 @@ import Foundation
 infix operator =~ { associativity left precedence 135 }
 
 public func =~ ( lhs: String, rhs: String ) -> Regexp {
-    return Regexp( target: lhs, pattern: rhs )
+    return Regexp( target: lhs as NSString, pattern: rhs )
 }
 
 infix operator !~ { associativity left precedence 135 }
 
 public func !~ ( lhs: String, rhs: String ) -> NotRegexp {
-    return NotRegexp( target: lhs, pattern: rhs )
+    return NotRegexp( target: lhs as NSString, pattern: rhs )
 }
 
 extension String {
 
     public subscript ( pattern: String ) -> Regexp {
-        return Regexp( target: self, pattern: pattern )
+        return Regexp( target: self as NSString, pattern: pattern )
     }
 
-    public subscript ( pattern: String, options: NSRegularExpressionOptions ) -> Regexp {
-        return Regexp( target: self, pattern: pattern, options: options )
+    public subscript ( pattern: String, options: NSRegularExpression.Options ) -> Regexp {
+        return Regexp( target: self as NSString, pattern: pattern, options: options )
     }
 
     public subscript ( pattern: String, optionString: String ) -> Regexp {
-        return Regexp( target: self, pattern: pattern, optionString: optionString )
+        return Regexp( target: self as NSString, pattern: pattern, optionString: optionString )
     }
 
     public subscript ( pattern: String, capture: Int ) -> String? {
@@ -48,14 +48,14 @@ extension String {
         return NSMutableString( string: self )
     }
 
-    public func gsub( pattern: String, _ template: String ) -> String {
+    public func gsub( _ pattern: String, _ template: String ) -> String {
         let out = self.mutableString
-        out[pattern] =~ template
+        _ = out[pattern] =~ template
         return out as String
     }
 
-    public func index( pattern: String ) -> Int? {
-        let range = Regexp( target: self, pattern: pattern ).range()
+    public func index( _ pattern: String ) -> Int? {
+        let range = Regexp( target: self as NSString, pattern: pattern ).range()
         return range.location != NSNotFound ? range.location : nil
     }
 
@@ -63,29 +63,29 @@ extension String {
         return self["^\\s+"][""]
     }
 
-    public func match( pattern: String ) -> [String?]? {
-        return Regexp( target: self, pattern: pattern ).groups()
+    public func match( _ pattern: String ) -> [String?]? {
+        return Regexp( target: self as NSString, pattern: pattern ).groups()
     }
 
     public var rstrip: String {
         return self["\\s*+"][""]
     }
 
-    public func slice( pattern: String, _ capture: Int = 0 ) -> String? {
-        return Regexp( target: self, pattern: pattern )[capture]
+    public func slice( _ pattern: String, _ capture: Int = 0 ) -> String? {
+        return Regexp( target: self as NSString, pattern: pattern )[capture]
     }
 
-    public func scan( pattern: String ) -> [[String?]] {
-        return Regexp( target: self, pattern: pattern ).allGroups()
+    public func scan( _ pattern: String ) -> [[String?]] {
+        return Regexp( target: self as NSString, pattern: pattern ).allGroups()
     }
 
     public var strip: String {
         return self["^\\s+|\\s+$"][""]
     }
 
-    public func sub( pattern: String, _ template: String ) -> String {
+    public func sub( _ pattern: String, _ template: String ) -> String {
         let out = self.mutableString
-        out[pattern] =~ [template]
+        _ = out[pattern] =~ [template]
         return out as String
     }
 
@@ -97,7 +97,7 @@ extension NSMutableString {
         return MutableRegexp( target: self, pattern: pattern )
     }
 
-    public subscript ( pattern: String, options: NSRegularExpressionOptions ) -> MutableRegexp {
+    public subscript ( pattern: String, options: NSRegularExpression.Options ) -> MutableRegexp {
         return MutableRegexp( target: self, pattern: pattern, options: options )
     }
 
@@ -107,7 +107,7 @@ extension NSMutableString {
     
 }
 
-public class Regexp: RubyObject, BooleanType {
+open class Regexp: RubyObject {
 
     let target: NSString
     let regexp: NSRegularExpression
@@ -118,29 +118,29 @@ public class Regexp: RubyObject, BooleanType {
         for char in optionString.characters {
             switch char {
             case "i":
-                options |= NSRegularExpressionOptions.CaseInsensitive.rawValue
+                options |= NSRegularExpression.Options.caseInsensitive.rawValue
             case "x":
-                options |= NSRegularExpressionOptions.AllowCommentsAndWhitespace.rawValue
+                options |= NSRegularExpression.Options.allowCommentsAndWhitespace.rawValue
             case "q":
-                options |= NSRegularExpressionOptions.IgnoreMetacharacters.rawValue
+                options |= NSRegularExpression.Options.ignoreMetacharacters.rawValue
             case "m":
-                options |= NSRegularExpressionOptions.AnchorsMatchLines.rawValue
+                options |= NSRegularExpression.Options.anchorsMatchLines.rawValue
             case "s":
-                options |= NSRegularExpressionOptions.DotMatchesLineSeparators.rawValue
+                options |= NSRegularExpression.Options.dotMatchesLineSeparators.rawValue
             case "l":
-                options |= NSRegularExpressionOptions.UseUnixLineSeparators.rawValue
+                options |= NSRegularExpression.Options.useUnixLineSeparators.rawValue
             case "u":
-                options |= NSRegularExpressionOptions.UseUnicodeWordBoundaries.rawValue
+                options |= NSRegularExpression.Options.useUnicodeWordBoundaries.rawValue
             default:
                 SRLog( "Invalid Regexp option \(char)" )
                 break
             }
         }
-        self.init( target: target, pattern: pattern, options: NSRegularExpressionOptions( rawValue: options ) )
+        self.init( target: target, pattern: pattern, options: NSRegularExpression.Options( rawValue: options ) )
     }
 
     public init( target: NSString, pattern: String,
-                options: NSRegularExpressionOptions = NSRegularExpressionOptions( rawValue: 0 ) ) {
+                options: NSRegularExpression.Options = NSRegularExpression.Options( rawValue: 0 ) ) {
         self.target = target
         do {
             self.regexp = try NSRegularExpression( pattern: pattern, options: options )
@@ -155,116 +155,116 @@ public class Regexp: RubyObject, BooleanType {
         return NSMakeRange( 0, target.length )
     }
 
-    final func substring( range: NSRange ) -> String? {
+    final func substring( _ range: NSRange ) -> String? {
         if ( range.location != NSNotFound ) {
-            return target.substringWithRange( range )
+            return target.substring( with: range )
         } else {
             return nil
         }
     }
 
-    public func doesMatch( options: NSMatchingOptions? = nil ) -> Bool {
+    open func doesMatch( _ options: NSRegularExpression.MatchingOptions? = nil ) -> Bool {
         return range( options ).location != NSNotFound
     }
 
-    public func range( options: NSMatchingOptions? = nil ) -> NSRange {
-        return regexp.rangeOfFirstMatchInString( target as String, options: options ?? NSMatchingOptions(rawValue: 0), range: targetRange )
+    open func range( _ options: NSRegularExpression.MatchingOptions? = nil ) -> NSRange {
+        return regexp.rangeOfFirstMatch( in: target as String, options: options ?? NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange )
     }
 
-    func matchResults( options: NSMatchingOptions? = nil ) -> [NSTextCheckingResult] {
-        return regexp.matchesInString( target as String, options: options ?? NSMatchingOptions(rawValue: 0), range: targetRange )
+    func matchResults( _ options: NSRegularExpression.MatchingOptions? = nil ) -> [NSTextCheckingResult] {
+        return regexp.matches( in: target as String, options: options ?? NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange )
     }
 
-    func replaceWith( template: String, options: NSMatchingOptions? = nil ) -> NSMutableString {
+    func replaceWith( _ template: String, options: NSRegularExpression.MatchingOptions? = nil ) -> NSMutableString {
         let mutable = /*target as? NSMutableString ??*/ NSMutableString( string: target )
-        regexp.replaceMatchesInString( mutable, options: options ?? NSMatchingOptions(rawValue: 0), range: targetRange, withTemplate: template )
+        regexp.replaceMatches( in: mutable, options: options ?? NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange, withTemplate: template )
         return mutable
     }
     
-    func groupsForMatch( match: NSTextCheckingResult ) -> [String?] {
+    func groupsForMatch( _ match: NSTextCheckingResult ) -> [String?] {
         var groups = [String?]()
         for groupno in 0...regexp.numberOfCaptureGroups {
-            groups.append( substring( match.rangeAtIndex( groupno ) ) )
+            groups.append( substring( match.rangeAt( groupno ) ) )
         }
         return groups
     }
 
-    public func dictionary( options: NSMatchingOptions? = nil ) -> [String:String] {
+    open func dictionary( _ options: NSRegularExpression.MatchingOptions? = nil ) -> [String:String] {
         var out = [String:String]()
         for match in matchResults(options) {
-            out[substring(match.rangeAtIndex(1))!] =
-                substring(match.rangeAtIndex(2))!
+            out[substring(match.rangeAt(1))!] =
+                substring(match.rangeAt(2))!
         }
         return out
     }
 
-    public func match( options: NSMatchingOptions? = nil ) -> String? {
+    open func match( _ options: NSRegularExpression.MatchingOptions? = nil ) -> String? {
         return substring( range( options ) )
     }
 
-    public func groups( options: NSMatchingOptions? = nil ) -> [String?]? {
-        if let match = regexp.firstMatchInString(target as String, options: options ?? NSMatchingOptions(rawValue: 0), range: targetRange ) {
+    open func groups( _ options: NSRegularExpression.MatchingOptions? = nil ) -> [String?]? {
+        if let match = regexp.firstMatch(in: target as String, options: options ?? NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
             return groupsForMatch( match )
         }
         return nil
     }
 
-    public func allGroups( options: NSMatchingOptions? = nil ) -> [[String?]] {
+    open func allGroups( _ options: NSRegularExpression.MatchingOptions? = nil ) -> [[String?]] {
         return matchResults( options ).map { self.groupsForMatch( $0 ) }
     }
 
-    public subscript ( groupno: Int ) -> String? {
-        if let match = regexp.firstMatchInString( target as String, options: NSMatchingOptions(rawValue: 0), range: targetRange ) {
-            return substring( match.rangeAtIndex( groupno ) )
+    open subscript ( groupno: Int ) -> String? {
+        if let match = regexp.firstMatch( in: target as String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
+            return substring( match.rangeAt( groupno ) )
         }
         return nil
     }
 
-    public subscript ( groupno: Int, options: NSMatchingOptions ) -> String? {
-        if let match = regexp.firstMatchInString( target as String, options: options, range: targetRange ) {
-            return substring( match.rangeAtIndex( groupno ) )
+    open subscript ( groupno: Int, options: NSRegularExpression.MatchingOptions ) -> String? {
+        if let match = regexp.firstMatch( in: target as String, options: options, range: targetRange ) {
+            return substring( match.rangeAt( groupno ) )
         }
         return nil
     }
 
-    public subscript( template: String ) -> String {
+    open subscript( template: String ) -> String {
         return replaceWith( template ) as String
     }
 
-    public subscript( template: String, options: NSMatchingOptions ) -> String {
+    open subscript( template: String, options: NSRegularExpression.MatchingOptions ) -> String {
         return replaceWith( template, options: options ) as String
     }
 
-    public var boolValue: Bool {
+    open var boolValue: Bool {
         return doesMatch()
     }
 
 }
 
-public class NotRegexp : Regexp {
+open class NotRegexp : Regexp {
 
-    public override var boolValue: Bool {
+    open override var boolValue: Bool {
         return !doesMatch()
     }
 
 }
 
-public class MutableRegexp: Regexp {
+open class MutableRegexp: Regexp {
 
-    override public subscript ( groupno: Int ) -> String? {
+    override open subscript ( groupno: Int ) -> String? {
         get {
-            if let match = regexp.firstMatchInString( target as String, options: NSMatchingOptions(rawValue: 0), range: targetRange ) {
-                return substring( match.rangeAtIndex( groupno ) )
+            if let match = regexp.firstMatch( in: target as String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
+                return substring( match.rangeAt( groupno ) )
             }
             return nil
         }
         set( newValue ) {
             if let newValue = newValue {
                 if let mutableTarget = target as? NSMutableString {
-                    for match in Array(matchResults().reverse()) {
-                        let replacement = regexp.replacementStringForResult( match,
-                            inString: target as String, offset: 0, template: newValue )
-                        mutableTarget.replaceCharactersInRange( match.rangeAtIndex(groupno), withString: replacement )
+                    for match in Array(matchResults().reversed()) {
+                        let replacement = regexp.replacementString( for: match,
+                            in: target as String, offset: 0, template: newValue )
+                        mutableTarget.replaceCharacters( in: match.rangeAt(groupno), with: replacement )
                     }
                 } else {
                     SRLog( "Group modify on non-mutable" )
@@ -277,20 +277,20 @@ public class MutableRegexp: Regexp {
         }
     }
 
-    func substituteMatches( substitution: (NSTextCheckingResult, UnsafeMutablePointer<ObjCBool>) -> String ) -> Bool {
+    func substituteMatches( _ substitution: (NSTextCheckingResult, UnsafeMutablePointer<ObjCBool>) -> String ) -> Bool {
         let out = NSMutableString()
         var pos = 0
 
-        regexp.enumerateMatchesInString( target as String, options: NSMatchingOptions(rawValue: 0), range: targetRange ) {
-            (match: NSTextCheckingResult?, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
+        regexp.enumerateMatches( in: target as String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
+            (match: NSTextCheckingResult?, flags: NSRegularExpression.MatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
 
             let matchRange = match!.range
-            out.appendString( self.substring( NSMakeRange( pos, matchRange.location-pos ) )! ) ////
-            out.appendString( substitution( match!, stop ) )
+            out.append( self.substring( NSMakeRange( pos, matchRange.location-pos ) )! ) ////
+            out.append( substitution( match!, stop ) )
             pos = matchRange.location + matchRange.length
         }
 
-        out.appendString( substring( NSMakeRange( pos, targetRange.length-pos ) )! ) ////
+        out.append( substring( NSMakeRange( pos, targetRange.length-pos ) )! ) ////
 
         if let mutableTarget = target as? NSMutableString {
             if out != target {
@@ -308,8 +308,8 @@ public class MutableRegexp: Regexp {
 public func =~ ( left: MutableRegexp, right: String ) -> Bool {
     return left.substituteMatches( {
         (match: NSTextCheckingResult, stop: UnsafeMutablePointer<ObjCBool>) in
-        return left.regexp.replacementStringForResult( match,
-            inString: left.target as String, offset: 0, template: right )
+        return left.regexp.replacementString( for: match,
+            in: left.target as String, offset: 0, template: right )
     } )
 }
 
@@ -320,11 +320,11 @@ public func =~ ( left: MutableRegexp, right: [String] ) -> Bool {
 
         matchNumber += 1
         if matchNumber == right.count {
-            stop.memory = true
+            stop.pointee = true
         }
 
-        return left.regexp.replacementStringForResult( match,
-            inString: left.target as String, offset: 0, template: right[matchNumber-1] )
+        return left.regexp.replacementString( for: match,
+            in: left.target as String, offset: 0, template: right[matchNumber-1] )
     } )
 }
 
@@ -342,7 +342,7 @@ public func =~ ( left: MutableRegexp, right: ([String?]) -> String ) -> Bool {
     } )
 }
 
-public class RegexpFile {
+open class RegexpFile {
 
     let filepath: String
     let contents: NSMutableString! ////
@@ -358,26 +358,26 @@ public class RegexpFile {
         }
     }
 
-    public subscript( pattern: String ) -> MutableRegexp {
+    open subscript( pattern: String ) -> MutableRegexp {
         let regexp = MutableRegexp( target: contents, pattern: pattern )
         regexp.file = self // retains until after substitution
         return regexp
     }
 
-    public subscript ( pattern: String, options: NSRegularExpressionOptions ) -> MutableRegexp {
+    open subscript ( pattern: String, options: NSRegularExpression.Options ) -> MutableRegexp {
         let regexp = MutableRegexp( target: contents, pattern: pattern, options: options )
         regexp.file = self // retains until after substitution
         return regexp
     }
 
-    public subscript ( pattern: String, options: String ) -> MutableRegexp {
+    open subscript ( pattern: String, options: String ) -> MutableRegexp {
         let regexp = MutableRegexp( target: contents, pattern: pattern, optionString: options )
         regexp.file = self // retains until after substitution
         return regexp
     }
 
     deinit {
-        if contents != original {
+        if contents as String != original {
             File.write( filepath, contents as String )
         }
     }

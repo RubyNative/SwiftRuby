@@ -16,12 +16,12 @@ import Darwin
 
 public var LINE_SEPARATOR = "\n"
 
-public class StringIO: IO {
+open class StringIO: IO {
 
-    public let data: Data
-    public var offset = 0
+    open let data: Data
+    open var offset = 0
 
-    public override var pos: Int {
+    open override var pos: Int {
         get {
             return offset
         }
@@ -35,15 +35,15 @@ public class StringIO: IO {
         super.init( what: nil, unixFILE: nil )
     }
 
-    public class func new( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
+    open class func new( _ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
         return StringIO( string, file: file, line: line )
     }
 
-    public class func open( string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
+    open class func open( _ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
         return new( string, mode, perm, file: file, line: line )
     }
 
-    public override func each_byte( block: (CChar) -> () ) -> IO {
+    open override func each_byte( _ block: (CChar) -> () ) -> IO {
         while !eof {
             block( data.bytes[offset] )
             offset += 1
@@ -51,33 +51,33 @@ public class StringIO: IO {
         return self
     }
 
-    public override var eof: Bool {
+    open override var eof: Bool {
         return offset >= data.length
     }
 
-    public override var getc: String? {
+    open override var getc: String? {
         let ret: String? = !eof ? String( data.bytes[offset] ) : nil
         offset += 1
         return ret
     }
 
-    override func gets( sep: string_like = LINE_SEPARATOR ) -> String? {
+    override func gets( _ sep: string_like = LINE_SEPARATOR ) -> String? {
         if eof {
             return nil
         }
 
         let sepchar = sep.to_s.ord
-        let endOfLine = UnsafeMutablePointer<Int8>( memchr( data.bytes+offset, Int32(sepchar), Int(data.length-offset) ) )
+        let endOfLine = memchr( data.bytes+offset, Int32(sepchar), Int(data.length-offset) )?.assumingMemoryBound(to: Int8.self)
 
         if endOfLine != nil {
-            endOfLine.memory = 0
+            endOfLine!.pointee = 0
         }
 
-        let out = String( UTF8String: data.bytes+offset )
+        let out = String( validatingUTF8: data.bytes+offset )
 
         if endOfLine != nil {
-            endOfLine.memory = Int8(sepchar)
-            offset = endOfLine - data.bytes + 1
+            endOfLine!.pointee = Int8(sepchar)
+            offset = endOfLine! - data.bytes + 1
         }
         else {
             offset = data.length
@@ -86,11 +86,11 @@ public class StringIO: IO {
         return out
     }
 
-    public override func print( string: string_like ) -> Int {
+    open override func print( _ string: string_like ) -> Int {
         return write( string.to_s )
     }
 
-    override func putc( obj: Int ) -> Int {
+    override func putc( _ obj: Int ) -> Int {
         if data.capacity <  data.length + 1 {
             data.capacity += 10_000 ////
         }
@@ -99,16 +99,17 @@ public class StringIO: IO {
         return 1
     }
 
-    public override func read( length: Int?, _ outbuf: Data? ) -> Data? {
+    open override func read( _ length: Int?, _ outbuf: Data? ) -> Data? {
         return data
     }
 
-    public override func rewind( file: StaticString = #file, line: UInt = #line ) -> IO {
-        seek( 0, Int(SEEK_SET) )
+    @discardableResult
+    open override func rewind( _ file: StaticString = #file, line: UInt = #line ) -> IO {
+        _ = seek( 0, Int(SEEK_SET) )
         return self
     }
 
-    public override func seek( amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open override func seek( _ amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
         switch Int32(whence) {
         case SEEK_SET:
             offset = amount
@@ -126,7 +127,8 @@ public class StringIO: IO {
         return true
     }
 
-    public override func write( string: data_like ) -> fixnum {
+    @discardableResult
+    open override func write( _ string: data_like ) -> fixnum {
         return data.append( string )
     }
 

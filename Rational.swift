@@ -12,6 +12,6 @@
 //  See: http://ruby-doc.org/core-2.2.3/Rational.html
 //
 
-public class Rational: RubyObject {
+open class Rational: RubyObject {
 
 }

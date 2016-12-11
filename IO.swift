@@ -18,48 +18,48 @@ public let EWOULDBLOCKWaitReadable = EWOULDBLOCK
 public let EWOULDBLOCKWaitWritable = EWOULDBLOCK
 
 @_silgen_name("fcntl")
-func _fcntl( filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
+func _fcntl( _ filedesc: Int32, _ command: Int32, _ arg: Int32 ) -> Int32
 
 @_silgen_name("_popen")
-func _popen( command: UnsafePointer<Int8>, _ perms: UnsafePointer<Int8> ) -> UnsafeMutablePointer<FILE>
+func _popen( _ command: UnsafePointer<Int8>, _ perms: UnsafePointer<Int8> ) -> UnsafeMutablePointer<FILE>
 
 @_silgen_name("_pclose")
-func _pclose( fp: UnsafeMutablePointer<FILE> ) -> Int32
+func _pclose( _ fp: UnsafeMutablePointer<FILE> ) -> Int32
 
 private let selectBitsPerFlag: Int32 = 32
 private let selectShift = 5
 private let selectBitMask = (1<<selectShift)-1
 
-public func FD_ZERO( flags: UnsafeMutablePointer<Int32> ) {
-    memset( flags, 0, sizeof(fd_set) )
+public func FD_ZERO( _ flags: UnsafeMutablePointer<Int32> ) {
+    memset( flags, 0, MemoryLayout<fd_set>.size )
 }
 
-public func FD_CLR( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
+public func FD_CLR( _ fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
     let set = flags + Int( fd>>selectShift )
-    set.memory &= ~Int32(1<<(fd&selectBitMask))
+    set.pointee &= ~Int32(1<<(fd&selectBitMask))
 }
 
-public func FD_SET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
+public func FD_SET( _ fd: Int, _ flags: UnsafeMutablePointer<Int32> ) {
     let set = flags + Int( fd>>selectShift )
-    set.memory |= Int32(1<<(fd&selectBitMask))
+    set.pointee |= Int32(1<<(fd&selectBitMask))
 }
 
-public func FD_ISSET( fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
+public func FD_ISSET( _ fd: Int, _ flags: UnsafeMutablePointer<Int32> ) -> Bool {
     let set = flags + Int( fd>>selectShift )
-    return (set.memory & Int32(1<<(fd&selectBitMask))) != 0
+    return (set.pointee & Int32(1<<(fd&selectBitMask))) != 0
 }
 
 public func ==(lhs: IO, rhs: IO) -> Bool {
-    if let lhData = lhs.read(), rhData = rhs.read() {
+    if let lhData = lhs.read(), let rhData = rhs.read() {
         return lhData == rhData
     }
     return false
 }
 
-public class IO: RubyObject, string_like, data_like {
+open class IO: RubyObject, string_like, data_like {
 
-    private var _unixFILE = UnsafeMutablePointer<FILE>(nil)
-    public var unixFILE: UnsafeMutablePointer<FILE> {
+    fileprivate var _unixFILE: UnsafeMutablePointer<FILE>?
+    open var unixFILE: UnsafeMutablePointer<FILE>? {
         get {
             if _unixFILE == nil {
                 SRLog( "Get of nil IO.unixFILE" )
@@ -68,18 +68,18 @@ public class IO: RubyObject, string_like, data_like {
         }
     }
 
-    public var autoclose = true
-    public let binmode = true
-    public var lineno = 0
+    open var autoclose = true
+    open let binmode = true
+    open var lineno = 0
 
-    public var sync = true {
+    open var sync = true {
         didSet {
             flush()
             setvbuf( unixFILE, nil, sync ? _IONBF : _IOFBF, 0 )
         }
     }
 
-    public var nonblock = false {
+    open var nonblock = false {
         didSet {
             var flags = fcntl( Int(F_GETFL), 0 )
             if nonblock {
@@ -92,7 +92,7 @@ public class IO: RubyObject, string_like, data_like {
         }
     }
 
-    public var close_on_exec = false {
+    open var close_on_exec = false {
         didSet {
             if close_on_exec {
                 fcntl( Int(F_SETFD), Int(FD_CLOEXEC) )
@@ -100,7 +100,7 @@ public class IO: RubyObject, string_like, data_like {
         }
     }
 
-    public var pos: Int {
+    open var pos: Int {
         get {
             return Int(ftell( unixFILE ))
         }
@@ -109,7 +109,7 @@ public class IO: RubyObject, string_like, data_like {
         }
     }
 
-    public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>, file: StaticString = #file, line: UInt = #line ) {
+    public init( what: String?, unixFILE: UnsafeMutablePointer<FILE>?, file: StaticString = #file, line: UInt = #line ) {
         super.init()
         if unixFILE == nil && what != nil {
             SRError( "\(what!) failed", file: file, line: line )
@@ -117,21 +117,21 @@ public class IO: RubyObject, string_like, data_like {
         self._unixFILE = unixFILE
     }
 
-    public func ifValid() -> IO? {
+    open func ifValid() -> IO? {
         return _unixFILE != nil ? self : nil
     }
 
     // MARK: Class methods
 
-    public class func binread( name: string_like, _ length: Int? = nil, _ offset: Int? = nil ) -> Data? {
+    open class func binread( _ name: string_like, _ length: Int? = nil, _ offset: Int? = nil ) -> Data? {
         return self.read( name, length, offset )
     }
 
-    public class func binwrite( name: string_like, _ string: data_like, _ offset: Int? = nil ) -> fixnum? {
+    open class func binwrite( _ name: string_like, _ string: data_like, _ offset: Int? = nil ) -> fixnum? {
         return self.write( name, string, offset )
     }
 
-    public class func copy_stream( src: IO, _ dst: IO, _ copy_length: Int? = nil, _ src_offset: Int? = nil ) -> Int {
+    open class func copy_stream( _ src: IO, _ dst: IO, _ copy_length: Int? = nil, _ src_offset: Int? = nil ) -> Int {
         if src_offset != nil {
             src.seek( src_offset!, Int(SEEK_SET) )
         }
@@ -145,41 +145,41 @@ public class IO: RubyObject, string_like, data_like {
         return copied
     }
 
-    public class func for_fd( fd: Int, _ mode: string_like, opt: Array<String>? = nil, file: StaticString = #file, line: UInt = #line ) -> IO? {
+    open class func for_fd( _ fd: Int, _ mode: string_like, opt: Array<String>? = nil, file: StaticString = #file, line: UInt = #line ) -> IO? {
         return IO( what: "fdopen \(fd)", unixFILE: fdopen( Int32(fd), mode.to_s ), file: file, line: line ).ifValid()
     }
 
-    public class func foreach( name: string_like, _ sep: string_like = LINE_SEPARATOR,
-                                _ limit: Int? = nil, _ block: (line: String) -> () ) {
-        if let ioFile = File.open( name, "r" ) {
+    open class func foreach( _ name: string_like, _ sep: string_like = LINE_SEPARATOR,
+                                _ limit: Int? = nil, _ block: (_ line: String) -> () ) {
+        if let ioFile = File.open( name as! Int, "r" ) {
             ioFile.each_line( sep, limit, block )
         }
     }
 
-    public class func foreach( name: string_like, _ limit: Int? = nil, _ block: (line: String) -> () ) {
+    open class func foreach( _ name: string_like, _ limit: Int? = nil, _ block: (_ line: String) -> () ) {
         foreach( name, LINE_SEPARATOR, limit, block )
     }
 
-    public class func new( fd: Int, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
+    open class func new( _ fd: Int, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
-    public class func open( fd: Int, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
+    open class func open( _ fd: Int, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
         return for_fd( fd, mode, file: file, line: line )
     }
 
-    public class func pipe( file: StaticString = #file, line: UInt = #line ) -> (reader: IO?, writer: IO?) {
-        var fds = [Int32](count: 0, repeatedValue: 0)
-        Darwin.pipe( &fds )
+    open class func pipe( _ file: StaticString = #file, line: UInt = #line ) -> (reader: IO?, writer: IO?) {
+        var fds = [Int32](repeating: 0, count: 0)
+        _ = Darwin.pipe( &fds )
         return (IO.new( Int(fds[0]), "r", file: file, line: line ), IO.new( Int(fds[1]), "w", file: file, line: line ))
     }
 
-    public class func popen( command: string_like, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
+    open class func popen( _ command: string_like, _ mode: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
         return IO( what: "IO.popen '\(command)'", unixFILE: _popen( command.to_s, mode.to_s ), file: file, line: line ).ifValid()
     }
 
-    public class func read( name: string_like, _ length: Int? = nil, _ offset: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> Data? {
-        if let ioFile = File.open( name, "r" ) {
+    open class func read( _ name: string_like, _ length: Int? = nil, _ offset: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> Data? {
+        if let ioFile = File.open( name as! Int, "r" ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
             }
@@ -188,8 +188,8 @@ public class IO: RubyObject, string_like, data_like {
         return nil
     }
 
-    public class func readlines( name: string_like, _ sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> [String]? {
-        if let ioFile = File.open( name, "r", file: file, line: line ) {
+    open class func readlines( _ name: string_like, _ sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> [String]? {
+        if let ioFile = File.open( name as! Int, "r", file: file, line: line ) {
             var out = [String]()
             ioFile.each_line( sep, limit, {
                 (line) in
@@ -200,17 +200,17 @@ public class IO: RubyObject, string_like, data_like {
         return nil
     }
 
-    public class func readlines( name: string_like, _ limit: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> [String]? {
+    open class func readlines( _ name: string_like, _ limit: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> [String]? {
         return readlines( name, LINE_SEPARATOR, limit, file: file, line: line )
     }
 
-    public class func select( read_array: [IO]?, _ write_array: [IO]? = nil, _ error_array: [IO]? = nil,
+    open class func select( _ read_array: [IO]?, _ write_array: [IO]? = nil, _ error_array: [IO]? = nil,
                         timeout: Double? = nil, file: StaticString = #file, line: UInt = #line )
                             -> (readable: [IO], writable: [IO], errored: [IO])? {
 
-        let read_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
-        let write_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
-        let error_flags = UnsafeMutablePointer<Int32>( malloc( sizeof(fd_set) ) )
+        let read_flags = malloc( MemoryLayout<fd_set>.size )!.assumingMemoryBound(to: Int32.self)
+        let write_flags = malloc( MemoryLayout<fd_set>.size )!.assumingMemoryBound(to: Int32.self)
+        let error_flags = malloc( MemoryLayout<fd_set>.size )!.assumingMemoryBound(to: Int32.self)
         var max_fd = -1
 
         for (array, flags) in [(read_array, read_flags), (write_array, write_flags), (error_array, error_flags)] {
@@ -230,17 +230,21 @@ public class IO: RubyObject, string_like, data_like {
             time = Time( time_f: timeout! )
         }
 
-        func mutablePointer<T>( inout val: T ) -> UnsafeMutablePointer<T> {
-            return withUnsafeMutablePointer (&val) {
+        func mutablePointer<T>( _ val: inout T ) -> UnsafeMutablePointer<T> {
+            return withUnsafeMutablePointer (to: &val) {
                 UnsafeMutablePointer($0)
             }
         }
 
-        let selected = Darwin.select( Int32(max_fd),
-                        UnsafeMutablePointer<fd_set>( read_flags ),
-                        UnsafeMutablePointer<fd_set>( write_flags ),
-                        UnsafeMutablePointer<fd_set>( error_flags ),
-            time != nil ? mutablePointer( &time!.value ) : nil )
+
+        let selected = read_flags.withMemoryRebound(to: fd_set.self, capacity: 1) { read_set in
+            return write_flags.withMemoryRebound(to: fd_set.self, capacity: 1) { write_set in
+                return error_flags.withMemoryRebound(to: fd_set.self, capacity: 1) { error_set in
+                    Darwin.select( Int32(max_fd), read_set, write_set, error_set,
+                                   time != nil ? mutablePointer( &time!.value ) : nil )
+                }
+            }
+        }
 
         var out: (readable: [IO], writable: [IO], errored: [IO])?
 
@@ -257,7 +261,7 @@ public class IO: RubyObject, string_like, data_like {
                 if array != nil {
                     for io in array! {
                        if FD_ISSET( io.fileno, flags ) {
-                            out.memory.append( io )
+                            out.pointee.append( io )
                         }
                     }
                 }
@@ -272,12 +276,12 @@ public class IO: RubyObject, string_like, data_like {
         return out
     }
 
-    public class func sysopen( path: string_like, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
+    open class func sysopen( _ path: string_like, _ mode: Int = Int(O_RDONLY), _ perm: Int = 0o644 ) -> fixnum {
         return Int(Darwin.open( path.to_s, CInt(mode), mode_t(perm) ))
     }
 
-
-    public class func write( name: string_like, _ string: data_like, _ offset: Int? = 0, _ open_args: String? = nil, file: StaticString = #file, line: UInt = #line ) -> fixnum? {
+    @discardableResult
+    open class func write( _ name: string_like, _ string: data_like, _ offset: Int? = 0, _ open_args: String? = nil, file: StaticString = #file, line: UInt = #line ) -> fixnum? {
         if let ioFile = File.open( name, open_args ?? "w", file: file, line: line ) {
             if offset != nil {
                 ioFile.seek( offset!, Int(SEEK_SET), file: file, line: line )
@@ -293,17 +297,18 @@ public class IO: RubyObject, string_like, data_like {
 //        RKNotImplemented( "IO.advise" )
 //    }
 
-    public func bytes( block: (CChar) -> () ) -> IO {
+    open func bytes( _ block: (CChar) -> () ) -> IO {
         return each_byte( block )
     }
 
-    public func chars( block: (CChar16) -> () ) -> IO {
+    open func chars( _ block: (CChar16) -> () ) -> IO {
         return each_char( block )
     }
 
-    public func close( file: StaticString = #file, line: UInt = #line ) -> Int {
+    @discardableResult
+    open func close( _ file: StaticString = #file, line: UInt = #line ) -> Int {
         if _unixFILE != nil {
-            var status = _pclose( unixFILE )
+            var status = _pclose( unixFILE! )
             if status == -1 {
                 status = fclose( unixFILE )
             }
@@ -321,11 +326,11 @@ public class IO: RubyObject, string_like, data_like {
 //        RKNotImplemented( "IO.close_write" )
 //    }
 
-    public var closed: Bool {
+    open var closed: Bool {
         return unixFILE == nil
     }
 
-    public func each_byte( block: (CChar) -> () ) -> IO {
+    open func each_byte( _ block: (CChar) -> () ) -> IO {
         while true {
             let byte = CChar(fgetc( unixFILE ))
             if eof {
@@ -336,16 +341,17 @@ public class IO: RubyObject, string_like, data_like {
         return self
     }
 
-    public func each_char( block: (CChar16) -> () ) -> IO {
+    @discardableResult
+    open func each_char( _ block: (CChar16) -> () ) -> IO {
         read()?.to_s.utf16.each( block )
         return self
     }
 
-    public func each( limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    open func each( _ limit: Int? = nil, _ block: (_ line: String) -> () ) -> IO {
         return each_line( LINE_SEPARATOR, limit, block )
     }
 
-    public func each( sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    open func each( _ sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (_ line: String) -> () ) -> IO {
         return each_line( sep, limit, block )
     }
 
@@ -353,10 +359,11 @@ public class IO: RubyObject, string_like, data_like {
 //        return each_line( dollarSlash, limit, block )
 //    }
 //
-    public func each_line( sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (line: String) -> () ) -> IO {
+    @discardableResult
+    open func each_line( _ sep: string_like = LINE_SEPARATOR, _ limit: Int? = nil, _ block: (_ line: String) -> () ) -> IO {
         var count = 0
         while let line = readline( sep ) {
-            block( line: line )
+            block( line )
             if limit != nil {
                 count += 1
                 if count >= limit! {
@@ -367,11 +374,12 @@ public class IO: RubyObject, string_like, data_like {
         return self
     }
 
-    public var eof: Bool {
+    open var eof: Bool {
         return feof( unixFILE ) != 0
     }
 
-    public func fcntl( arg: Int, _ arg2: Int = 0 ) -> Int {
+    @discardableResult
+    open func fcntl( _ arg: Int, _ arg2: Int = 0 ) -> Int {
         return Int(_fcntl( Int32(fileno), Int32(arg), Int32(arg2) ))
     }
 
@@ -379,19 +387,20 @@ public class IO: RubyObject, string_like, data_like {
 //        RKNotImplemented( "IO.fdatasync" )
 //    }
 
-    public var fileno: Int {
+    open var fileno: Int {
         return Int(Darwin.fileno( unixFILE ))
     }
 
-    public func flush( file: StaticString = #file, line: UInt = #line ) -> Bool {
+    @discardableResult
+    open func flush( _ file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "IO.fflush", fflush( unixFILE ), file: file, line: line )
     }
 
-    public func fsync( file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open func fsync( _ file: StaticString = #file, line: UInt = #line ) -> Bool {
         return flush() && unixOK( "IO.fsync", Darwin.fsync( Int32(fileno) ), file: file, line: line )
     }
 
-    public var getbyte: fixnum? {
+    open var getbyte: fixnum? {
         let byte = CChar(fgetc( unixFILE ))
         if feof( unixFILE ) != 0 {
             return nil
@@ -399,7 +408,7 @@ public class IO: RubyObject, string_like, data_like {
         return Int(byte)
     }
 
-    public var getc: String? {
+    open var getc: String? {
         let byte = CChar(fgetc( unixFILE ))
         if feof( unixFILE ) != 0 {
             return nil
@@ -407,10 +416,10 @@ public class IO: RubyObject, string_like, data_like {
         return String(byte)
     }
 
-    static public let newline = Int8("\n".ord)
-    static public let retchar = Int8("\r".ord)
+    static open let newline = Int8("\n".ord)
+    static open let retchar = Int8("\r".ord)
 
-    func gets( sep: string_like = LINE_SEPARATOR ) -> String? {
+    func gets( _ sep: string_like = LINE_SEPARATOR ) -> String? {
         let data = Data( capacity: 1_000_000 ) //// TODO: should loop
         if fgets( data.bytes, Int32(data.capacity), unixFILE ) == nil {
             return nil
@@ -428,12 +437,12 @@ public class IO: RubyObject, string_like, data_like {
         return data.to_s
     }
 
-    public var inspect: String {
+    open var inspect: String {
         return self.to_s
     }
 
-    public var internal_encoding: Int {
-        return Int(STRING_ENCODING)
+    open var internal_encoding: Int {
+        return Int(STRING_ENCODING.rawValue)
     }
 
 //    public func ioctl( integer_cmd: Int, arg: Int ) -> Int {
@@ -441,11 +450,11 @@ public class IO: RubyObject, string_like, data_like {
 //        return 1
 //    }
 
-    public var isatty: Bool {
+    open var isatty: Bool {
         return Darwin.isatty( Int32(fileno) ) != 0
     }
 
-    public func lines( block: (line: String) -> () ) -> IO {
+    open func lines( _ block: (_ line: String) -> () ) -> IO {
         return each_line( LINE_SEPARATOR, nil, block )
     }
 
@@ -455,33 +464,34 @@ public class IO: RubyObject, string_like, data_like {
 //        return -1
 //    }
 
-    public func print( string: string_like ) -> Int {
+    @discardableResult
+    open func print( _ string: string_like ) -> Int {
         return Int(fputs( string.to_s, unixFILE ))
     }
 
-    public func print( strings: array_like ) {
+    open func print( _ strings: array_like ) {
         for string in strings.to_a {
             print( string )
         }
     }
 
-    func printf( string: string_like ) {
+    func printf( _ string: string_like ) {
         print( string )
     }
 
-    func putc( obj: Int ) -> Int {
+    func putc( _ obj: Int ) -> Int {
         return Int(fputc( Int32(obj), unixFILE ))
     }
 
-    public func puts( string: string_like ) -> Int {
+    open func puts( _ string: string_like ) -> Int {
         return print( string )
     }
 
-    public func puts( strings: array_like ) {
+    open func puts( _ strings: array_like ) {
         return print( strings )
     }
     
-    public func read( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
+    open func read( _ length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
         let data = outbuf ?? Data( capacity: (length ?? stat?.size ?? 1_000_000)+1 ) ////
         while true {
             let toread = data.capacity-data.length
@@ -495,24 +505,24 @@ public class IO: RubyObject, string_like, data_like {
         return ferror( unixFILE ) == 0 || feof( unixFILE ) != 0 ? data : nil
     }
 
-    public func read_nonblock( length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
+    open func read_nonblock( _ length: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
         nonblock = true
         return read( length, outbuf )
     }
 
-    public var readbyte: fixnum? {
+    open var readbyte: fixnum? {
         return getbyte
     }
 
-    public var readchar: String? {
+    open var readchar: String? {
         return getc
     }
 
-    public func readline( sep: string_like = LINE_SEPARATOR ) -> String? {
+    open func readline( _ sep: string_like = LINE_SEPARATOR ) -> String? {
         return gets( sep )
     }
 
-    public func readlines( /*sep: string_like = dollarSlash, _*/ limit: Int? = nil ) -> [String] {
+    open func readlines( /*sep: string_like = dollarSlash, _*/ _ limit: Int? = nil ) -> [String] {
         var out = [String]()
         each_line( LINE_SEPARATOR, limit, {
             (line) in
@@ -530,22 +540,23 @@ public class IO: RubyObject, string_like, data_like {
 //        return nil
 //    }
 
-    public func reopen( other_IO: IO ) -> IO {
+    open func reopen( _ other_IO: IO ) -> IO {
         _unixFILE = other_IO.unixFILE ////
         return self
     }
 
-    public func reopen( path: string_like, _ mode_str: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
+    open func reopen( _ path: string_like, _ mode_str: string_like = "r", file: StaticString = #file, line: UInt = #line ) -> IO? {
         return unixOK( "IO.reopen \(path.to_s)", freopen( path.to_s, mode_str.to_s, self.unixFILE ) == nil ? 1 : 0,
                         file: file, line: line ) ? self : nil
     }
 
-    public func rewind( file: StaticString = #file, line: UInt = #line ) -> IO {
+    open func rewind( _ file: StaticString = #file, line: UInt = #line ) -> IO {
         Darwin.rewind( unixFILE )
         return self
     }
 
-    public func seek( amount: Int, _ whence: Int = Int(SEEK_SET), file: StaticString = #file, line: UInt = #line ) -> Bool {
+    @discardableResult
+    open func seek( _ amount: Int, _ whence: Int = Int(SEEK_SET), file: StaticString = #file, line: UInt = #line ) -> Bool {
         return unixOK( "IO.seek", fseek( unixFILE, amount, Int32(whence) ), file: file, line: line )
     }
 
@@ -554,37 +565,37 @@ public class IO: RubyObject, string_like, data_like {
 //        return nil
 //    }
 
-    public var stat: Stat? {
+    open var stat: Stat? {
         return Stat( fd: fileno, file: #file, line: #line )
     }
 
-    public func sysread( maxlen: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
+    open func sysread( _ maxlen: Int? = nil, _ outbuf: Data? = nil ) -> Data? {
         let data = outbuf ?? Data( capacity: maxlen ?? stat?.size ?? 1_000_000 ) ////
         data.length = Darwin.read( Int32(fileno), data.bytes, data.capacity )
         return data.length > 0 ? data : nil
     }
 
-    public func sysseek( offset: Int, _ whence: Int = Int(SEEK_SET) ) -> Int {
+    open func sysseek( _ offset: Int, _ whence: Int = Int(SEEK_SET) ) -> Int {
         return Int(lseek( Int32(fileno), off_t(offset), Int32(whence) ))
     }
 
-    public func syswrite( string: data_like ) -> Int {
+    open func syswrite( _ string: data_like ) -> Int {
         return Int(Darwin.write( Int32(fileno), string.to_d.bytes, string.to_d.length ))
     }
 
-    public var tell: Int {
+    open var tell: Int {
         return pos
     }
 
-    public var to_a: [String] {
+    open var to_a: [String] {
         return readlines()
     }
 
-    public var to_i: Int {
+    open var to_i: Int {
         return fileno
     }
 
-    public var to_d: Data {
+    open var to_d: Data {
         if let data = read() {
             return data
         }
@@ -592,7 +603,7 @@ public class IO: RubyObject, string_like, data_like {
         return "IO.to_d, no data".to_d
     }
 
-    public var to_s: String {
+    open var to_s: String {
         if let data = read() {
             return data.to_s
         }
@@ -600,24 +611,25 @@ public class IO: RubyObject, string_like, data_like {
         return "IO.to_s, no data"
     }
 
-    public var tty: Bool {
+    open var tty: Bool {
         return isatty
     }
 
-    public func ungetbyte( string: string_like ) {
+    open func ungetbyte( _ string: string_like ) {
         ungetc( Int32(string.to_s.characterAtIndex(0)), unixFILE ) ////
     }
 
-    public func ungetbyte( byte: Int ) {
+    open func ungetbyte( _ byte: Int ) {
         ungetc( Int32(byte), unixFILE )
     }
 
-    public func write( string: data_like ) -> fixnum {
+    @discardableResult
+    open func write( _ string: data_like ) -> fixnum {
         let data = string.to_d
         return fwrite( data.bytes, 1, data.length, unixFILE );
     }
 
-    public func write_nonblock( string: data_like, options: Array<String>? = nil ) -> Int {
+    open func write_nonblock( _ string: data_like, options: Array<String>? = nil ) -> Int {
         nonblock = true
         return write( string )
     }

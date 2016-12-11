@@ -14,7 +14,7 @@
 
 import Foundation
 
-public let ARGV = Process.arguments
+public let ARGV = CommandLine.arguments
 
 public let STDIN = IO( what: "stdin", unixFILE: stdin )
 public let STDOUT = IO( what: "stdout", unixFILE: stdout )
@@ -22,12 +22,12 @@ public let STDERR = IO( what: "stderr", unixFILE: stderr )
 
 public let ENV = ENVProxy()
 
-public class ENVProxy {
+open class ENVProxy {
 
-    public subscript( key: string_like ) -> String? {
+    open subscript( key: string_like ) -> String? {
         get {
             let val = getenv( key.to_s )
-            return val != nil ? String( UTF8String: val ) ?? "Value not UTF8" : nil
+            return val != nil ? String( validatingUTF8: val! ) ?? "Value not UTF8" : nil
         }
         set {
             if newValue != nil {
@@ -42,23 +42,57 @@ public class ENVProxy {
 }
 
 @_silgen_name("instanceVariablesForClass")
-func instanceVariablesForClass( cls: AnyClass, _ ivarNames: NSMutableArray ) -> [String]
+func instanceVariablesForClass( _ cls: AnyClass, _ ivarNames: NSMutableArray ) -> [String]
 
 @_silgen_name("methodSymbolsForClass")
-func methodSymbolsForClass( cls: AnyClass ) -> [String]
+func methodSymbolsForClass( _ cls: AnyClass ) -> [String]
 
-public class RubyObject {
+open class RubyObject {
 
-    public var hash: fixnum {
-        return unsafeBitCast( self, Int.self )
+    open var hash: fixnum {
+        return unsafeBitCast( self, to: Int.self )
     }
 
-    public var instance_variables: [String] {
-        return instanceVariablesForClass( self.dynamicType, NSMutableArray() ) 
+    open var instance_variables: [String] {
+        return instanceVariablesForClass( type(of: self), NSMutableArray() ) 
     }
 
-    public var methods: [String] {
-        return methodSymbolsForClass( self.dynamicType ).map { _stdlib_demangleName( String( $0 ) ) }
+    open var methods: [String] {
+        return methodSymbolsForClass( type(of: self) ).map { _stdlib_demangleName( String( $0 ) ) }
     }
 
 }
+
+// not public in Swift3
+
+@_silgen_name("swift_demangle")
+public
+func _stdlib_demangleImpl(
+    _ mangledName: UnsafePointer<CChar>?,
+    mangledNameLength: UInt,
+    outputBuffer: UnsafeMutablePointer<UInt8>?,
+    outputBufferSize: UnsafeMutablePointer<UInt>?,
+    flags: UInt32
+    ) -> UnsafeMutablePointer<CChar>?
+
+
+func _stdlib_demangleName(_ mangledName: String) -> String {
+    return mangledName.utf8CString.withUnsafeBufferPointer {
+        (mangledNameUTF8) in
+
+        let demangledNamePtr = _stdlib_demangleImpl(
+            mangledNameUTF8.baseAddress,
+            mangledNameLength: UInt(mangledNameUTF8.count - 1),
+            outputBuffer: nil,
+            outputBufferSize: nil,
+            flags: 0)
+
+        if let demangledNamePtr = demangledNamePtr {
+            let demangledName = String(cString: demangledNamePtr)
+            free(demangledNamePtr)
+            return demangledName
+        }
+        return mangledName
+    }
+}
+

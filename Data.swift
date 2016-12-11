@@ -24,11 +24,11 @@ public func ==(lhs: Data, rhs: Data) -> Bool {
     return lhs.length == rhs.length && memcmp( lhs.bytes, rhs.bytes, lhs.length ) == 0
 }
 
-public class Data: RubyObject, string_like, array_like, char_like, data_like {
+open class Data: RubyObject, string_like, array_like, char_like, data_like {
 
-    public var bytes: UnsafeMutablePointer<Int8>
+    open var bytes: UnsafeMutablePointer<Int8>
 
-    public var length = 0 {
+    open var length = 0 {
         didSet {
             if length > capacity {
                 SRFatal( "Data length \(length) > capacity \(capacity)", file: #file, line: #line )
@@ -37,9 +37,9 @@ public class Data: RubyObject, string_like, array_like, char_like, data_like {
         }
     }
 
-    public var capacity = 0 {
+    open var capacity = 0 {
         didSet {
-            bytes = UnsafeMutablePointer<Int8>( realloc( bytes, capacity+1 ) )
+            bytes = realloc( bytes, capacity+1 )!.assumingMemoryBound(to: Int8.self)
         }
     }
 
@@ -51,7 +51,7 @@ public class Data: RubyObject, string_like, array_like, char_like, data_like {
 
     public convenience init( capacity: Int? = 0 ) {
         let capacity = capacity ?? 10 * 1024
-        self.init( bytes: UnsafeMutablePointer<Int8>( malloc( capacity+1 ) ) )
+        self.init( bytes: malloc( capacity+1 )!.assumingMemoryBound(to: Int8.self) )
         self.capacity = capacity
     }
 
@@ -62,7 +62,7 @@ public class Data: RubyObject, string_like, array_like, char_like, data_like {
         length = alen-1
     }
 
-    public func append( extra: data_like ) -> Int {
+    open func append( _ extra: data_like ) -> Int {
         let extra = extra.to_d
         let required = length + extra.length
         if required + 1 > capacity {
@@ -73,27 +73,27 @@ public class Data: RubyObject, string_like, array_like, char_like, data_like {
         return extra.length
     }
 
-    public var to_a: [String] {
+    open var to_a: [String] {
         return [to_s]
     }
 
-    public var to_c: [CChar] {
-        var data = [CChar]( count: length+1, repeatedValue: 0 ) ///
+    open var to_c: [CChar] {
+        var data = [CChar]( repeating: 0, count: length+1 ) ///
         memcpy( &data, bytes, data.count )
         return data
     }
 
-    public var to_d: Data {
+    open var to_d: Data {
         return self
     }
 
-    public var to_s: String {
-        if let string = String( CString: bytes, encoding: STRING_ENCODING ) {
+    open var to_s: String {
+        if let string = String( cString: bytes, encoding: STRING_ENCODING ) {
             return string
         }
 
         SRLog( "Data.to_s: Could not decode string from input" )
-        return U(String( CString: bytes, encoding: FALLBACK_INPUT_ENCODING ))
+        return U(String( cString: bytes, encoding: FALLBACK_INPUT_ENCODING ))
     }
 
     deinit {

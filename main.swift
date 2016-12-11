@@ -13,4 +13,4 @@
 
 import Foundation
 
-print("Hello, \(Process.arguments)!")
+print("Hello, \(CommandLine.arguments)!")

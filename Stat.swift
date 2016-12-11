@@ -51,31 +51,31 @@ public let S_IRUGO = (S_IRUSR|S_IRGRP|S_IROTH)
 public let S_IWUGO = (S_IWUSR|S_IWGRP|S_IWOTH)
 public let S_IXUGO = (S_IXUSR|S_IXGRP|S_IXOTH)
 
-public func S_ISBLK(m: Int) -> Bool {
+public func S_ISBLK(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFBLK)	/* block special */
 }
 
-public func S_ISCHR(m: Int) -> Bool {
+public func S_ISCHR(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFCHR)	/* char special */
 }
 
-public func S_ISDIR(m: Int) -> Bool {
+public func S_ISDIR(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFDIR)	/* directory */
 }
 
-public func S_ISFIFO(m: Int) -> Bool {
+public func S_ISFIFO(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFIFO)	/* fifo or socket */
 }
 
-public func S_ISREG(m: Int) -> Bool {
+public func S_ISREG(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFREG)	/* regular file */
 }
 
-public func S_ISLNK(m: Int) -> Bool {
+public func S_ISLNK(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFLNK)	/* symbolic link */
 }
 
-public func S_ISSOCK(m: Int) -> Bool {
+public func S_ISSOCK(_ m: Int) -> Bool {
     return (((m) & S_IFMT) == S_IFSOCK)	/* socket */
 }
 
@@ -83,11 +83,11 @@ public func ==(lhs: Stat, rhs: Stat) -> Bool {
     return lhs.dev ==  rhs.dev && lhs.ino == rhs.ino
 }
 
-public class Stat : RubyObject {
+open class Stat : RubyObject {
 
-    public var info = stat()
+    open var info = stat()
 
-    public class func new( filename: string_like, statLink: Bool = false, file: StaticString = #file, line: UInt = #line ) -> Stat? {
+    open class func new( _ filename: string_like, statLink: Bool = false, file: StaticString = #file, line: UInt = #line ) -> Stat? {
         return Stat( filename, statLink: statLink, file: file, line: line )
     }
 
@@ -114,43 +114,43 @@ public class Stat : RubyObject {
 
     // MARK: Instance methods
 
-    public var atime: Time {
+    open var atime: Time {
         return Time(spec: info.st_atimespec)
     }
 
-    public var birthtime: Time {
+    open var birthtime: Time {
         return Time(spec: info.st_ctimespec)
     }
 
-    public var blksize: Int {
+    open var blksize: Int {
         return Int(info.st_blksize)
     }
 
-    public var blockdev: Bool {
+    open var blockdev: Bool {
         return S_ISBLK(mode)
     }
 
-    public var blocks: Int {
+    open var blocks: Int {
         return Int(info.st_blocks)
     }
 
-    public var chardev: Bool {
+    open var chardev: Bool {
         return S_ISCHR(mode)
     }
 
-    public var ctime: Time {
+    open var ctime: Time {
         return Time(spec: info.st_ctimespec)
     }
 
-    public var dev: Int {
+    open var dev: Int {
         return Int(info.st_dev)
     }
 
-    public var directory: Bool {
+    open var directory: Bool {
         return S_ISDIR(mode)
     }
 
-    public var executable: Bool {
+    open var executable: Bool {
         if geteuid() == 0 {
             return true
         }
@@ -166,7 +166,7 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var executable_real: Bool {
+    open var executable_real: Bool {
         if getuid() == 0 {
             return true
         }
@@ -182,11 +182,11 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var file: Bool {
+    open var file: Bool {
         return S_ISREG(mode)
     }
 
-    public var ftype: String {
+    open var ftype: String {
         return
             S_ISREG(mode) ? "file" :
             S_ISDIR(mode) ? "directory" :
@@ -198,13 +198,13 @@ public class Stat : RubyObject {
             "unknown"
     }
 
-    public var gid: Int {
+    open var gid: Int {
         return Int(info.st_gid)
     }
 
-    public var grpowned: Bool {
+    open var grpowned: Bool {
         let egid = gid_t(getegid())
-        var groups = [gid_t](count: 1000, repeatedValue: 0)
+        var groups = [gid_t](repeating: 0, count: 1000)
         let gcount = getgroups( Int32(groups.count), &groups )
 
         for g in 0..<Int(gcount) {
@@ -216,43 +216,43 @@ public class Stat : RubyObject {
         return false
     }
 
-    public var ino: Int {
+    open var ino: Int {
         return Int(info.st_ino)
     }
 
-    public var mode: Int {
+    open var mode: Int {
         return Int(info.st_mode)
     }
 
-    public var mtime: Time {
+    open var mtime: Time {
         return Time(spec: info.st_mtimespec)
     }
 
-    public var nlink: Int {
+    open var nlink: Int {
         return Int(info.st_nlink)
     }
 
-    public var owned: Bool {
+    open var owned: Bool {
         return geteuid() == info.st_uid
     }
 
-    public var pipe: Bool {
+    open var pipe: Bool {
         return S_ISFIFO(mode)
     }
 
-    public var rdev: Int {
+    open var rdev: Int {
         return Int(info.st_rdev)
     }
 
-    public var rdev_major: Int? {
+    open var rdev_major: Int? {
         return nil
     }
 
-    public var rdev_minor: Int? {
+    open var rdev_minor: Int? {
         return nil
     }
 
-    public var readable: Bool {
+    open var readable: Bool {
         if geteuid() == 0 {
             return true
         }
@@ -268,7 +268,7 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var readable_real: Bool {
+    open var readable_real: Bool {
         if getuid() == 0 {
             return true
         }
@@ -284,13 +284,13 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var rowned: Bool {
+    open var rowned: Bool {
         return getuid() == info.st_uid
     }
 
-    public var rgrpowned: Bool {
+    open var rgrpowned: Bool {
         let egid = gid_t(getgid())
-        var groups = [gid_t](count: 1000, repeatedValue: 0)
+        var groups = [gid_t](repeating: 0, count: 1000)
         let gcount = getgroups( Int32(groups.count), &groups )
 
         for g in 0..<Int(gcount) {
@@ -302,43 +302,43 @@ public class Stat : RubyObject {
         return false
     }
     
-    public var setgid: Bool {
+    open var setgid: Bool {
         return (mode & S_ISGID) != 0
     }
 
-    public var setuid: Bool {
+    open var setuid: Bool {
         return (mode & S_ISUID) != 0
     }
 
-    public var size: Int {
+    open var size: Int {
         return Int(info.st_size)
     }
 
-    public var socket: Bool {
+    open var socket: Bool {
         return S_ISSOCK(mode)
     }
 
-    public var sticky: Bool {
+    open var sticky: Bool {
         return mode & S_ISVTX != 0
     }
 
-    public var symlink: Bool {
+    open var symlink: Bool {
         return S_ISLNK(mode)
     }
 
-    public var uid: Int {
+    open var uid: Int {
         return Int(info.st_uid)
     }
 
-    public var world_readable: Bool {
+    open var world_readable: Bool {
         return mode & S_IROTH != 0
     }
 
-    public var world_writable: Bool {
+    open var world_writable: Bool {
         return mode & S_IWOTH != 0
     }
 
-    public var writable: Bool {
+    open var writable: Bool {
         if geteuid() == 0 {
             return true
         }
@@ -354,7 +354,7 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var writable_real: Bool {
+    open var writable_real: Bool {
         if getuid() == 0 {
             return true
         }
@@ -370,7 +370,7 @@ public class Stat : RubyObject {
         return true
     }
 
-    public var zero: Bool {
+    open var zero: Bool {
         return info.st_size == 0
     }
 

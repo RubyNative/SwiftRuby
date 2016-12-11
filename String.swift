@@ -14,16 +14,16 @@
 
 import Foundation
 
-public var STRING_ENCODING = NSUTF8StringEncoding
+public var STRING_ENCODING = String.Encoding.utf8
 
-public let FALLBACK_INPUT_ENCODING = NSISOLatin1StringEncoding
-public let FALLBACK_OUTPUT_ENCODING = NSUTF8StringEncoding
+public let FALLBACK_INPUT_ENCODING = String.Encoding.isoLatin1
+public let FALLBACK_OUTPUT_ENCODING = String.Encoding.utf8
 
 public enum StringIndexDisposition {
-    case WarnAndFail, Truncate
+    case warnAndFail, truncate
 }
 
-public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .WarnAndFail
+public var STRING_INDEX_DISPOSITION: StringIndexDisposition = .warnAndFail
 
 public protocol string_like: array_like {
 
@@ -48,7 +48,7 @@ extension String: string_like, array_like, data_like, char_like {
     }
 
     public subscript ( r: Range<Int> ) -> String {
-        return substringWithRange( startIndex.advancedBy( r.startIndex )..<startIndex.advancedBy( r.endIndex ) )
+        return substring( with: characters.index(startIndex, offsetBy: r.lowerBound)..<characters.index(startIndex, offsetBy: r.upperBound) )
     }
 
     public var to_s: String {
@@ -56,17 +56,17 @@ extension String: string_like, array_like, data_like, char_like {
     }
 
     public var to_a: [String] {
-        self.characters.count
+        // ??? self.characters.count
         return [self]
     }
 
     public var to_c: [CChar] {
-        if let chars = cStringUsingEncoding( STRING_ENCODING ) {
+        if let chars = cString( using: STRING_ENCODING ) {
             return chars
         }
 
         SRLog( "String.to_c, unable to encode string for output" )
-        return U(cStringUsingEncoding( FALLBACK_OUTPUT_ENCODING ))
+        return U(cString( using: FALLBACK_OUTPUT_ENCODING ))
     }
 
     public var to_d: Data {
@@ -91,7 +91,7 @@ extension String: string_like, array_like, data_like, char_like {
         return dummy
     }
     
-    public func characterAtIndex( i: Int ) -> Int {
+    public func characterAtIndex( _ i: Int ) -> Int {
         if let char = self[i].unicodeScalars.first {
             return Int(char.value)
         }
@@ -100,28 +100,28 @@ extension String: string_like, array_like, data_like, char_like {
     }
 
     public var downcase: String {
-        return self.lowercaseString
+        return self.lowercased()
     }
 
-    public func each_byte( block: (UInt8) -> () ) {
+    public func each_byte( _ block: (UInt8) -> () ) {
         for char in utf8 {
             block( char )
         }
     }
 
-    public func each_char( block: (UInt16) -> () ) {
+    public func each_char( _ block: (UInt16) -> () ) {
         for char in utf16 {
             block( char )
         }
     }
 
-    public func each_codepoint( block: (String) -> () ) {
+    public func each_codepoint( _ block: (String) -> () ) {
         for char in characters {
             block( String( char ) )
         }
     }
 
-    public func each_line( block: (String) -> () ) {
+    public func each_line( _ block: (String) -> () ) {
         StringIO( self ).each_line( LINE_SEPARATOR, nil, block )
     }
 
@@ -133,7 +133,7 @@ extension String: string_like, array_like, data_like, char_like {
         return characterAtIndex(0)
     }
 
-    public func slice( start: Int, len: Int = 1 ) -> String {
+    public func slice( _ start: Int, len: Int = 1 ) -> String {
         var vstart = start, vlen = len
         let length = self.length
 
@@ -142,13 +142,13 @@ extension String: string_like, array_like, data_like, char_like {
         }
         if vstart < 0 {
             SRLog( "String.str( \(start), \(len) ) start before front of string '\(self)', length \(length)" )
-            if STRING_INDEX_DISPOSITION == .Truncate {
+            if STRING_INDEX_DISPOSITION == .truncate {
                 vstart = 0
             }
         }
         else if vstart > length {
             SRLog( "String.str( \(start), \(len) ) start after end of string '\(self)', length \(length)" )
-            if STRING_INDEX_DISPOSITION == .Truncate {
+            if STRING_INDEX_DISPOSITION == .truncate {
                 vstart = length
             }
         }
@@ -161,13 +161,13 @@ extension String: string_like, array_like, data_like, char_like {
         }
         if vlen < 0 {
             SRLog( "String.str( \(start), \(len) ) start + len before start of substring '\(self)', length \(length)" )
-            if STRING_INDEX_DISPOSITION == .Truncate {
+            if STRING_INDEX_DISPOSITION == .truncate {
                 vlen = 0
             }
         }
         else if vstart + vlen > length {
             SRLog( "String.str( \(start), \(len) ) start + len after end of string '\(self)', length \(length)" )
-            if STRING_INDEX_DISPOSITION == .Truncate {
+            if STRING_INDEX_DISPOSITION == .truncate {
                 vlen = length - vstart
             }
         }
@@ -175,12 +175,12 @@ extension String: string_like, array_like, data_like, char_like {
         return self[vstart..<vstart+vlen]
     }
 
-    public func split( delimiter: String ) -> [String] {
-        return componentsSeparatedByString( delimiter )
+    public func split( _ delimiter: String ) -> [String] {
+        return components( separatedBy: delimiter )
     }
 
     public var upcase: String {
-        return self.uppercaseString
+        return self.uppercased()
     }
 
 }

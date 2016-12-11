@@ -21,7 +21,7 @@ public protocol array_like {
 extension Array: array_like {
 
     public var to_a: [String] {
-        return map { String( $0 ) }
+        return map { String( describing: $0 ) }
     }
 
 //    public func join( sep: String = " " ) -> String {
@@ -30,9 +30,9 @@ extension Array: array_like {
 
 }
 
-extension CollectionType {
+extension Collection {
 
-    public func each( block: (Generator.Element) -> () ) {
+    public func each( _ block: (Iterator.Element) -> () ) {
         forEach( block )
     }
     
