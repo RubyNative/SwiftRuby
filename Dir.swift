@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Dir.swift#6 $
+//  $Id: //depot/SwiftRuby/Dir.swift#7 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //

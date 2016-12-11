@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#14 $
+//  $Id: //depot/SwiftRuby/Object.swift#16 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -76,7 +76,7 @@ func _stdlib_demangleImpl(
     ) -> UnsafeMutablePointer<CChar>?
 
 
-func _stdlib_demangleName(_ mangledName: String) -> String {
+public func _stdlib_demangleName(_ mangledName: String) -> String {
     return mangledName.utf8CString.withUnsafeBufferPointer {
         (mangledNameUTF8) in
 
