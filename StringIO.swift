@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#8 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -109,6 +109,7 @@ open class StringIO: IO {
         return self
     }
 
+    @discardableResult
     open override func seek( _ amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
         switch Int32(whence) {
         case SEEK_SET:

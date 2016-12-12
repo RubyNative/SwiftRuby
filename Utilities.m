@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#17 $
+//  $Id: //depot/SwiftRuby/Utilities.m#18 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -28,16 +28,24 @@ struct _in_objc_class {
     int f1, f2; // added for 1.0 Beta5
     int size, tos, mdsize, eight;
 
-    struct __swift_data {
-        unsigned long flags;
+    struct _swift_data3 {
+//        unsigned long flags;
         const char *className;
         int fieldcount, flags2;
-        const char *ivarNames;
-        struct _swift_field **(*get_field_data)();
+        int ivarNames;
+        int get_field_data;
+//        const char *ivarNames;
+//        struct _swift_field **(*get_field_data)();
     } *swiftData;
 
     IMP dispatch[1];
 };
+
+// Swift3 pointers to some metadata are relative
+static const char *swift3Relative( void *ptrPtr ) {
+    intptr_t offset = *(int *)ptrPtr;
+    return offset < 0 ? (const char *)((intptr_t)ptrPtr + offset) : (const char *)offset;
+}
 
 NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSString *> *ivarNames ) {
     Class superCls = class_getSuperclass( cls );
@@ -47,12 +55,13 @@ NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSStri
     struct _in_objc_class *swiftClass = (__bridge struct _in_objc_class *)cls;
 
     if ( (uintptr_t)swiftClass->internal & 0x1 ) {
-        const char *names = swiftClass->swiftData->ivarNames;
+        struct _swift_data3 *swiftData = (struct _swift_data3 *)swift3Relative( &swiftClass->swiftData );
+        const char *nameptr = swift3Relative( &swiftData->ivarNames );
 
-        for ( int f = 0 ; f < swiftClass->swiftData->fieldcount ; f++ ) {
+        for ( int f = 0 ; f < swiftData->fieldcount ; f++ ) {
             [ivarNames addObject:[NSString stringWithFormat:@"%@.%@", NSStringFromClass( cls ),
-                                  [NSString stringWithUTF8String:names]]];
-            names += strlen( names ) + 1;
+                                  [NSString stringWithUTF8String:nameptr]]];
+            nameptr += strlen( nameptr ) + 1;
         }
     }
     else {
