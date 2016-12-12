@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Object.swift#16 $
+//  $Id: //depot/SwiftRuby/Object.swift#17 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -42,10 +42,10 @@ open class ENVProxy {
 }
 
 @_silgen_name("instanceVariablesForClass")
-func instanceVariablesForClass( _ cls: AnyClass, _ ivarNames: NSMutableArray ) -> [String]
+func instanceVariablesForClass( _ cls: AnyClass, _ ivarNames: NSMutableArray ) -> NSArray
 
 @_silgen_name("methodSymbolsForClass")
-func methodSymbolsForClass( _ cls: AnyClass ) -> [String]
+func methodSymbolsForClass( _ cls: AnyClass, _ syms: NSMutableArray ) -> NSArray
 
 open class RubyObject {
 
@@ -54,11 +54,11 @@ open class RubyObject {
     }
 
     open var instance_variables: [String] {
-        return instanceVariablesForClass( type(of: self), NSMutableArray() ) 
+        return instanceVariablesForClass( type(of: self), NSMutableArray() ).map {$0 as! String}
     }
 
     open var methods: [String] {
-        return methodSymbolsForClass( type(of: self) ).map { _stdlib_demangleName( String( $0 ) ) }
+        return methodSymbolsForClass( type(of: self), NSMutableArray() ).map { _stdlib_demangleName( $0 as! String ) }
     }
 
 }

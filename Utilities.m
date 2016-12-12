@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.m#18 $
+//  $Id: //depot/SwiftRuby/Utilities.m#19 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -30,7 +30,8 @@ struct _in_objc_class {
 
     struct _swift_data3 {
 //        unsigned long flags;
-        const char *className;
+//        const char *className;
+        int className;
         int fieldcount, flags2;
         int ivarNames;
         int get_field_data;
@@ -75,8 +76,7 @@ NSArray<NSString *> *instanceVariablesForClass( Class cls, NSMutableArray<NSStri
     return ivarNames;
 }
 
-NSArray<NSString *> *methodSymbolsForClass( Class cls ) {
-    NSMutableArray<NSString *> *syms = [NSMutableArray new];
+NSArray<NSString *> *methodSymbolsForClass( Class cls, NSMutableArray<NSString *> *syms ) {
 
     struct _in_objc_class *swiftClass = (__bridge struct _in_objc_class *)cls;
 

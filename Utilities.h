@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 12/10/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Utilities.h#8 $
+//  $Id: //depot/SwiftRuby/Utilities.h#9 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSArray<NSString *> * _Nonnull instanceVariablesForClass( Class _Nonnull cls, NSMutableArray<NSString *> * _Nonnull ivarNames );
-extern NSArray<NSString *> * _Nonnull methodSymbolsForClass( Class _Nonnull cls );
+extern NSArray<NSString *> * _Nonnull methodSymbolsForClass( Class _Nonnull cls, NSMutableArray<NSString *> * _Nonnull syms );
 
 extern NSString * _Nonnull kCatchLevels;
 
