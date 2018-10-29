@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Regexp.swift#10 $
+//  $Id: //depot/SwiftRuby/Regexp.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -14,13 +14,13 @@
 
 import Foundation
 
-infix operator =~ { associativity left precedence 135 }
+infix operator =~ : ComparisonPrecedence
 
 public func =~ ( lhs: String, rhs: String ) -> Regexp {
     return Regexp( target: lhs as NSString, pattern: rhs )
 }
 
-infix operator !~ { associativity left precedence 135 }
+infix operator !~ : ComparisonPrecedence
 
 public func !~ ( lhs: String, rhs: String ) -> NotRegexp {
     return NotRegexp( target: lhs as NSString, pattern: rhs )
@@ -184,7 +184,7 @@ open class Regexp: RubyObject {
     func groupsForMatch( _ match: NSTextCheckingResult ) -> [String?] {
         var groups = [String?]()
         for groupno in 0...regexp.numberOfCaptureGroups {
-            groups.append( substring( match.rangeAt( groupno ) ) )
+            groups.append( substring( match.range( at: groupno ) ) )
         }
         return groups
     }
@@ -192,8 +192,8 @@ open class Regexp: RubyObject {
     open func dictionary( _ options: NSRegularExpression.MatchingOptions? = nil ) -> [String:String] {
         var out = [String:String]()
         for match in matchResults(options) {
-            out[substring(match.rangeAt(1))!] =
-                substring(match.rangeAt(2))!
+            out[substring(match.range(at: 1))!] =
+                substring(match.range(at: 2))!
         }
         return out
     }
@@ -215,14 +215,14 @@ open class Regexp: RubyObject {
 
     open subscript ( groupno: Int ) -> String? {
         if let match = regexp.firstMatch( in: target as String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
-            return substring( match.rangeAt( groupno ) )
+            return substring( match.range( at: groupno ) )
         }
         return nil
     }
 
     open subscript ( groupno: Int, options: NSRegularExpression.MatchingOptions ) -> String? {
         if let match = regexp.firstMatch( in: target as String, options: options, range: targetRange ) {
-            return substring( match.rangeAt( groupno ) )
+            return substring( match.range( at: groupno ) )
         }
         return nil
     }
@@ -254,7 +254,7 @@ open class MutableRegexp: Regexp {
     override open subscript ( groupno: Int ) -> String? {
         get {
             if let match = regexp.firstMatch( in: target as String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: targetRange ) {
-                return substring( match.rangeAt( groupno ) )
+                return substring( match.range( at: groupno ) )
             }
             return nil
         }
@@ -264,7 +264,7 @@ open class MutableRegexp: Regexp {
                     for match in Array(matchResults().reversed()) {
                         let replacement = regexp.replacementString( for: match,
                             in: target as String, offset: 0, template: newValue )
-                        mutableTarget.replaceCharacters( in: match.rangeAt(groupno), with: replacement )
+                        mutableTarget.replaceCharacters( in: match.range(at: groupno), with: replacement )
                     }
                 } else {
                     SRLog( "Group modify on non-mutable" )

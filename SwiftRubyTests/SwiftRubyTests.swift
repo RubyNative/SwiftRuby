@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 30/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#14 $
+//  $Id: //depot/SwiftRuby/SwiftRubyTests/SwiftRubyTests.swift#15 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -85,7 +85,7 @@ class RubyNativeTests: XCTestCase {
         }
 
         let files = ["diff1.txt", "same1.txt", "same2.txt"]
-        XCTAssertEqual( Dir.glob( "*.txt", testdir )!.sorted(), files, "glob directory" )
+        XCTAssertEqual( Dir.glob( testdir+"/*.txt" )!.sorted(), files.map { testdir+"/"+$0 }, "glob directory" )
         XCTAssertEqual( Dir.open( "." )!.to_a.sorted(), [".", ".."]+files, "read directory" )
         XCTAssertEqual( Kernel.open( "| ls \(testdir)" )!.to_a, files, "read popen" )
 

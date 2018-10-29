@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/File.swift#11 $
+//  $Id: //depot/SwiftRuby/File.swift#12 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -437,9 +437,9 @@ open class File : IO {
         return birthtime
     }
 
-    open func flock( _ locking_constant: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
-        return unixOK( "File.flock '\(filepath)' \(locking_constant)", Darwin.flock( Int32(fileno), Int32(locking_constant) ), file: file, line: line )
-    }
+//    open func flock( _ locking_constant: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
+//        return unixOK( "File.flock '\(filepath)' \(locking_constant)", Darwin.flock( Int32(fileno), Int32(locking_constant) ), file: file, line: line )
+//    }
 
     open var lstat: Stat? {
         return Stat( filepath, statLink: true, file: #file, line: #line )

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Dir.swift#7 $
+//  $Id: //depot/SwiftRuby/Dir.swift#14 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -87,15 +87,15 @@ open class Dir: RubyObject, array_like {
         return String( validatingUTF8: cwd )
     }
 
-    open class func glob( _ pattern: string_like, _ root: String = ".", file: StaticString = #file, line: UInt = #line ) -> [String]? {
-        let regex = pattern.to_s
-            .replacingOccurrences( of: ".", with: "\\." )
-            .replacingOccurrences( of: "**", with: "___" )
-            .replacingOccurrences( of: "*", with: "[^/]*" )
-            .replacingOccurrences( of: "?", with: "[^/]" )
-            .replacingOccurrences( of: "___", with: ".*" )
-        let command = "cd \"\(root)\" && find -E . -regex \"^(./)?\(regex)$\"| sed -e s/^.\\\\///"
-        return IO.popen( command, file: file, line: line )?.readlines()
+    open class func glob( _ pattern: string_like, _ flags: Int32 = 0, file: StaticString = #file, line: UInt = #line ) -> [String]? {
+        return pattern.to_s.withCString {
+            var pglob = glob_t()
+            if (unixOK("Dir.glob", Darwin.glob($0, flags, nil, &pglob), file: file, line: line)) {
+                defer { globfree(&pglob) }
+                return (0..<Int(pglob.gl_matchc)).map { String(cString: U(U(pglob.gl_pathv)[$0])) }
+            }
+            return nil
+        }
     }
 
     open class func home( _ user: string_like? = nil, file: StaticString = #file, line: UInt = #line ) -> String? {
