@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 28/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/StringIO.swift#9 $
+//  $Id: //depot/SwiftRuby/StringIO.swift#10 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -18,7 +18,7 @@ public var LINE_SEPARATOR = "\n"
 
 open class StringIO: IO {
 
-    open let data: Data
+    public let data: Data
     open var offset = 0
 
     open override var pos: Int {
@@ -30,22 +30,22 @@ open class StringIO: IO {
         }
     }
 
-    public init( _ string: data_like = "", file: StaticString = #file, line: UInt = #line ) {
+    public init(_ string: data_like = "", file: StaticString = #file, line: UInt = #line) {
         data = string.to_d
-        super.init( what: nil, unixFILE: nil )
+        super.init(what: nil, unixFILE: nil)
     }
 
-    open class func new( _ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
-        return StringIO( string, file: file, line: line )
+    open class func new(_ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line) -> StringIO {
+        return StringIO(string, file: file, line: line)
     }
 
-    open class func open( _ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line ) -> StringIO {
-        return new( string, mode, perm, file: file, line: line )
+    open class func open(_ string: data_like, _ mode: string_like = "r", _ perm: Int? = nil, file: StaticString = #file, line: UInt = #line) -> StringIO {
+        return new(string, mode, perm, file: file, line: line)
     }
 
-    open override func each_byte( _ block: (CChar) -> () ) -> IO {
+    open override func each_byte(_ block: (CChar) -> ()) -> IO {
         while !eof {
-            block( data.bytes[offset] )
+            block(data.bytes[offset])
             offset += 1
         }
         return self
@@ -56,24 +56,24 @@ open class StringIO: IO {
     }
 
     open override var getc: String? {
-        let ret: String? = !eof ? String( data.bytes[offset] ) : nil
+        let ret: String? = !eof ? String(data.bytes[offset]) : nil
         offset += 1
         return ret
     }
 
-    override func gets( _ sep: string_like = LINE_SEPARATOR ) -> String? {
+    override func gets(_ sep: string_like = LINE_SEPARATOR) -> String? {
         if eof {
             return nil
         }
 
         let sepchar = sep.to_s.ord
-        let endOfLine = memchr( data.bytes+offset, Int32(sepchar), Int(data.length-offset) )?.assumingMemoryBound(to: Int8.self)
+        let endOfLine = memchr(data.bytes+offset, Int32(sepchar), Int(data.length-offset))?.assumingMemoryBound(to: Int8.self)
 
         if endOfLine != nil {
             endOfLine!.pointee = 0
         }
 
-        let out = String( validatingUTF8: data.bytes+offset )
+        let out = String(validatingUTF8: data.bytes+offset)
 
         if endOfLine != nil {
             endOfLine!.pointee = Int8(sepchar)
@@ -86,11 +86,11 @@ open class StringIO: IO {
         return out
     }
 
-    open override func print( _ string: string_like ) -> Int {
-        return write( string.to_s )
+    open override func print(_ string: string_like) -> Int {
+        return write(string.to_s)
     }
 
-    override func putc( _ obj: Int ) -> Int {
+    override func putc(_ obj: Int) -> Int {
         if data.capacity <  data.length + 1 {
             data.capacity += 10_000 ////
         }
@@ -99,18 +99,18 @@ open class StringIO: IO {
         return 1
     }
 
-    open override func read( _ length: Int?, _ outbuf: Data? ) -> Data? {
+    open override func read(_ length: Int?, _ outbuf: Data?) -> Data? {
         return data
     }
 
     @discardableResult
-    open override func rewind( _ file: StaticString = #file, line: UInt = #line ) -> IO {
-        _ = seek( 0, Int(SEEK_SET) )
+    open override func rewind(_ file: StaticString = #file, line: UInt = #line) -> IO {
+        _ = seek(0, Int(SEEK_SET))
         return self
     }
 
     @discardableResult
-    open override func seek( _ amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line ) -> Bool {
+    open override func seek(_ amount: Int, _ whence: Int, file: StaticString = #file, line: UInt = #line) -> Bool {
         switch Int32(whence) {
         case SEEK_SET:
             offset = amount
@@ -122,15 +122,15 @@ open class StringIO: IO {
             return false
         }
         if offset < 0 || offset > data.length {
-            SRLog( "Invalid StringIO.seek \(amount), \(whence) -> \(offset) outside 0-\(data.length)", file: file, line: line )
+            SRLog("Invalid StringIO.seek \(amount), \(whence) -> \(offset) outside 0-\(data.length)", file: file, line: line)
             return false
         }
         return true
     }
 
     @discardableResult
-    open override func write( _ string: data_like ) -> fixnum {
-        return data.append( string )
+    open override func write(_ string: data_like) -> fixnum {
+        return data.append(string)
     }
 
 }
