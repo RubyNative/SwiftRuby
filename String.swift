@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/String.swift#12 $
+//  $Id: //depot/SwiftRuby/String.swift#13 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -39,16 +39,17 @@ public protocol char_like {
 
 extension String: string_like, array_like, data_like, char_like {
 
-    public subscript ( i: Int ) -> String {
-        return slice( i )
+    public subscript (i: Int) -> String {
+        return slice(i)
     }
 
-    public subscript ( start: Int, len: Int ) -> String {
-        return slice( start, len: len )
+    public subscript (start: Int, len: Int) -> String {
+        return slice(start, len: len)
     }
 
-    public subscript ( r: Range<Int> ) -> String {
-        return substring( with: characters.index(startIndex, offsetBy: r.lowerBound)..<characters.index(startIndex, offsetBy: r.upperBound) )
+    public subscript (r: Range<Int>) -> String {
+        return String(self[index(startIndex, offsetBy: r.lowerBound) ..<
+                           index(startIndex, offsetBy: r.upperBound)])
     }
 
     public var to_s: String {
@@ -61,41 +62,41 @@ extension String: string_like, array_like, data_like, char_like {
     }
 
     public var to_c: [CChar] {
-        if let chars = cString( using: STRING_ENCODING ) {
+        if let chars = cString(using: STRING_ENCODING) {
             return chars
         }
 
-        SRLog( "String.to_c, unable to encode string for output" )
-        return U(cString( using: FALLBACK_OUTPUT_ENCODING ))
+        SRLog("String.to_c, unable to encode string for output")
+        return U(cString(using: FALLBACK_OUTPUT_ENCODING))
     }
 
     public var to_d: Data {
-        return Data( array: self.to_c )
+        return Data(array: self.to_c)
     }
 
     public var to_i: Int {
-        if let val = Int( self ) {
+        if let val = Int(self) {
             return val
         }
         let dummy = -99999999
-        SRLog( "Unable to convert \(self) to Int. Returning \(dummy)" )
+        SRLog("Unable to convert \(self) to Int. Returning \(dummy)")
         return dummy
     }
 
     public var to_f: Double {
-        if let val = Double( self ) {
+        if let val = Double(self) {
             return val
         }
         let dummy = -99999999.0
-        SRLog( "Unable to convert \(self) to Doubleb. Returning \(dummy)" )
+        SRLog("Unable to convert \(self) to Doubleb. Returning \(dummy)")
         return dummy
     }
     
-    public func characterAtIndex( _ i: Int ) -> Int {
+    public func characterAtIndex(_ i: Int) -> Int {
         if let char = self[i].unicodeScalars.first {
             return Int(char.value)
         }
-        SRLog( "No character available in string '\(self)' returning nul char" )
+        SRLog("No character available in string '\(self)' returning nul char")
         return 0
     }
 
@@ -103,37 +104,37 @@ extension String: string_like, array_like, data_like, char_like {
         return self.lowercased()
     }
 
-    public func each_byte( _ block: (UInt8) -> () ) {
+    public func each_byte(_ block: (UInt8) -> ()) {
         for char in utf8 {
-            block( char )
+            block(char)
         }
     }
 
-    public func each_char( _ block: (UInt16) -> () ) {
+    public func each_char(_ block: (UInt16) -> ()) {
         for char in utf16 {
-            block( char )
+            block(char)
         }
     }
 
-    public func each_codepoint( _ block: (String) -> () ) {
-        for char in characters {
-            block( String( char ) )
+    public func each_codepoint(_ block: (String) -> ()) {
+        for char in self {
+            block(String(char ))
         }
     }
 
-    public func each_line( _ block: (String) -> () ) {
-        StringIO( self ).each_line( LINE_SEPARATOR, nil, block )
+    public func each_line(_ block: (String) -> ()) {
+        StringIO(self).each_line(LINE_SEPARATOR, nil, block)
     }
 
     public var length: Int {
-        return characters.count
+        return count
     }
 
     public var ord: Int {
         return characterAtIndex(0)
     }
 
-    public func slice( _ start: Int, len: Int = 1 ) -> String {
+    public func slice(_ start: Int, len: Int = 1) -> String {
         var vstart = start, vlen = len
         let length = self.length
 
@@ -141,13 +142,13 @@ extension String: string_like, array_like, data_like, char_like {
             vstart = length + start
         }
         if vstart < 0 {
-            SRLog( "String.str( \(start), \(len) ) start before front of string '\(self)', length \(length)" )
+            SRLog("String.str(\(start), \(len)) start before front of string '\(self)', length \(length)")
             if STRING_INDEX_DISPOSITION == .truncate {
                 vstart = 0
             }
         }
         else if vstart > length {
-            SRLog( "String.str( \(start), \(len) ) start after end of string '\(self)', length \(length)" )
+            SRLog("String.str(\(start), \(len)) start after end of string '\(self)', length \(length)")
             if STRING_INDEX_DISPOSITION == .truncate {
                 vstart = length
             }
@@ -160,13 +161,13 @@ extension String: string_like, array_like, data_like, char_like {
             vlen = length - vstart
         }
         if vlen < 0 {
-            SRLog( "String.str( \(start), \(len) ) start + len before start of substring '\(self)', length \(length)" )
+            SRLog("String.str(\(start), \(len)) start + len before start of substring '\(self)', length \(length)")
             if STRING_INDEX_DISPOSITION == .truncate {
                 vlen = 0
             }
         }
         else if vstart + vlen > length {
-            SRLog( "String.str( \(start), \(len) ) start + len after end of string '\(self)', length \(length)" )
+            SRLog("String.str(\(start), \(len)) start + len after end of string '\(self)', length \(length)")
             if STRING_INDEX_DISPOSITION == .truncate {
                 vlen = length - vstart
             }
@@ -175,8 +176,8 @@ extension String: string_like, array_like, data_like, char_like {
         return self[vstart..<vstart+vlen]
     }
 
-    public func split( _ delimiter: String ) -> [String] {
-        return components( separatedBy: delimiter )
+    public func split(_ delimiter: String) -> [String] {
+        return components(separatedBy: delimiter)
     }
 
     public var upcase: String {

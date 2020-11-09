@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Integer.swift#7 $
+//  $Id: //depot/SwiftRuby/Integer.swift#8 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -27,23 +27,23 @@ extension Int: int_like {
     }
     
     public var to_f: Double {
-        return Double( self )
+        return Double(self)
     }
 
     public var to_s: String {
-        return String( self )
+        return String(self)
     }
 
     public var to_b: String {
-        return String( self, radix: 2 )
+        return String(self, radix: 2)
     }
 
     public var to_o: String {
-        return String( self, radix: 8  )
+        return String(self, radix: 8 )
     }
 
     public var to_h: String {
-        return String( self, radix: 16, uppercase: false )
+        return String(self, radix: 16, uppercase: false)
     }
 
     public var chr: String {
@@ -55,10 +55,10 @@ extension Int: int_like {
         return 1
     }
 
-    public func downto( _ limit: Int, block: (_ i: Int) -> () ) -> Int {
+    public func downto(_ limit: Int, block: (_ i: Int) -> ()) -> Int {
         var i = self
         while i >= limit {
-            block( i )
+            block(i)
             i  -= 1
         }
         return self
@@ -68,18 +68,18 @@ extension Int: int_like {
         return self & 0x1 == 0
     }
 
-//    public func gcd( int2: Int ) -> Int {
-//        RKNotImplemented( "Integer.gcd" )
+//    public func gcd(int2: Int) -> Int {
+//        RKNotImplemented("Integer.gcd")
 //        return -1
 //    }
 //
-//    public func gcdlcm( int2: Int ) -> Int {
-//        RKNotImplemented( "Integer.gcd" )
+//    public func gcdlcm(int2: Int) -> Int {
+//        RKNotImplemented("Integer.gcd")
 //        return -1
 //    }
 //
-//    public func lcm( int2: Int ) -> Int {
-//        RKNotImplemented( "Integer.gcd" )
+//    public func lcm(int2: Int) -> Int {
+//        RKNotImplemented("Integer.gcd")
 //        return -1
 //    }
 
@@ -103,19 +103,19 @@ extension Int: int_like {
         return self-1
     }
 
-    public func times( _ block: (_ i: Int) -> () ) -> Int {
+    public func times(_ block: (_ i: Int) -> ()) -> Int {
         var i = 1
         while i <= self {
-            block( i )
+            block(i)
             i += 1
         }
         return self
     }
 
-    public func upto( _ limit: Int, block: (_ i: Int) -> () ) -> Int {
+    public func upto(_ limit: Int, block: (_ i: Int) -> ()) -> Int {
         var i = self
         while i <= limit {
-            block( i )
+            block(i)
             i += 1
         }
         return self

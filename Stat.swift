@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Stat.swift#9 $
+//  $Id: //depot/SwiftRuby/Stat.swift#10 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -87,26 +87,26 @@ open class Stat : RubyObject {
 
     open var info = stat()
 
-    open class func new( _ filename: string_like, statLink: Bool = false, file: StaticString = #file, line: UInt = #line ) -> Stat? {
-        return Stat( filename, statLink: statLink, file: file, line: line )
+    open class func new(_ filename: string_like, statLink: Bool = false, file: StaticString = #file, line: UInt = #line) -> Stat? {
+        return Stat(filename, statLink: statLink, file: file, line: line)
     }
 
-    public convenience init?( fd: Int, file: StaticString, line: UInt ) {
+    public convenience init?(fd: Int, file: StaticString, line: UInt) {
         self.init()
-        if !unixOK( "Stat.fstat #\(fd)", fstat( Int32(fd), &info ), file: file, line: line ) || info.st_dev == 0 {
+        if !unixOK("Stat.fstat #\(fd)", fstat(Int32(fd), &info), file: file, line: line) || info.st_dev == 0 {
             return nil
         }
     }
 
-    public convenience init?( _ filepath: string_like, statLink: Bool = false, file: StaticString?, line: UInt = 0 ) {
+    public convenience init?(_ filepath: string_like, statLink: Bool = false, file: StaticString?, line: UInt = 0) {
         self.init()
         if statLink {
-            if !unixOK( "Stat.lstat \(filepath.to_s)", lstat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK("Stat.lstat \(filepath.to_s)", lstat(filepath.to_s, &info), file: file, line: line) {
                 return nil
             }
         }
         else {
-            if !unixOK( "Stat.stat \(filepath.to_s)", stat( filepath.to_s, &info ), file: file, line: line ) {
+            if !unixOK("Stat.stat \(filepath.to_s)", stat(filepath.to_s, &info), file: file, line: line) {
                 return nil
             }
         }
@@ -205,7 +205,7 @@ open class Stat : RubyObject {
     open var grpowned: Bool {
         let egid = gid_t(getegid())
         var groups = [gid_t](repeating: 0, count: 1000)
-        let gcount = getgroups( Int32(groups.count), &groups )
+        let gcount = getgroups(Int32(groups.count), &groups)
 
         for g in 0..<Int(gcount) {
             if groups[g] == egid {
@@ -291,7 +291,7 @@ open class Stat : RubyObject {
     open var rgrpowned: Bool {
         let egid = gid_t(getgid())
         var groups = [gid_t](repeating: 0, count: 1000)
-        let gcount = getgroups( Int32(groups.count), &groups )
+        let gcount = getgroups(Int32(groups.count), &groups)
 
         for g in 0..<Int(gcount) {
             if groups[g] == egid {

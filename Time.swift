@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 26/09/2015.
 //  Copyright © 2015 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/SwiftRuby/Time.swift#10 $
+//  $Id: //depot/SwiftRuby/Time.swift#11 $
 //
 //  Repo: https://github.com/RubyNative/SwiftRuby
 //
@@ -31,11 +31,11 @@ open class Time : RubyObject, string_like {
     }
 
     public convenience override init() {
-        self.init( seconds: nil )
-        gettimeofday( &value, &tzone )
+        self.init(seconds: nil)
+        gettimeofday(&value, &tzone)
     }
 
-    public init( seconds: Int?, usec: Int = 0 ) { ///
+    public init(seconds: Int?, usec: Int = 0) { ///
         super.init()
         if seconds != nil {
             value.tv_sec = seconds!.to_i
@@ -43,45 +43,45 @@ open class Time : RubyObject, string_like {
         }
     }
 
-    public convenience init( spec: timespec ) {
-        self.init( seconds: spec.tv_sec, usec: spec.tv_nsec/1_000 )
+    public convenience init(spec: timespec) {
+        self.init(seconds: spec.tv_sec, usec: spec.tv_nsec/1_000)
     }
 
-    public convenience init( time_f: Double ) {
+    public convenience init(time_f: Double) {
         let time_i = Int(time_f.to_f)
-        self.init( seconds: time_i, usec: Int((time_f.to_f-Double(time_i))*1_000_000) )
+        self.init(seconds: time_i, usec: Int((time_f.to_f-Double(time_i))*1_000_000))
     }
 
     // MARK: Class methods
 
-    open class func at( _ time: Time ) -> Time {
-        return Time( seconds: Int(time.value.tv_sec), usec: Int(time.value.tv_usec) )
+    open class func at(_ time: Time) -> Time {
+        return Time(seconds: Int(time.value.tv_sec), usec: Int(time.value.tv_usec))
     }
 
-    open class func at( _ time_f: float_like ) -> Time {
-        return Time( time_f: time_f.to_f )
+    open class func at(_ time_f: float_like) -> Time {
+        return Time(time_f: time_f.to_f)
     }
 
-    open class func at( _ time: Int, usec: Double = 0 ) -> Time {
-        return Time( seconds: time, usec: Int(usec.to_f) )
+    open class func at(_ time: Int, usec: Double = 0) -> Time {
+        return Time(seconds: time, usec: Int(usec.to_f))
     }
 
-    open class func at( _ time: string_like, format: string_like = "%Y-%m-%d %H:%M:%S %z" ) -> Time {
-        return strptime( time, format: format )
+    open class func at(_ time: string_like, format: string_like = "%Y-%m-%d %H:%M:%S %z") -> Time {
+        return strptime(time, format: format)
     }
 
-    open class func strptime( _ time: string_like, format: string_like ) -> Time {
+    open class func strptime(_ time: string_like, format: string_like) -> Time {
         var mktm = tm()
-        _ = Darwin.strptime( time.to_s, format.to_s, &mktm )
-        return Time( seconds: mktime( &mktm ) )
+        _ = Darwin.strptime(time.to_s, format.to_s, &mktm)
+        return Time(seconds: mktime(&mktm ))
     }
 
-    open class func local( _ year: Int = 0, month: Int = 0, day: Int = 0,
-            hour: Int = 0, min: Int = 0, sec: Int = 0, usec_with_frac: Double = 0.0 ) -> Time {
+    open class func local(_ year: Int = 0, month: Int = 0, day: Int = 0,
+            hour: Int = 0, min: Int = 0, sec: Int = 0, usec_with_frac: Double = 0.0) -> Time {
         var mktm = tm(tm_sec: Int32(sec), tm_min: Int32(min), tm_hour: Int32(hour),
             tm_mday: 0, tm_mon: Int32(month), tm_year: Int32(year),
             tm_wday: 0, tm_yday: 0, tm_isdst: 0, tm_gmtoff: 0, tm_zone: getenv("TZ"))
-        return Time( seconds: mktime( &mktm ) )
+        return Time(seconds: mktime(&mktm ))
     }
 
     // MARK: Instance methods
@@ -90,20 +90,20 @@ open class Time : RubyObject, string_like {
         if tmout == nil {
             tmout = tm()
             if isUTC {
-                gmtime_r( &value.tv_sec, &tmout! )
+                gmtime_r(&value.tv_sec, &tmout!)
             }
             else {
-                localtime_r( &value.tv_sec, &tmout! );
+                localtime_r(&value.tv_sec, &tmout!);
             }
         }
         return tmout!
     }
 
     open var asctime: String {
-        var out = [CChar]( repeating: 0, count: 30 )
+        var out = [CChar](repeating: 0, count: 30)
         var tmp = settm()
-        asctime_r( &tmp, &out )
-        return String( validatingUTF8: out )!
+        asctime_r(&tmp, &out)
+        return String(validatingUTF8: out)!
     }
 
     open var ctime: String {
@@ -118,7 +118,7 @@ open class Time : RubyObject, string_like {
         return settm().tm_isdst != 0
     }
 
-    open func eql( _ other_time: Time ) -> Bool {
+    open func eql(_ other_time: Time) -> Bool {
         return value.tv_sec == other_time.value.tv_sec && value.tv_usec == other_time.value.tv_usec
     }
 
@@ -127,18 +127,18 @@ open class Time : RubyObject, string_like {
     }
 
     open var getgm: Time {
-        let gm = Time.at( self )
+        let gm = Time.at(self)
         gm.isUTC = true
         return gm
     }
 
     open var getlocal: Time {
-        let gm = Time.at( self )
+        let gm = Time.at(self)
         gm.isUTC = false
         return gm
     }
 
-    open func getlocal( _ utc_offset: Int ) -> Time? {
+    open func getlocal(_ utc_offset: Int) -> Time? {
         return nil////
     }
 
@@ -168,7 +168,7 @@ open class Time : RubyObject, string_like {
     }
 
     open var inspect: String {
-        return self.strftime( isUTC ? "%Y-%m-%d %H:%M:%S UTC" : "%Y-%m-%d %H:%M:%S %z" )
+        return self.strftime(isUTC ? "%Y-%m-%d %H:%M:%S UTC" : "%Y-%m-%d %H:%M:%S %z")
     }
 
     open var isdst: Bool {
@@ -179,7 +179,7 @@ open class Time : RubyObject, string_like {
         return getlocal
     }
 
-    open func localtime( _ utc_offset: Int ) -> Time? {
+    open func localtime(_ utc_offset: Int) -> Time? {
         return nil////
     }
 
@@ -207,9 +207,9 @@ open class Time : RubyObject, string_like {
         return Int(value.tv_usec) * 1_000
     }
 
-    open func round( _ ndigits: Int ) -> Time {
-        let divisor = pow( 10.0, Double(ndigits.to_i) )
-        return Time( time_f: Darwin.round(self.to_f * divisor) / divisor )
+    open func round(_ ndigits: Int) -> Time {
+        let divisor = pow(10.0, Double(ndigits.to_i))
+        return Time(time_f: Darwin.round(self.to_f * divisor) / divisor)
     }
 
     open var saturday: Bool {
@@ -220,15 +220,15 @@ open class Time : RubyObject, string_like {
         return Int(settm().tm_sec)
     }
 
-    open func strftime( _ format: string_like ) -> String {
-        var out = [Int8]( repeating: 0, count: 1000 )
+    open func strftime(_ format: string_like) -> String {
+        var out = [Int8](repeating: 0, count: 1000)
         var tmp = settm()
-        _ = Darwin.strftime( &out, out.count, format.to_s,  &tmp )
-        return String( validatingUTF8: out )!
+        _ = Darwin.strftime(&out, out.count, format.to_s,  &tmp)
+        return String(validatingUTF8: out)!
     }
 
     open var succ: Time {
-        return Time( seconds: value.tv_sec+1, usec: Int(value.tv_usec) )
+        return Time(seconds: value.tv_sec+1, usec: Int(value.tv_usec))
     }
 
     open var sunday: Bool {
@@ -285,7 +285,7 @@ open class Time : RubyObject, string_like {
         return gmtime
     }
 
-    open func utc( _ utc_offset: Int ) -> Time? {
+    open func utc(_ utc_offset: Int) -> Time? {
         return nil///
     }
 
@@ -310,7 +310,7 @@ open class Time : RubyObject, string_like {
     }
 
     open var zone: String {
-        return String( validatingUTF8: settm().tm_zone )!
+        return String(validatingUTF8: settm().tm_zone)!
     }
 
 }
